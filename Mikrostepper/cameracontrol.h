@@ -20,29 +20,6 @@ public:
     explicit CameraControl(QObject *parent = 0);
     ~CameraControl();
 
-    double rGain() const;
-    void setRGain(double val);
-    double gGain() const;
-    void setGGain(double val);
-    double bGain() const;
-    void setBGain(double val);
-
-    double gamma() const;
-    void setGamma(double val);
-    double contrast() const;
-    void setContrast(double val);
-    double saturation() const;
-    void setSaturation(double val);
-
-    bool autoexposure() const;
-    void setAutoexposure(bool);
-    double aeGain() const;
-    void setAeGain(double val);
-    double exposureTime() const;
-    void setExposureTime(double);
-    double aeTarget() const;
-    void setAeTarget(double);
-
 signals:
     void rGainChanged(double);
     void gGainChanged(double);
@@ -54,8 +31,32 @@ signals:
     void aeGainChanged(double);
     void exposureTimeChanged(double);
     void aeTargetChanged(double);
+
 public slots:
     void oneShotWB();
+
+	double rGain() const;
+	void setRGain(double val);
+	double gGain() const;
+	void setGGain(double val);
+	double bGain() const;
+	void setBGain(double val);
+
+	double gamma() const;
+	void setGamma(double val);
+	double contrast() const;
+	void setContrast(double val);
+	double saturation() const;
+	void setSaturation(double val);
+
+	bool autoexposure() const;
+	void setAutoexposure(bool);
+	double aeGain() const;
+	void setAeGain(double val);
+	double exposureTime() const;
+	void setExposureTime(double);
+	double aeTarget() const;
+	void setAeTarget(double);
     double maxExposureTime();
 
     void saveParametersA();
@@ -68,6 +69,10 @@ public slots:
     void loadParametersD();
 
     void loadDefaultParameters();
+
+	void reloadParams();
+
+	int getCurrentParameterTeam();
 
 private:
     double _rg, _gg, _bg, _gamma, _contrast, _saturation, _aegain, _aetarget, _exptime;

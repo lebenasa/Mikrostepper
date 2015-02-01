@@ -48,13 +48,6 @@ Rectangle {
         for (var i = 0; i < _model.count; ++i) {
             appsettings.saveShortcut(_model.get(i).name, _model.get(i).shortcut)
         }
-
-        var lastParams = 0;
-        if (radioButton1.checked) lastParams = 0
-        else if (radioButton2.checked) lastParams = 1
-        else if (radioButton3.checked) lastParams = 2
-        else lastParams = 3
-        appsettings.saveSettings("CameraLastParams", lastParams)
     }
 
     function restoreSettings() {
@@ -234,7 +227,7 @@ Rectangle {
 
                     TextRegular {
                         id: textRegular1
-                        text: "Brightness: %1".arg(Math.round(sliderBrightness.value))
+                        text: "Gamma: %1".arg(Math.round(sliderBrightness.value))
                     }
 
                     Slider {
@@ -1593,11 +1586,21 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        var lastParams = appsettings.readInt("CameraLastParams", 0)
+        var lastParams = camprop.getCurrentParameterTeam()
         if (lastParams === 0) radioButton1.checked = true
         else if (lastParams === 1) radioButton2.checked = true
         else if (lastParams === 2) radioButton3.checked = true
         else radioButton4.checked = true
     }
+
+    Binding { target: camprop; property: "rGain"; value: sliderRed.value   }
+    Binding { target: camprop; property: "gGain"; value: sliderGreen.value }
+    Binding { target: camprop; property: "bGain"; value: sliderBlue.value }
+    Binding { target: camprop; property: "gamma"; value: sliderBrightness.value }
+    Binding { target: camprop; property: "contrast"; value: sliderContrast.value }
+    Binding { target: camprop; property: "saturation"; value: sliderSaturation.value }
+    Binding { target: camprop; property: "aeTarget"; value: sliderTarget.value }
+    Binding { target: camprop; property: "exposureTime"; value: sliderTime.value }
+    Binding { target: camprop; property: "aeGain"; value: sliderGain.value }
 }
 

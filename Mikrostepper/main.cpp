@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<QuickCam>("QuickCam", 1, 0, "CameraItem");
 
     AppSettings settings;
-    MockCamera camera;
+    DSCamera camera;
     if (!camera.isAvailable())
         app.quit();
     MockStepper stepper(&camera);

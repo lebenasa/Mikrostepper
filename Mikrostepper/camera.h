@@ -63,6 +63,33 @@ protected:
     void deinitialize() { }
 };
 
+class DSCamera : public Camera
+{
+	Q_OBJECT
+	QSize m_size;
+	int m_resolution;
+	bool m_available;
+public:
+	DSCamera(QObject *parent = 0);
+	~DSCamera();
+
+	bool isAvailable() { return m_available; }
+
+public slots:
+	void setResolution(int res);
+
+	QSize size() const;
+
+	void capture(int resolution, const QString &fileName);
+
+	void imageProc(BYTE* pBuffer);
+
+protected:
+	void initialize();
+	void deinitialize();
+
+};
+
 /*
 QuickCam - QQuickItem to render camera stream
 - Image stream is stretched, aspect ratio calculation is done elsewhere

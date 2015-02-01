@@ -2,6 +2,10 @@
 #include <QtGui>
 #include <QImage>
 #include <QSize>
+#include <qt_windows.h>
+#include <atlstr.h>
+#include <commctrl.h>
+#include <tchar.h>
 
 #include <iostream>
 #include <chrono>

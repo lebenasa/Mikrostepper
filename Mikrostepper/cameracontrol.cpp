@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "cameracontrol.h"
 
+#include "DSCAMAPI.h"
+
 CameraControl::CameraControl(QObject *parent) : QObject(parent)
 {
     _gamma = 45;
@@ -21,157 +23,219 @@ CameraControl::~CameraControl()
 }
 
 double CameraControl::rGain() const {
-    return _rg;
+	int rg, gg, bg;
+	CameraGetGain(&rg, &gg, &bg);
+    return rg;
 }
 
 void CameraControl::setRGain(double val) {
-    if (rGain() != val) {
-        _rg = val;
+	int rg, gg, bg;
+	CameraGetGain(&rg, &gg, &bg);
+    if (rg != int(val)) {
+		rg = int(val);
+		CameraSetGain(rg, gg, bg);
         emit rGainChanged(val);
     }
 }
 
 double CameraControl::gGain() const {
-    return _gg;
+	int rg, gg, bg;
+	CameraGetGain(&rg, &gg, &bg);
+	return 1.0 * gg;
 }
 
 void CameraControl::setGGain(double val) {
-    if (gGain() != val) {
-        _gg = val;
-        emit gGainChanged(val);
-    }
+	int rg, gg, bg;
+	CameraGetGain(&rg, &gg, &bg);
+	if (gg != int(val)) {
+		gg = int(val);
+		CameraSetGain(rg, gg, bg);
+		emit rGainChanged(val);
+	}
 }
 
 double CameraControl::bGain() const {
-    return _bg;
+	int rg, gg, bg;
+	CameraGetGain(&rg, &gg, &bg);
+	return 1.0 * bg;
 }
 
 void CameraControl::setBGain(double val) {
-    if (bGain() != val) {
-        _bg = val;
-        emit bGainChanged(val);
-    }
+	int rg, gg, bg;
+	CameraGetGain(&rg, &gg, &bg);
+	if (bg != int(val)) {
+		bg = int(val);
+		CameraSetGain(rg, gg, bg);
+		emit rGainChanged(val);
+	}
 }
 
 double CameraControl::gamma() const {
-    return _gamma;
+	uchar ga;
+	CameraGetGamma(&ga);
+	return 1.0 * ga;
 }
 
 void CameraControl::setGamma(double val) {
     if (gamma() != val) {
-        _gamma = val;
+		CameraSetGamma((uchar)val);
         emit gammaChanged(val);
     }
 }
 
 double CameraControl::contrast() const {
-    return _contrast;
+	uchar cont;
+	CameraGetContrast(&cont);
+	return 1.0 * cont;
 }
 
 void CameraControl::setContrast(double val) {
     if (contrast() != val) {
-        _contrast = val;
+		CameraSetContrast((uchar)val);
         emit contrastChanged(val);
     }
 }
 
 double CameraControl::saturation() const {
-    return _saturation;
+	uchar sat;
+	CameraGetSaturation(&sat);
+	return 1.0 * sat;
 }
 
 void CameraControl::setSaturation(double val) {
     if (saturation() != val) {
-        _saturation = val;
+		CameraSetSaturation((uchar)val);
         emit saturationChanged(val);
     }
 }
 
 bool CameraControl::autoexposure() const {
-    return _ae;
+	BOOL AE;
+	CameraGetAeState(&AE);
+	return (AE == TRUE);
 }
 
 void CameraControl::setAutoexposure(bool val) {
     if (autoexposure() != val) {
-        _ae = val;
+		BOOL v = val ? TRUE : FALSE;
+		CameraSetAeState(v);
         emit autoexposureChanged(val);
     }
 }
 
 double CameraControl::aeGain() const {
-    return _aegain;
+	ushort AEG;
+	CameraGetAnalogGain(&AEG);
+	return 1.0 * AEG;
 }
 
 void CameraControl::setAeGain(double val) {
     if (aeGain() != val) {
-        _aegain = val;
+		CameraSetAnalogGain((ushort)val);
         emit aeGainChanged(val);
     }
 }
 
 double CameraControl::exposureTime() const {
-    return _exptime;
+	int tm;
+	CameraGetExposureTime(&tm);
+	return 1.0 * tm;
 }
 
 double CameraControl::maxExposureTime() {
-    return 300;
+	ushort tmx;
+	CameraGetMaxExposureTime(&tmx);
+	return 1.0 * tmx;
 }
 
 void CameraControl::setExposureTime(double val) {
     if (exposureTime() != val) {
-        _exptime = val;
+		CameraSetExposureTime((int)val);
         emit exposureTimeChanged(val);
     }
 }
 
 double CameraControl::aeTarget() const {
-    return _aetarget;
+	uchar tgt;
+	CameraGetAeTarget(&tgt);
+	return 1.0 * tgt;
 }
 
 void CameraControl::setAeTarget(double val) {
     if (aeTarget() != val) {
-        _aetarget = val;
+		CameraSetAeTarget((uchar)val);
         emit aeTargetChanged(val);
     }
 }
 
 void CameraControl::oneShotWB() {
+	CameraSetAWBState(TRUE);
+}
 
+void CameraControl::reloadParams() {
+	CameraSetB2RGBMode(DS_B2RGB_MODE::B2RGB_MODE_LINE);
+	CameraSetColorEnhancement(TRUE);
+	CameraSetLightFrquency(DS_LIGHT_FREQUENCY::LIGHT_FREQUENCY_60HZ);
+	CameraSetFrameSpeed(DS_FRAME_SPEED::FRAME_SPEED_NORMAL);
+	CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_HORIZONTAL, TRUE);
+	CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_VERTICAL, TRUE);
+	emit rGainChanged(rGain());
+	emit gGainChanged(gGain());
+	emit bGainChanged(bGain());
+	emit gammaChanged(gamma());
+	emit contrastChanged(contrast());
+	emit saturationChanged(saturation());
+	emit autoexposureChanged(autoexposure());
+	emit aeGainChanged(aeGain());
+	emit aeTargetChanged(aeTarget());
+	emit exposureTimeChanged(exposureTime());
 }
 
 void CameraControl::saveParametersA() {
-
+	CameraSaveParameter(PARAMETER_TEAM_A);
 }
 
 void CameraControl::loadParametersA() {
-
+	CameraReadParameter(PARAMETER_TEAM_A);
+	reloadParams();
 }
 
 void CameraControl::saveParametersB() {
-
+	CameraSaveParameter(PARAMETER_TEAM_B);
 }
 
 void CameraControl::loadParametersB() {
-
+	CameraReadParameter(PARAMETER_TEAM_B);
+	reloadParams();
 }
 
 void CameraControl::saveParametersC() {
-
+	CameraSaveParameter(PARAMETER_TEAM_C);
 }
 
 void CameraControl::loadParametersC() {
-
+	CameraReadParameter(PARAMETER_TEAM_C);
+	reloadParams();
 }
 
 void CameraControl::saveParametersD() {
-
+	CameraSaveParameter(PARAMETER_TEAM_D);
 }
 
 void CameraControl::loadParametersD() {
-
+	CameraReadParameter(PARAMETER_TEAM_D);
+	reloadParams();
 }
 
 void CameraControl::loadDefaultParameters() {
+	CameraLoadDefault();
+	reloadParams();
+}
 
+int CameraControl::getCurrentParameterTeam() {
+	uchar pt;
+	CameraGetCurrentParameterTeam(&pt);
+	return (int)pt;
 }
 
 
