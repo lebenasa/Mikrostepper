@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include "opencv2\opencv.hpp"
 
 class BaseRecorder : public QObject
 {
@@ -11,7 +12,9 @@ class BaseRecorder : public QObject
     QTime timestarted;
     QString m_file;
     double m_fps;
-    QImage im_frame;
+	QImage im_frame;
+
+	cv::VideoWriter writer;
 public:
     explicit BaseRecorder(QObject *parent = 0);
     ~BaseRecorder();

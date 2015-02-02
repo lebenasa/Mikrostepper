@@ -100,7 +100,6 @@ void AtlasCapture::startCapture(const QUrl& saveDir) {
         addMoveToCommand(target);
         addBlockCommand(250);
         addCaptureCommand();
-        addBlockCommand(250);
     }
     nextCommand();
 }
@@ -129,9 +128,9 @@ void AtlasCapture::addCaptureCommand() {
         auto base = m_saveDir;
         auto fn = base + "/" + QString("%1_%2.jpg").arg(pt.y(), 4, 10, QChar('0')).
                 arg(pt.x(), 4, 10, QChar('0'));
-        m_camera->capture(1, fn);
+        m_camera->capture(2, fn);
         setProgress(m_progress + 1);
-        QTimer::singleShot(100, this, SLOT(nextCommand()));
+        QTimer::singleShot(250, this, SLOT(nextCommand()));
     };
     addCommand(cmd);
 }
@@ -148,8 +147,7 @@ void AtlasCapture::nextCommand() {
 void AtlasCapture::flushCommand() {
     disconnect(m_navigator, &StepperNavigator::bufferFull, this, &AtlasCapture::nextCommand);
     m_navigator->stop();
-    while (!commandPool.empty())
-        commandPool.pop();
+    commandPool = {};
 }
 
 QRect enclosedRect(vector<QPoint> marks) {

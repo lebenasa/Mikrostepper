@@ -120,6 +120,9 @@ void CameraControl::setAutoexposure(bool val) {
 		BOOL v = val ? TRUE : FALSE;
 		CameraSetAeState(v);
         emit autoexposureChanged(val);
+		emit aeGainChanged(aeGain());
+		emit aeTargetChanged(aeTarget());
+		emit exposureTimeChanged(exposureTime());
     }
 }
 
@@ -177,8 +180,8 @@ void CameraControl::reloadParams() {
 	CameraSetColorEnhancement(TRUE);
 	CameraSetLightFrquency(DS_LIGHT_FREQUENCY::LIGHT_FREQUENCY_60HZ);
 	CameraSetFrameSpeed(DS_FRAME_SPEED::FRAME_SPEED_NORMAL);
-	CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_HORIZONTAL, TRUE);
-	CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_VERTICAL, TRUE);
+	CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_HORIZONTAL, FALSE);
+	CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_VERTICAL, FALSE);
 	emit rGainChanged(rGain());
 	emit gGainChanged(gGain());
 	emit bGainChanged(bGain());

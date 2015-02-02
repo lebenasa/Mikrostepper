@@ -74,7 +74,7 @@ void DSCamera::imageProc(BYTE* pBuffer) {
 	auto sz = size();
 	cv::Mat frame = cv::Mat(sz.height(), sz.width(), CV_8UC3, pBuffer);
 	cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
-	//cv::flip(frame, frame, 0);
+	cv::flip(frame, frame, 0);
 	auto buff = QImage(frame.data, sz.width(), sz.height(), QImage::Format_RGB888);
 	emit frameReady(buff);
 }
@@ -92,8 +92,8 @@ void DSCamera::setResolution(int res) {
 		CameraSetColorEnhancement(TRUE);
 		CameraSetLightFrquency(DS_LIGHT_FREQUENCY::LIGHT_FREQUENCY_60HZ);
 		CameraSetFrameSpeed(DS_FRAME_SPEED::FRAME_SPEED_NORMAL);
-		CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_HORIZONTAL, TRUE);
-		CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_VERTICAL, TRUE);
+		CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_HORIZONTAL, FALSE);
+		CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_VERTICAL, FALSE);
 		CameraPlay();
 		int W, H;
 		CameraGetImageSize(&W, &H);

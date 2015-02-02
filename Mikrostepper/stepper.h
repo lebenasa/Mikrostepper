@@ -124,4 +124,49 @@ private:
     void setBufferFree(int);
 };
 
+class CEventHandler;
+class CNCStepper : public Stepper
+{
+	Q_OBJECT
+	double m_x, m_y, m_z;
+	long m_output, m_bufferFree, m_bufferSize, m_jog;
+	std::bitset<8> m_limit;
+	bool m_isActive = false;
+	QTimer* statusUpdater;
+	CEventHandler* cncAPI;
+public:
+	CNCStepper(QObject* parent = 0);
+	~CNCStepper();
+
+	double x() { return m_x; }
+	double y() { return m_y; }
+	double z() { return m_z; }
+	int bufferFree() { return m_bufferFree; }
+
+	bool limitAt(int id) override { return m_limit.at(id); }
+
+	bool isAvailable() { return m_isActive; }
+
+public slots:
+	int bufferSize() { return m_bufferSize; }
+	void stop();
+
+	void moveX(double);
+	void moveY(double);
+	void moveZ(double);
+
+	void moveTo(const QPointF& npos);
+
+	void setZeroX();
+	void setZeroY();
+	void setZeroZ();
+
+	void updateStatus();
+
+	void powerStat(bool stat);
+
+private:
+	bool init();
+	void deinit();
+};
 #endif // STEPPER_H

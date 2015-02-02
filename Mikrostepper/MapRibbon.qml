@@ -51,9 +51,6 @@ Rectangle {
         onRejected: {
             atlas.flushCommand()
         }
-        onVisibilityChanged: {
-            if (!visible) atlas.flushCommand()
-        }
 
         Rectangle {
             width: 600; height: 80
@@ -65,8 +62,9 @@ Rectangle {
                 minimumValue: 0
                 value: atlas.progress
                 onValueChanged: {
-                    if (value == maximumValue)
+                    if (value == maximumValue) {
                         dgProgress.close()
+                    }
                 }
             }
             TextRegular {
@@ -88,7 +86,7 @@ Rectangle {
         anchors.verticalCenterOffset: -10
         anchors.verticalCenter: parent.verticalCenter
         enabled: (atlas.approxSize.width * atlas.approxSize.height > 2)
-        onClicked: startCapture()
+        onClicked: capture()
     }
 
     Rectangle {

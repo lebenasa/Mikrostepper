@@ -18,13 +18,13 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     qmlRegisterType<LebenWindow>("Leben.Asa", 1, 0, "LebenWindow");
-    qmlRegisterType<QuickCam>("QuickCam", 1, 0, "CameraItem");
+	qmlRegisterType<QuickCam>("QuickCam", 1, 0, "CameraItem");
 
     AppSettings settings;
     DSCamera camera;
     if (!camera.isAvailable())
         app.quit();
-    MockStepper stepper(&camera);
+    CNCStepper stepper(&camera);
     if (!stepper.isAvailable())
         app.quit();
 

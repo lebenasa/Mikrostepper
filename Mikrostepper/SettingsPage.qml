@@ -48,6 +48,13 @@ Rectangle {
         for (var i = 0; i < _model.count; ++i) {
             appsettings.saveShortcut(_model.get(i).name, _model.get(i).shortcut)
         }
+
+        var lastParams = 0;
+        if (radioButton1.checked) lastParams = 0
+        else if (radioButton2.checked) lastParams = 1
+        else if (radioButton3.checked) lastParams = 2
+        else lastParams = 3
+        appsettings.saveSettings("CameraLastParams", lastParams)
     }
 
     function restoreSettings() {
@@ -1586,7 +1593,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        var lastParams = camprop.getCurrentParameterTeam()
+        var lastParams = appsettings.readInt("CameraLastParams", 0)
         if (lastParams === 0) radioButton1.checked = true
         else if (lastParams === 1) radioButton2.checked = true
         else if (lastParams === 2) radioButton3.checked = true

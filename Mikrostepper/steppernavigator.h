@@ -29,7 +29,7 @@ public:
 
     static std::pair<double, double> getLimitX();
     static std::pair<double, double> getLimitY();
-    static std::pair<double, double> getLimitZ();
+	static std::pair<double, double> getLimitZ();
 
 public slots:
     void initSettings();
@@ -71,6 +71,8 @@ private:
     bool enableLimitX, enableLimitY, enableLimitZ;
     Stepper* stepper;
     QSizeF sz_profile;
+
+	std::pair<bool, bool> switchx, switchy, switchz;
 
     double adjustx(double);
     double adjusty(double);

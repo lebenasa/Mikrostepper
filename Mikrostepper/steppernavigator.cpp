@@ -13,6 +13,9 @@ StepperNavigator::StepperNavigator(Stepper *parent)
     connect(this, &StepperNavigator::zChanged, [this]() { emit coordinateStringChanged(coordinateString());});
     connect(stepper, &Stepper::bufferFull, this, &StepperNavigator::bufferFull);
     initSettings();
+	switchx = { false, false };
+	switchy = { false, false };
+	switchz = { false, false };
 }
 
 StepperNavigator::~StepperNavigator()
@@ -44,6 +47,25 @@ void StepperNavigator::initSettings() {
     enableLimitX = s.readBool("EnableLimitX", true);
     enableLimitY = s.readBool("EnableLimitY", true);
     enableLimitZ = s.readBool("EnableLimitZ", true);
+
+	bool swt = s.readBool("StopOnMinX", true);
+	if (swt) connect(stepper, &Stepper::limit0Changed, [this](bool v){ if (v) stop(); switchx.first = v; });
+	else disconnect(stepper, SIGNAL(limit0Changed()), 0, 0);
+	swt = s.readBool("StopOnMaxX", true);
+	if (swt) connect(stepper, &Stepper::limit1Changed, [this](bool v){ if (v) stop(); switchx.second = v; });
+	else disconnect(stepper, SIGNAL(limit1Changed()), 0, 0);
+	swt = s.readBool("StopOnMinY", true);
+	if (swt) connect(stepper, &Stepper::limit2Changed, [this](bool v){ if (v) stop(); switchy.first = v; });
+	else disconnect(stepper, SIGNAL(limit2Changed()), 0, 0);
+	swt = s.readBool("StopOnMaxY", true);
+	if (swt) connect(stepper, &Stepper::limit3Changed, [this](bool v){ if (v) stop(); switchy.second = v; });
+	else disconnect(stepper, SIGNAL(limit3Changed()), 0, 0);
+	swt = s.readBool("StopOnMinZ", true);
+	if (swt) connect(stepper, &Stepper::limit4Changed, [this](bool v){ if (v) stop(); switchz.first = v; });
+	else disconnect(stepper, SIGNAL(limit4Changed()), 0, 0);
+	swt = s.readBool("StopOnMaxZ", true);
+	if (swt) connect(stepper, &Stepper::limit5Changed, [this](bool v){ if (v) stop(); switchz.second = v; });
+	else disconnect(stepper, SIGNAL(limit5Changed()), 0, 0);
 }
 
 QPointF StepperNavigator::xy() const {
@@ -114,6 +136,10 @@ void StepperNavigator::stop() {
 }
 
 double StepperNavigator::adjustx(double x) {
+	auto currentX = xy().x();
+	if (x > currentX && switchx.second) return currentX;
+	else if (x < currentX && switchx.first) return currentX;
+
     if (!enableLimitX) return x;
     if (x < m_limitx.first) x = m_limitx.first;
     else if (x > m_limitx.second) x = m_limitx.second;
@@ -121,6 +147,10 @@ double StepperNavigator::adjustx(double x) {
 }
 
 double StepperNavigator::adjusty(double y) {
+	auto currentY = xy().y();
+	if (y > currentY && switchy.second) return currentY;
+	else if (y < currentY && switchy.first) return currentY;
+
     if (!enableLimitY) return y;
     if (y < m_limity.first) y = m_limity.first;
     else if (y > m_limity.second) y = m_limity.second;
@@ -128,6 +158,10 @@ double StepperNavigator::adjusty(double y) {
 }
 
 double StepperNavigator::adjustz(double z) {
+	auto currentZ = this->z();
+	if (z > currentZ && switchz.second) return currentZ;
+	else if (z < currentZ && switchz.first) return currentZ;
+
     if (!enableLimitZ) return z;
     if (z < m_limitz.first) z = m_limitz.first;
     else if (z > m_limitz.second) z = m_limitz.second;
