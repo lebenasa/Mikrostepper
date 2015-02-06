@@ -56,6 +56,10 @@ public slots:
 
     void resetShortcut(const QString& command);
     void resetAllShortcut();
+
+	double readCNCStepsPerUnitX();
+	double readCNCStepsPerUnitY();
+	double readCNCStepsPerUnitZ();
 };
 
 #endif // APPSETTINGS_H

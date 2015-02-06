@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "appsettings.h"
 
+#include "tinyxml2.h"
+
 AppSettings::AppSettings(QObject *parent)
     : QObject(parent)
 {
@@ -162,4 +164,46 @@ void AppSettings::resetAllShortcut() {
     setting->remove("");
     setting->endGroup();
     emit shortcutUpdated();
+}
+
+double AppSettings::readCNCStepsPerUnitX() {
+	auto dir = QCoreApplication::applicationDirPath();
+	dir += "/CNCUSBController.setting";
+	auto xml = QDir::toNativeSeparators(dir);
+	tinyxml2::XMLDocument doc;
+	auto err = doc.LoadFile(xml.toStdString().c_str());
+	if (err == tinyxml2::XML_NO_ERROR) {
+		auto spx = doc.FirstChildElement("Setting")->FirstChildElement("Axis1StepsPerUnit")->FirstChild()->ToText();
+		QString txt{ spx->Value() };
+		return txt.toDouble();
+	}
+	return 0.0;
+}
+
+double AppSettings::readCNCStepsPerUnitY() {
+	auto dir = QCoreApplication::applicationDirPath();
+	dir += "/CNCUSBController.setting";
+	auto xml = QDir::toNativeSeparators(dir);
+	tinyxml2::XMLDocument doc;
+	auto err = doc.LoadFile(xml.toStdString().c_str());
+	if (err == tinyxml2::XML_NO_ERROR) {
+		auto spx = doc.FirstChildElement("Setting")->FirstChildElement("Axis2StepsPerUnit")->FirstChild()->ToText();
+		QString txt{ spx->Value() };
+		return txt.toDouble();
+	}
+	return 0.0;
+}
+
+double AppSettings::readCNCStepsPerUnitZ() {
+	auto dir = QCoreApplication::applicationDirPath();
+	dir += "/CNCUSBController.setting";
+	auto xml = QDir::toNativeSeparators(dir);
+	tinyxml2::XMLDocument doc;
+	auto err = doc.LoadFile(xml.toStdString().c_str());
+	if (err == tinyxml2::XML_NO_ERROR) {
+		auto spx = doc.FirstChildElement("Setting")->FirstChildElement("Axis3StepsPerUnit")->FirstChild()->ToText();
+		QString txt{ spx->Value() };
+		return txt.toDouble();
+	}
+	return 0.0;
 }

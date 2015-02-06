@@ -30,6 +30,10 @@ Rectangle {
             var key = appsettings.readShortcut(_model.get(i).name, _model.get(i).keys)
             _model.set(i, { "shortcut": key })
         }
+
+        stepperunitx.value = appsettings.readCNCStepsPerUnitX()
+        stepperunity.value = appsettings.readCNCStepsPerUnitY()
+        stepperunitz.value = appsettings.readCNCStepsPerUnitZ()
     }
 
     function updateSettings() {

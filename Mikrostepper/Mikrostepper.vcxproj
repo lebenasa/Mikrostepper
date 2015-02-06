@@ -180,8 +180,10 @@
     <ClCompile Include="stepper.cpp" />
     <ClCompile Include="stepperinterface.cpp" />
     <ClCompile Include="steppernavigator.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tinyxml2.h" />
     <CustomBuild Include="steppernavigator.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing steppernavigator.h...</Message>
