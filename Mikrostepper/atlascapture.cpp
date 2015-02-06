@@ -126,9 +126,9 @@ void AtlasCapture::addCaptureCommand() {
     auto cmd = [=]() {
         QPoint pt = v_targets.at(m_progress);
         auto base = m_saveDir;
-        auto fn = base + "/" + QString("%1_%2.jpg").arg(pt.y(), 4, 10, QChar('0')).
-                arg(pt.x(), 4, 10, QChar('0'));
-        m_camera->capture(2, fn);
+        auto fn = base + "/" + QString("%1_%2.png").arg(pt.y(), 5, 10, QChar('0')).
+                arg(pt.x(), 5, 10, QChar('0'));
+        m_camera->capture(1, fn);
         setProgress(m_progress + 1);
         QTimer::singleShot(250, this, SLOT(nextCommand()));
     };

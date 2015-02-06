@@ -26,6 +26,7 @@ public slots:
     virtual QSize size() const = 0;
 
 	virtual void capture(int resolution, const QString &fileName) = 0;
+	virtual void saveBuffer(const QString& fileName) = 0;
 
 signals :
 	void frameReady(const QImage& frame);
@@ -55,6 +56,7 @@ public slots:
     QSize size() const { return m_buffer.size(); }
 
     void capture(int resolution, const QString &fileName);
+	void saveBuffer(const QString& fileName);
     
     void imageProc();
 
@@ -69,6 +71,7 @@ class DSCamera : public Camera
 	QSize m_size;
 	int m_resolution;
 	bool m_available;
+	QImage m_buffer;
 public:
 	DSCamera(QObject *parent = 0);
 	~DSCamera();
@@ -81,6 +84,7 @@ public slots:
 	QSize size() const;
 
 	void capture(int resolution, const QString &fileName);
+	void saveBuffer(const QString& fileName);
 
 	void imageProc(BYTE* pBuffer);
 

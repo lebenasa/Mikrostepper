@@ -49,22 +49,40 @@ void StepperNavigator::initSettings() {
     enableLimitZ = s.readBool("EnableLimitZ", true);
 
 	bool swt = s.readBool("StopOnMinX", true);
-	if (swt) connect(stepper, &Stepper::limit0Changed, [this](bool v){ if (v) stop(); switchx.first = v; });
+	if (swt) {
+		if (stepper->limit0()) switchx.first = true;
+		connect(stepper, &Stepper::limit0Changed, [this](bool v){ if (v) stop(); switchx.first = v; });
+	}
 	else disconnect(stepper, SIGNAL(limit0Changed()), 0, 0);
 	swt = s.readBool("StopOnMaxX", true);
-	if (swt) connect(stepper, &Stepper::limit1Changed, [this](bool v){ if (v) stop(); switchx.second = v; });
+	if (swt) {
+		if (stepper->limit1()) switchx.second = true;
+		connect(stepper, &Stepper::limit1Changed, [this](bool v){ if (v) stop(); switchx.second = v; });
+	}
 	else disconnect(stepper, SIGNAL(limit1Changed()), 0, 0);
 	swt = s.readBool("StopOnMinY", true);
-	if (swt) connect(stepper, &Stepper::limit2Changed, [this](bool v){ if (v) stop(); switchy.first = v; });
+	if (swt) {
+		if (stepper->limit2()) switchy.first = true;
+		connect(stepper, &Stepper::limit2Changed, [this](bool v){ if (v) stop(); switchy.first = v; });
+	}
 	else disconnect(stepper, SIGNAL(limit2Changed()), 0, 0);
 	swt = s.readBool("StopOnMaxY", true);
-	if (swt) connect(stepper, &Stepper::limit3Changed, [this](bool v){ if (v) stop(); switchy.second = v; });
+	if (swt) {
+		if (stepper->limit3()) switchy.second = true;
+		connect(stepper, &Stepper::limit3Changed, [this](bool v){ if (v) stop(); switchy.second = v; });
+	}
 	else disconnect(stepper, SIGNAL(limit3Changed()), 0, 0);
 	swt = s.readBool("StopOnMinZ", true);
-	if (swt) connect(stepper, &Stepper::limit4Changed, [this](bool v){ if (v) stop(); switchz.first = v; });
+	if (swt) {
+		if (stepper->limit4()) switchz.first = true;
+		connect(stepper, &Stepper::limit4Changed, [this](bool v){ if (v) stop(); switchz.first = v; });
+	}
 	else disconnect(stepper, SIGNAL(limit4Changed()), 0, 0);
 	swt = s.readBool("StopOnMaxZ", true);
-	if (swt) connect(stepper, &Stepper::limit5Changed, [this](bool v){ if (v) stop(); switchz.second = v; });
+	if (swt) {
+		if (stepper->limit5()) switchz.second = true;
+		connect(stepper, &Stepper::limit5Changed, [this](bool v){ if (v) stop(); switchz.second = v; });
+	}
 	else disconnect(stepper, SIGNAL(limit5Changed()), 0, 0);
 }
 
@@ -92,18 +110,18 @@ void StepperNavigator::jogXY(int x, int y) {
     auto xbase = stepper->x();
     auto ybase = stepper->y();
 
-    if (x > 0) xbase = 999999;
-    else if (x < 0) xbase = -999999;
-    if (y > 0) ybase = 999999;
-    else if (y < 0) ybase = -999999;
+    if (x > 0) xbase = 9999;
+    else if (x < 0) xbase = -9999;
+    if (y > 0) ybase = 9999;
+    else if (y < 0) ybase = -9999;
 
     moveXY(xbase, ybase);
 }
 
 void StepperNavigator::jogZ(int z) {
     double zinc = 0;
-    if (z > 0) zinc = 999999;
-    else if (z < 0) zinc = -999999;
+    if (z > 0) zinc = 9999;
+    else if (z < 0) zinc = -9999;
     moveZ(zinc);
 }
 

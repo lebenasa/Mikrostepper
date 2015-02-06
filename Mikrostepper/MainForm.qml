@@ -538,53 +538,54 @@ Item {
     function procKeyPress(event) {
         if (event.isAutoRepeat || currentKey != "") return
         var val = appsettings.keyCodeToString(event.modifiers + event.key)
+        var key = appsettings.keyCodeToString(event.key)
         if (val === jogKeyUp) {
-            currentKey = val
+            currentKey = key
             navigator.jogXY(0, -1)
         }
         else if (val === jogKeyRight) {
-            currentKey = val
+            currentKey = key
             navigator.jogXY(1, 0)
         }
         else if (val === jogKeyDown) {
-            currentKey = val
+            currentKey = key
             navigator.jogXY(0, 1)
         }
         else if (val === jogKeyLeft) {
-            currentKey = val
+            currentKey = key
             navigator.jogXY(-1, 0)
         }
         else if (val === jogKeyZUp) {
-            currentKey = val
+            currentKey = key
             navigator.jogZ(1)
         }
         else if (val === jogKeyZDown) {
-            currentKey = val
+            currentKey = key
             navigator.jogZ(-1)
         }
 
         else if (val === jogSlowKeyUp) {
-            currentKey = val
+            currentKey = key
             navigator.jogSlowXY(0, -1)
         }
         else if (val === jogSlowKeyRight) {
-            currentKey = val
+            currentKey = key
             navigator.jogSlowXY(1, 0)
         }
         else if (val === jogSlowKeyDown) {
-            currentKey = val
+            currentKey = key
             navigator.jogSlowXY(0, 1)
         }
         else if (val === jogSlowKeyLeft) {
-            currentKey = val
+            currentKey = key
             navigator.jogSlowXY(-1, 0)
         }
         else if (val === jogSlowKeyZUp) {
-            currentKey = val
+            currentKey = key
             navigator.jogSlowZ(1)
         }
         else if (val === jogSlowKeyZDown) {
-            currentKey = val
+            currentKey = key
             navigator.jogSlowZ(-1)
         }
 
@@ -604,7 +605,7 @@ Item {
 
     function procKeyRelease(event) {
         if (event.isAutoRepeat || currentKey == "") return
-        var val = appsettings.keyCodeToString(event.modifiers + event.key)
+        var val = appsettings.keyCodeToString(event.key)
         if (val === currentKey) {
             currentKey = ""
             navigator.stop()

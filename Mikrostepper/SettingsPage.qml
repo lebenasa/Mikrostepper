@@ -34,27 +34,28 @@ Rectangle {
 
     function updateSettings() {
         for (var d = 0; d < doublesettings.count; ++d) {
-            appsettings.saveSettings(doublesettings.get(d).name, doublesettings.get(d).value)
+            var val = appsettings.readDouble(doublesettings.get(d).name, doublesettings.get(d).defval)
+            if (val !== doublesettings.get(d).value)
+                appsettings.saveSettings(doublesettings.get(d).name, doublesettings.get(d).value)
         }
 
         for (var b = 0; b < booleansettings.count; ++b) {
-            appsettings.saveSettings(booleansettings.get(b).name, booleansettings.get(b).value)
+            var bval = appsettings.readBool(booleansettings.get(b).name, booleansettings.get(b).defval)
+            if (bval !== booleansettings.get(b).value)
+                appsettings.saveSettings(booleansettings.get(b).name, booleansettings.get(b).value)
         }
 
         for (var j = 0; j < integersettings.count; ++j) {
-            appsettings.saveSettings(integersettings.get(j).name, integersettings.get(j).value)
+            var ival = appsettings.readInt(integersettings.get(j).name, integersettings.get(j).defval)
+            if (ival !== integersettings.get(j).value)
+                appsettings.saveSettings(integersettings.get(j).name, integersettings.get(j).value)
         }
 
         for (var i = 0; i < _model.count; ++i) {
-            appsettings.saveShortcut(_model.get(i).name, _model.get(i).shortcut)
+            var key = appsettings.readShortcut(_model.get(i).name, _model.get(i).keys)
+            if (key !== _model.get(i).shortcut)
+                appsettings.saveShortcut(_model.get(i).name, _model.get(i).shortcut)
         }
-
-        var lastParams = 0;
-        if (radioButton1.checked) lastParams = 0
-        else if (radioButton2.checked) lastParams = 1
-        else if (radioButton3.checked) lastParams = 2
-        else lastParams = 3
-        appsettings.saveSettings("CameraLastParams", lastParams)
     }
 
     function restoreSettings() {

@@ -38,6 +38,10 @@ void MockCamera::capture(int resolution, const QString &fileName) {
     m_buffer.save(fileName);
 }
 
+void MockCamera::saveBuffer(const QString& fileName) {
+	m_buffer.save(fileName);
+}
+
 void MockCamera::imageProc() {
     auto rgb = QColor::fromHsv(state, 255, 255);
     m_buffer.fill(rgb);
@@ -52,7 +56,7 @@ void MockCamera::imageProc() {
 //DSCamera implementation
 DSCamera* dscamera;
 DSCamera::DSCamera(QObject *parent)
-	: Camera(parent), m_resolution(2), m_available(false)
+	: Camera(parent), m_resolution(1), m_available(false)
 {
 	dscamera = this;
 	initialize();
@@ -75,8 +79,8 @@ void DSCamera::imageProc(BYTE* pBuffer) {
 	cv::Mat frame = cv::Mat(sz.height(), sz.width(), CV_8UC3, pBuffer);
 	cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
 	cv::flip(frame, frame, 0);
-	auto buff = QImage(frame.data, sz.width(), sz.height(), QImage::Format_RGB888);
-	emit frameReady(buff);
+	m_buffer = QImage(frame.data, sz.width(), sz.height(), QImage::Format_RGB888);
+	emit frameReady(m_buffer);
 }
 
 QSize DSCamera::size() const {
@@ -127,6 +131,10 @@ void DSCamera::capture(int res, const QString &fileName) {
 		QImage("Z.jpg").save(fileName);
 	else
 		QFile::copy("Z.jpg", fileName);
+}
+
+void DSCamera::saveBuffer(const QString& fileName) {
+	m_buffer.save(fileName);
 }
 
 //QuickCam implementation
