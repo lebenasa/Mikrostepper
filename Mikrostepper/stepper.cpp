@@ -142,7 +142,7 @@ CNCStepper::CNCStepper(QObject* parent)
 {
 	statusUpdater = new QTimer(this);
 	connect(statusUpdater, &QTimer::timeout, this, &CNCStepper::updateStatus);
-	statusUpdater->start(10);
+	statusUpdater->start(1);
 	m_isActive = init();
 }
 

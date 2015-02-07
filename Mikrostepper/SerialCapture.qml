@@ -38,12 +38,6 @@ Rectangle {
         onSettingsChanged: updateSettings()
     }
 
-    Binding {
-        target: serialcapture
-        property: "focus"
-        value: root.visible
-    }
-
     ScrollView {
         id: gridview
         anchors.fill: parent

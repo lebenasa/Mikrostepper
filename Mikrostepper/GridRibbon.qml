@@ -47,6 +47,12 @@ Rectangle {
         serialcapture.zoomOut()
     }
 
+    Binding {
+        target: serialcapture
+        property: "focus"
+        value: ribbonbar.visible
+    }
+
     MessageDialog {
         id: warning
         title: "Not enough information for auto-fill"
