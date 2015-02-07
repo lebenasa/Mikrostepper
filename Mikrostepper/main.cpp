@@ -17,10 +17,11 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    qmlRegisterType<LebenWindow>("Leben.Asa", 1, 0, "LebenWindow");
+	qmlRegisterType<LebenWindow>("Leben.Asa", 1, 0, "LebenWindow");
 	qmlRegisterType<QuickCam>("QuickCam", 1, 0, "CameraItem");
 
     AppSettings settings;
+	settings.updateCNCSettings();
     DSCamera camera;
     if (!camera.isAvailable())
         app.quit();

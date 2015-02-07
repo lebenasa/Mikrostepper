@@ -207,3 +207,32 @@ double AppSettings::readCNCStepsPerUnitZ() {
 	}
 	return 0.0;
 }
+
+void AppSettings::updateCNCSettings() {
+	bool cx, cy, cz;
+	cx = cy = cz = false;
+	auto spx = readDouble("StepPerUnitX", 5096.0);
+	if (spx != readCNCStepsPerUnitX()) cx = true;
+	auto spy = readDouble("StepPerUnitY", 5096.0);
+	if (spy != readCNCStepsPerUnitY()) cy = true;
+	auto spz = readDouble("StepPerUnitZ", 1067.0);
+	if (spz != readCNCStepsPerUnitZ()) cz = true;
+	QStringList args;
+	args << QString().setNum((int)spx) << QString().setNum((int)spy) << QString().setNum((int)spz);
+	if (cx || cy || cz) {
+		auto dir = QCoreApplication::applicationDirPath();
+		dir += "/CNCUSBController.setting";
+		auto xml = QDir::toNativeSeparators(dir);
+		tinyxml2::XMLDocument doc;
+		auto err = doc.LoadFile(xml.toStdString().c_str());
+		if (err == tinyxml2::XML_NO_ERROR) {
+			auto aspx = doc.FirstChildElement("Setting")->FirstChildElement("Axis1StepsPerUnit")->FirstChild()->ToText();
+			aspx->SetValue(args.at(0).toStdString().c_str());
+			auto aspy = doc.FirstChildElement("Setting")->FirstChildElement("Axis2StepsPerUnit")->FirstChild()->ToText();
+			aspy->SetValue(args.at(1).toStdString().c_str());
+			auto aspz = doc.FirstChildElement("Setting")->FirstChildElement("Axis3StepsPerUnit")->FirstChild()->ToText();
+			aspz->SetValue(args.at(2).toStdString().c_str());
+			doc.SaveFile(xml.toStdString().c_str());
+		}
+	}
+}

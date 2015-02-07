@@ -60,6 +60,8 @@ public slots:
 	double readCNCStepsPerUnitX();
 	double readCNCStepsPerUnitY();
 	double readCNCStepsPerUnitZ();
+
+	void updateCNCSettings();
 };
 
 #endif // APPSETTINGS_H

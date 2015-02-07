@@ -30,10 +30,6 @@ Rectangle {
             var key = appsettings.readShortcut(_model.get(i).name, _model.get(i).keys)
             _model.set(i, { "shortcut": key })
         }
-
-        stepperunitx.value = appsettings.readCNCStepsPerUnitX()
-        stepperunity.value = appsettings.readCNCStepsPerUnitY()
-        stepperunitz.value = appsettings.readCNCStepsPerUnitZ()
     }
 
     function updateSettings() {
@@ -60,6 +56,19 @@ Rectangle {
             if (key !== _model.get(i).shortcut)
                 appsettings.saveShortcut(_model.get(i).name, _model.get(i).shortcut)
         }
+
+        if (stepperunitx.value !== appsettings.readCNCStepsPerUnitX()) {
+            appsettings.saveSettings("StepPerUnitX", stepperunitx.value)
+            requireRestart = true
+        }
+        if (stepperunity.value !== appsettings.readCNCStepsPerUnitY()) {
+            appsettings.saveSettings("StepPerUnitY", stepperunity.value)
+            requireRestart = true
+        }
+        if (stepperunitz.value !== appsettings.readCNCStepsPerUnitZ()) {
+            appsettings.saveSettings("StepPerUnitZ", stepperunitz.value)
+            requireRestart = true
+        }
     }
 
     function restoreSettings() {
@@ -85,6 +94,22 @@ Rectangle {
             var key = appsettings.readShortcut(_model.get(i).name, _model.get(i).keys)
             if (key !== _model.get(i).keys)
                 appsettings.resetShortcut(_model.get(i).name)
+        }
+
+        if (5096.0 !== appsettings.readCNCStepsPerUnitX()) {
+            stepperunitx.value = 5096.0
+            appsettings.saveSettings("StepPerUnitX", 5096.0)
+            requireRestart = true
+        }
+        if (5096.0 !== appsettings.readCNCStepsPerUnitY()) {
+            stepperunity.value = 5096.0
+            appsettings.saveSettings("StepPerUnitY", 5096.0)
+            requireRestart = true
+        }
+        if (1067.0 !== appsettings.readCNCStepsPerUnitZ()) {
+            stepperunitz.value = 1067.0
+            appsettings.saveSettings("StepPerUnitZ", 1067.0)
+            requireRestart = true
         }
     }
 
@@ -549,7 +574,7 @@ Rectangle {
                     }
                     SpinBox {
                         id: stepperunitx
-                        value: 5096
+                        value: appsettings.readCNCStepsPerUnitX()
                         stepSize: 100
                         maximumValue: 10000
                         minimumValue: 10
@@ -596,7 +621,7 @@ Rectangle {
                     }
                     SpinBox {
                         id: stepperunity
-                        value: 5096
+                        value: appsettings.readCNCStepsPerUnitY()
                         stepSize: 100
                         minimumValue: 10
                         maximumValue: 10000
@@ -643,7 +668,7 @@ Rectangle {
                     }
                     SpinBox {
                         id: stepperunitz
-                        value: 1067
+                        value: appsettings.readCNCStepsPerUnitZ()
                         stepSize: 100
                         minimumValue: 10
                         maximumValue: 10000
