@@ -40,8 +40,8 @@ void SerialCapture::updateCenter() {
     auto shift = m_interface->setTopLeft(currentCoord());
     flushCommand();
     blockStream();
-    m_navigator->moveTo(m_interface->indexToCoord(QPoint(0, 0)));
-
+	auto mv = [this]() { m_navigator->moveTo(m_interface->indexToCoord(QPoint(0, 0))); };
+	QTimer::singleShot(100, mv);
     m_model->shiftData(shift);
 }
 
@@ -111,7 +111,8 @@ void SerialCapture::zoomOut() {
 void SerialCapture::moveToSelected() {
     flushCommand();
     blockStream();
-    m_navigator->moveTo(m_interface->indexToCoord(m_model->selectedCell()));
+	auto mv = [this]() { m_navigator->moveTo(m_interface->indexToCoord(m_model->selectedCell())); };
+	QTimer::singleShot(100, mv);
 }
 
 void SerialCapture::procSelect(const QPoint &pos) {
@@ -218,7 +219,7 @@ void SerialCapture::addMoveToCommand(const QPointF &target) {
     addCommand([=]() {
         blockStream();
         connect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::nextCommand);
-        m_navigator->moveTo(target);
+		QTimer::singleShot(100, [=]() { m_navigator->moveTo(target); });
     });
 }
 

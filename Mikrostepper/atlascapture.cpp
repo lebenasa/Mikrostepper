@@ -111,7 +111,7 @@ void AtlasCapture::addCommand(Command cmd) {
 void AtlasCapture::addMoveToCommand(const QPointF &target) {
     addCommand([=]() {
         connect(m_navigator, &StepperNavigator::bufferFull, this, &AtlasCapture::nextCommand);
-        m_navigator->moveTo(target);
+		QTimer::singleShot(100, [=]() { m_navigator->moveTo(target); });
     });
 }
 
@@ -130,7 +130,7 @@ void AtlasCapture::addCaptureCommand() {
                 arg(pt.x(), 5, 10, QChar('0'));
         m_camera->capture(1, fn);
         setProgress(m_progress + 1);
-        QTimer::singleShot(250, this, SLOT(nextCommand()));
+        QTimer::singleShot(100, this, SLOT(nextCommand()));
     };
     addCommand(cmd);
 }

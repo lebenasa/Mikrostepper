@@ -142,7 +142,7 @@ CNCStepper::CNCStepper(QObject* parent)
 {
 	statusUpdater = new QTimer(this);
 	connect(statusUpdater, &QTimer::timeout, this, &CNCStepper::updateStatus);
-	statusUpdater->start(100);
+	statusUpdater->start(10);
 	m_isActive = init();
 }
 
@@ -177,6 +177,7 @@ bool CNCStepper::init() {
 	connect(this, &CNCStepper::limit7Changed, this, &CNCStepper::powerStat);
 	ControllerEventCallBack();
 
+	m_bufferSize = cncAPI->mObject->GetBufferSize();
 	return true;
 }
 
@@ -227,7 +228,6 @@ void CNCStepper::updateStatus() {
 		}
 	}
 
-	m_bufferSize = cncAPI->mObject->GetBufferSize();
 	m_output = cncAPI->mObject->GetOutput();
 	m_jog = cncAPI->mObject->GetJog();
 
