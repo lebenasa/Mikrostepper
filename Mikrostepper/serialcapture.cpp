@@ -189,28 +189,28 @@ void SerialCapture::shiftUp() {
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(0, -1));
     m_model->shiftData(shift);
-    unblockStream();
+    //unblockStream();
 }
 
 void SerialCapture::shiftDown() {
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(0, 1));
     m_model->shiftData(shift);
-    unblockStream();
+    //unblockStream();
 }
 
 void SerialCapture::shiftRight() {
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(1, 0));
     m_model->shiftData(shift);
-    unblockStream();
+    //unblockStream();
 }
 
 void SerialCapture::shiftLeft() {
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(-1, 0));
     m_model->shiftData(shift);
-    unblockStream();
+    //unblockStream();
 }
 
 void SerialCapture::addCommand(Command cmd) {

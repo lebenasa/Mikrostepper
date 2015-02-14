@@ -24,19 +24,18 @@ void BaseRecorder::initRecorder(const QString &video_file, double frame_rate) {
     timestarted = QTime(0, 0, 0, 0);
     timer->setInterval(1000/frame_rate);
 	if (QFile::exists(video_file)) QFile::remove(video_file);
-	int sW, sH;
-	CameraGetImageSize(&sW, &sH);
 	auto writer = cv::VideoWriter{ };
-	bool result = writer.open(video_file.toStdString(), cv::VideoWriter::fourcc('D', 'I', 'V', 'X'), frame_rate, cv::Size(sW, sH));
+	bool result = writer.open(QDir::toNativeSeparators(video_file).toStdString(), cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 
+		frame_rate, cv::Size(im_frame.width(), im_frame.height()));
 }
 
 void BaseRecorder::imgProc(const QImage &img) {
-    im_frame = img;
+    im_frame = img.copy();
 }
 
 void BaseRecorder::timeout() {
 	cv::Mat cFrame{ im_frame.width(), im_frame.height(), CV_8UC3, im_frame.bits(), (size_t)im_frame.bytesPerLine() };
-	writer << cFrame;
+	writer.write(cFrame);
     timestarted = timestarted.addMSecs(1000/m_fps);
     emit timestatus(timestarted.toString("hh:mm:ss"));
 }

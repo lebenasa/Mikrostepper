@@ -51,7 +51,7 @@ QUrl OptilabViewer::captureToTemp(const QString& imgName) {
     QString img = appPath + "/" + imgName;
     if (QFile::exists(img))
         QFile::remove(img);
-    m_camera->capture(0, img); // 0 = Highest, 2 = Lowest
+    m_camera->capture(1, img); // 0 = Highest, 2 = Lowest
     return QUrl::fromLocalFile(img);
 }
 
