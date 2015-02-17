@@ -34,8 +34,8 @@ Rectangle {
                 Rectangle {
                     id: capturearea
                     color: "transparent"
-                    x: atlas.captureRect.x; y: atlas.captureRect.y
-                    width: atlas.captureRect.width; height: atlas.captureRect.height
+                    x: atlas.captureRect.x - 13; y: atlas.captureRect.y - 13
+                    width: atlas.captureRect.width + 26; height: atlas.captureRect.height + 26
                     visible: (atlas.captureRect.width > 1 && atlas.captureRect.height > 1)
                     border.color: "#9b59b6"
                     border.width: 2
@@ -94,7 +94,7 @@ Rectangle {
 
                 Rectangle {
                     id: mark1
-                    width: 30; height: 30
+                    width: 26; height: 26
                     color: "#3498db"
                     visible: false
                     radius: 60
@@ -106,7 +106,7 @@ Rectangle {
                 }
                 Rectangle {
                     id: mark2
-                    width: 30; height: 30
+                    width: 26; height: 26
                     color: "#3498db"
                     visible: false
                     radius: 60
@@ -118,7 +118,7 @@ Rectangle {
                 }
                 Rectangle {
                     id: mark3
-                    width: 30; height: 30
+                    width: 26; height: 26
                     color: "#3498db"
                     visible: false
                     radius: 60
@@ -130,7 +130,7 @@ Rectangle {
                 }
                 Rectangle {
                     id: mark4
-                    width: 30; height: 30
+                    width: 26; height: 26
                     color: "#3498db"
                     visible: false
                     radius: 60
@@ -177,19 +177,19 @@ Rectangle {
     }
 
     function popMark1() {
-        mark1.x = atlas.currentPos.x - 15; mark1.y = atlas.currentPos.y - 15
+        mark1.x = atlas.currentPos.x - 13; mark1.y = atlas.currentPos.y - 13
         mark1.visible = true
     }
     function popMark2() {
-        mark2.x = atlas.currentPos.x - 15; mark2.y = atlas.currentPos.y - 15
+        mark2.x = atlas.currentPos.x - 13; mark2.y = atlas.currentPos.y - 13
         mark2.visible = true
     }
     function popMark3() {
-        mark3.x = atlas.currentPos.x - 15; mark3.y = atlas.currentPos.y - 15
+        mark3.x = atlas.currentPos.x - 13; mark3.y = atlas.currentPos.y - 13
         mark3.visible = true
     }
     function popMark4() {
-        mark4.x = atlas.currentPos.x - 15; mark4.y = atlas.currentPos.y - 15
+        mark4.x = atlas.currentPos.x - 13; mark4.y = atlas.currentPos.y - 13
         mark4.visible = true
     }
     function hideAllMark() {

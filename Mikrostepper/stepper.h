@@ -22,6 +22,8 @@ public:
 	Stepper(QObject *parent = 0);
 	~Stepper();
 
+    virtual bool isAvailable() = 0;
+
 	virtual double x() = 0;
 	virtual double y() = 0;
 	virtual double z() = 0;
@@ -38,8 +40,6 @@ public:
 	bool limit5() { return limitAt(5); }
 	bool limit6() { return limitAt(6); }
 	bool limit7() { return limitAt(7); }
-
-    virtual bool isAvailable() = 0;
 
 public slots:
     virtual int bufferSize() = 0;
@@ -93,14 +93,14 @@ public:
 	MockStepper(QObject* parent = 0);
 	~MockStepper();
 
+    bool isAvailable() { return m_available; }
+
 	double x() { return m_pos.x(); }
 	double y() { return m_pos.y(); }
 	double z() { return m_z; }
     int bufferFree() { return m_bufferFree; }
 
 	bool limitAt(int id) override { return m_limit.at(id); }
-
-    bool isAvailable() { return m_available; }
 
 public slots:
     int bufferSize() { return m_bufferSize; }
@@ -138,14 +138,14 @@ public:
 	CNCStepper(QObject* parent = 0);
 	~CNCStepper();
 
+	bool isAvailable() { return m_isActive; }
+
 	double x() { return m_x; }
 	double y() { return m_y; }
 	double z() { return m_z; }
 	int bufferFree() { return m_bufferFree; }
 
 	bool limitAt(int id) override { return m_limit.at(id); }
-
-	bool isAvailable() { return m_isActive; }
 
 public slots:
 	int bufferSize() { return m_bufferSize; }

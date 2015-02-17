@@ -36,6 +36,7 @@ void AtlasCapture::initSettings() {
     emit approxSizeChanged();
     emit approxTimeChanged();
     emit profileChanged();
+	procStepperPos(m_navigator->xy());
 }
 
 QPoint AtlasCapture::coordToPx(const QPointF &coord) {

@@ -23,11 +23,13 @@ int main(int argc, char *argv[])
     AppSettings settings;
 	settings.updateCNCSettings();
     DSCamera camera;
-    if (!camera.isAvailable())
-        app.quit();
+	if (!camera.isAvailable()) {
+		return 0;
+	}
     CNCStepper stepper(&camera);
-    if (!stepper.isAvailable())
-        app.quit();
+	if (!stepper.isAvailable()) {
+		return 0;
+	}
 
     CameraControl camctr(&camera);
     StepperNavigator nav(&stepper);

@@ -138,7 +138,7 @@ void MockStepper::setZeroZ() {
 #include "api_wrapper.h"
 
 CNCStepper::CNCStepper(QObject* parent)
-	: Stepper(parent)
+	: Stepper(parent), m_limit{0}
 {
 	statusUpdater = new QTimer(this);
 	connect(statusUpdater, &QTimer::timeout, this, &CNCStepper::updateStatus);
@@ -289,22 +289,22 @@ void CNCStepper::stop() {
 }
 
 void CNCStepper::moveX(double dist) {
-	if (!m_isActive || m_bufferFree != m_bufferSize) return;
+	if (!m_isActive) return;
 	cncAPI->mObject->SendMoveDeltaAxis(AxisEnum_X, dist, m_speed, UnitsEnum_Millimeters);
 }
 
 void CNCStepper::moveY(double dist) {
-	if (!m_isActive || m_bufferFree != m_bufferSize) return;
+	if (!m_isActive) return;
 	cncAPI->mObject->SendMoveDeltaAxis(AxisEnum_Y, dist, m_speed, UnitsEnum_Millimeters);
 }
 
 void CNCStepper::moveZ(double dist) {
-	if (!m_isActive || m_bufferFree != m_bufferSize) return;
+	if (!m_isActive) return;
 	cncAPI->mObject->SendMoveDeltaAxis(AxisEnum_Z, dist, m_speed, UnitsEnum_Millimeters);
 }
 
 void CNCStepper::moveTo(const QPointF& npos) {
-	if (!m_isActive || m_bufferFree != m_bufferSize) return;
+	if (!m_isActive) return;
 	ICoord* coord = 0;
 	coord = cncAPI->mObject->GetPosition();
 	coord->X = npos.x();

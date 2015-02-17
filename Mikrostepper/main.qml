@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
+import QtQuick.Dialogs 1.2
 import Leben.Asa 1.0
 
 LebenWindow {
@@ -73,5 +74,9 @@ LebenWindow {
         }
     }
 
-    Component.onCompleted: applicationWindow1.showMaximized()
+
+
+    Component.onCompleted: {
+        applicationWindow1.showMaximized()
+    }
 }

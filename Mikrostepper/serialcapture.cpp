@@ -186,31 +186,31 @@ void SerialCapture::autoFill() {
 }
 
 void SerialCapture::shiftUp() {
+	flushCommand();
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(0, -1));
     m_model->shiftData(shift);
-    //unblockStream();
 }
 
 void SerialCapture::shiftDown() {
+	flushCommand();
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(0, 1));
     m_model->shiftData(shift);
-    //unblockStream();
 }
 
 void SerialCapture::shiftRight() {
+	flushCommand();
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(1, 0));
     m_model->shiftData(shift);
-    //unblockStream();
 }
 
 void SerialCapture::shiftLeft() {
+	flushCommand();
     blockStream();
     auto shift = m_interface->shiftOffset(QSize(-1, 0));
     m_model->shiftData(shift);
-    //unblockStream();
 }
 
 void SerialCapture::addCommand(Command cmd) {

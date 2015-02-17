@@ -82,35 +82,35 @@ Rectangle {
                 Rectangle {
                     id: innergridarea
                     color: "#34495e"
-                    width: cameraGrid.cellWidth * cammodel.cols
-                    height: cameraGrid.cellHeight * cammodel.rows
+                    width: serialcapture.cellSize.width * cammodel.cols
+                    height: serialcapture.cellSize.height * cammodel.rows
                     anchors.centerIn: parent
-                    GridView {
-                        id: cameraGrid
-                        model: cammodel
+                    Grid {
                         anchors.fill: parent
-                        interactive: false
-                        cellWidth: serialcapture.cellSize.width
-                        cellHeight: serialcapture.cellSize.height
-                        delegate: Rectangle {
-                            id: delegateBorder
-                            width: cameraGrid.cellWidth
-                            height: cameraGrid.cellHeight
-                            color: "transparent"
-                            border.width: (selected | highlight) ? 2 : 1
-                            border.color: selected ? "yellow" : highlight ? "magenta" : "#34495e"
-                            CameraItem {
-                                id: cameraDelegate
-                                anchors.fill: parent
-                                anchors.margins: (selected | highlight) ? 2 : 1
-                                blocked: false
-                                source: buffer
-                                renderParams: CameraItem.ScaledToItem
-                                overlap: istep.overlap()
+                        columns: cammodel.cols
+                        Repeater {
+                            id: cameraGrid
+                            model: cammodel
+                            delegate: Rectangle {
+                                id: delegateBorder
+                                width: serialcapture.cellSize.width
+                                height: serialcapture.cellSize.height
+                                color: "transparent"
+                                border.width: (selected | highlight) ? 2 : 1
+                                border.color: selected ? "yellow" : highlight ? "magenta" : "#34495e"
+                                CameraItem {
+                                    id: cameraDelegate
+                                    anchors.fill: parent
+                                    anchors.margins: (selected | highlight) ? 2 : 1
+                                    blocked: false
+                                    source: buffer
+                                    renderParams: CameraItem.ScaledToItem
+                                    overlap: istep.overlap()
+                                }
+                                Behavior on width { NumberAnimation { duration: 200 } }
+                                Behavior on height { NumberAnimation { duration: 200 } }
                             }
                         }
-                        Behavior on cellWidth { NumberAnimation { duration: 200 } }
-                        Behavior on cellHeight { NumberAnimation { duration: 200 } }
                     }
                     MouseArea {
                         id: cameraMouse
