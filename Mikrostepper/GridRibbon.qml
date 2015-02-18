@@ -107,6 +107,7 @@ Rectangle {
     ButtonRibbon {
         id: btnSaveSelected
         text: "Save Selected"
+        iconSource: "Images/SaveSelected.png"
         tooltip: "Save image in selected cells (indicated by yellow border)"
         anchors.verticalCenterOffset: -10
         anchors.left: btnSaveAll.right
@@ -119,6 +120,7 @@ Rectangle {
     ButtonRibbon {
         id: btnSaveAll
         text: "Save All"
+        iconSource: "Images/SaveAll.png"
         tooltip: "Save all images in current view"
         enabled: true
         anchors.verticalCenterOffset: -10
@@ -142,6 +144,7 @@ Rectangle {
     ButtonRibbon {
         id: btnMove
         text: "Move"
+        iconSource: "Images/MoveToSelected.png"
         tooltip: "Move to selected cell (indicated by yellow border)"
         anchors.verticalCenterOffset: -10
         anchors.left: rectangle1.right
@@ -154,6 +157,7 @@ Rectangle {
     ButtonRibbon {
         id: btnFill
         text: "Fill"
+        iconSource: "Images/FillSelected.png"
         tooltip: "Start capture to fill selected cell with images"
         anchors.verticalCenterOffset: -10
         anchors.left: btnMove.right
@@ -166,6 +170,7 @@ Rectangle {
     ButtonRibbon {
         id: btnAutoFill
         text: "Auto-Fill"
+        iconSource: "Images/FillAuto.png"
         tooltip: "Automatically fill cells based on existing images"
         anchors.verticalCenterOffset: -10
         anchors.left: btnFill.right
@@ -250,6 +255,7 @@ Rectangle {
     ButtonRibbon {
         id: btnZoomIn
         text: "Enlarge"
+        iconSource: "Images/EnlargeGrid.png"
         tooltip: "Enlarge cell size"
         anchors.left: rectangle2.right
         anchors.leftMargin: 10
@@ -261,6 +267,7 @@ Rectangle {
     ButtonRibbon {
         id: btnZoomOut
         text: "Shrink"
+        iconSource: "Images/ShrinkGrid.png"
         tooltip: "Shrink cell size"
         anchors.left: btnZoomIn.right
         anchors.leftMargin: 10

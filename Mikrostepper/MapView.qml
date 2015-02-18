@@ -95,7 +95,7 @@ Rectangle {
                 Rectangle {
                     id: mark1
                     width: 26; height: 26
-                    color: "#3498db"
+                    color: "#e74c3c"
                     visible: false
                     radius: 60
                     TextBlack {
@@ -119,7 +119,7 @@ Rectangle {
                 Rectangle {
                     id: mark3
                     width: 26; height: 26
-                    color: "#3498db"
+                    color: "#2ecc71"
                     visible: false
                     radius: 60
                     TextBlack {
@@ -131,7 +131,7 @@ Rectangle {
                 Rectangle {
                     id: mark4
                     width: 26; height: 26
-                    color: "#3498db"
+                    color: "#f1c40f"
                     visible: false
                     radius: 60
                     TextBlack {

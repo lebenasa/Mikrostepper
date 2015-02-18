@@ -81,6 +81,7 @@ Rectangle {
         id: btnStartCapture
         y: 20
         text: "Start Capture"
+        iconSource: "Images/MapCapture.png"
         anchors.left: parent.left
         anchors.leftMargin: 5
         anchors.verticalCenterOffset: -10
@@ -102,6 +103,7 @@ Rectangle {
     ButtonRibbon {
         id: btnMark1
         text: "Mark as Point 1"
+        iconSource: "Images/SelectPt1.png"
         anchors.leftMargin: 10
         anchors.left: rectangle1.right
         anchors.verticalCenter: btnStartCapture.verticalCenter
@@ -111,6 +113,7 @@ Rectangle {
     ButtonRibbon {
         id: btnMark2
         text: "Mark as Point 2"
+        iconSource: "Images/SelectPt2.png"
         anchors.left: btnMark1.right
         anchors.leftMargin: 10
         anchors.verticalCenter: btnStartCapture.verticalCenter
@@ -120,6 +123,7 @@ Rectangle {
     ButtonRibbon {
         id: btnMark3
         text: "Mark as Point 3"
+        iconSource: "Images/SelectPt3.png"
         anchors.left: btnMark2.right
         anchors.leftMargin: 10
         anchors.verticalCenter: btnStartCapture.verticalCenter
@@ -129,6 +133,7 @@ Rectangle {
     ButtonRibbon {
         id: btnMark4
         text: "Mark as Point 4"
+        iconSource: "Images/SelectPt4.png"
         anchors.verticalCenter: btnStartCapture.verticalCenter
         anchors.left: btnMark3.right
         anchors.leftMargin: 10
@@ -147,7 +152,9 @@ Rectangle {
 
     TextRegular {
         id: textRegular1
+        color: "#2c3e50"
         text: "Markers"
+        font.pointSize: 9
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 5
         verticalAlignment: Text.AlignVCenter

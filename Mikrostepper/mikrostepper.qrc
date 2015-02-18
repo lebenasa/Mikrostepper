@@ -52,5 +52,19 @@
         <file>CustomProfile.qml</file>
         <file>CalibrateRibbon.qml</file>
         <file>SettingsPage.qml</file>
+        <file>Images/MapCapture.png</file>
+        <file>Images/SelectPt4.png</file>
+        <file>Images/SelectPt3.png</file>
+        <file>Images/SelectPt2.png</file>
+        <file>Images/SelectPt1.png</file>
+        <file>Images/ShrinkGrid.png</file>
+        <file>Images/EnlargeGrid.png</file>
+        <file>Images/FillAuto.png</file>
+        <file>Images/FillSelected.png</file>
+        <file>Images/MoveToSelected.png</file>
+        <file>Images/SaveAll.png</file>
+        <file>Images/SaveSelected.png</file>
+        <file>Images/Mikrostepper.ico</file>
+        <file>Mikrostepper.ico</file>
     </qresource>
 </RCC>

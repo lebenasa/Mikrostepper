@@ -13,7 +13,7 @@ Button {
     style: ButtonStyle {
         background: Rectangle {
             implicitWidth: 60
-            implicitHeight: 80
+            implicitHeight: 90
             color: control.pressed ? bgpressed : control.checked ? bgchecked : bgdefault
             border.width: control.hovered ? 1 : 0
             border.color: bordercolor
@@ -45,7 +45,7 @@ Button {
                 text: control.text
                 anchors {
                     horizontalCenter: icon.horizontalCenter
-                    bottom: parent.bottom
+                    top: icon.bottom
                 }
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 9
