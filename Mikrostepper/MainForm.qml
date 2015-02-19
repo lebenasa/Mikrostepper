@@ -534,6 +534,13 @@ Item {
     property string frameDown: keysModel.get(getIndex("FrameDown")).shortcut
     property string frameLeft: keysModel.get(getIndex("FrameLeft")).shortcut
 
+    property string micronUp: keysModel.get(getIndex("MicronUp")).shortcut
+    property string micronRight: keysModel.get(getIndex("MicronRight")).shortcut
+    property string micronDown: keysModel.get(getIndex("MicronDown")).shortcut
+    property string micronLeft: keysModel.get(getIndex("MicronLeft")).shortcut
+    property string micronZUp: keysModel.get(getIndex("MicronZUp")).shortcut
+    property string micronZDown: keysModel.get(getIndex("MicronZDown")).shortcut
+
     property string currentKey: ""
     function procKeyPress(event) {
         if (event.isAutoRepeat || currentKey != "") return
@@ -600,6 +607,25 @@ Item {
         }
         else if (val === frameLeft) {
             navigator.frameXY(-1, 0)
+        }
+
+        else if (val === micronUp) {
+            navigator.micronXY(0, -1)
+        }
+        else if (val === micronRight) {
+            navigator.micronXY(1, 0)
+        }
+        else if (val === micronDown) {
+            navigator.micronXY(0, 1)
+        }
+        else if (val === micronLeft) {
+            navigator.micronXY(-1, 0)
+        }
+        else if (val === micronZUp) {
+            navigator.micronZ(1)
+        }
+        else if (val === micronZDown) {
+            navigator.micronZ(-1)
         }
     }
 

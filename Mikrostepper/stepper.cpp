@@ -43,8 +43,8 @@ void MockStepper::updateStatus() {
     auto incr = [](const double &now, const double &target) -> double {
         double res = now;
         if (target > now)
-            return res + .05;
-        return res - .05;
+            return res + .001;
+        return res - .001;
     };
     if (m_target != m_pos) {
         if (m_target.x() != m_pos.x()) {
@@ -59,8 +59,8 @@ void MockStepper::updateStatus() {
         }
         emit xyChanged(m_pos);
 
-        if (fabs(m_pos.x() - m_target.x()) <= .1 &&
-                fabs(m_pos.y() - m_target.y()) <= .1) {
+        if (fabs(m_pos.x() - m_target.x()) <= .01 &&
+                fabs(m_pos.y() - m_target.y()) <= .01) {
             stop();
             if (m_bufferFree == m_bufferSize)
                 emit bufferFull();

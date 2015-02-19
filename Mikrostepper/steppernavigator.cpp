@@ -149,6 +149,27 @@ void StepperNavigator::jogSlowZ(int z) {
     jogZ(z);
 }
 
+void StepperNavigator::micronXY(int x, int y) {
+	auto xbase = stepper->x();
+	auto ybase = stepper->y();
+	double xinc, yinc;
+	xinc = 0;
+	if (x > 0) xinc = 0.001;
+	else if (x < 0) xinc = -0.001;
+	yinc = 0;
+	if (y > 0) yinc = 0.001;
+	else if (y < 0) yinc = -0.001;
+	moveXY(xbase + xinc, ybase + yinc);
+}
+
+void StepperNavigator::micronZ(int z) {
+	auto zbase = stepper->z();
+	double zinc = 0;
+	if (z > 0) zinc = 0.001;
+	else if (z < 0) zinc = -0.001;
+	moveZ(zbase + zinc);
+}
+
 void StepperNavigator::stop() {
     stepper->stop();
     stepper->setSpeed(m_speed.second);

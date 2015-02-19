@@ -46,6 +46,8 @@ public slots:
     void frameXY(int x, int y);
     void jogSlowXY(int x, int y);
     void jogSlowZ(int z);
+	void micronXY(int x, int y);
+	void micronZ(int z);
 
     void stop();
 

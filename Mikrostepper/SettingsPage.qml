@@ -543,12 +543,12 @@ Rectangle {
                         font.pointSize: 9
                         Layout.columnSpan: 2
                     }
+                    Item { width: 2 }
                     TextBlack {
                         text: "Limit Switches"
                         font.pointSize: 9
                         Layout.columnSpan: 2
                     }
-                    Item { width: 2 }
 
                     Item { width: 2 }
                     TextRegular {
@@ -561,11 +561,11 @@ Rectangle {
                         text: "Limit Max"
                     }
                     TextRegular {
-                        text: "Stop"
-                        Layout.columnSpan: 2
+                        text: "Enable"
                     }
                     TextRegular {
-                        text: "Enable"
+                        text: "Stop"
+                        Layout.columnSpan: 2
                     }
 
                     TextBlack {
@@ -598,6 +598,11 @@ Rectangle {
                         onValueChanged: doublesettings.setProperty(1, "value", value)
                     }
                     CheckBox {
+                        id: enablelimitx
+                        checked: booleansettings.get(6).value
+                        onCheckedChanged: booleansettings.setProperty(6, "value", checked)
+                    }
+                    CheckBox {
                         id: minstopx
                         text: "Min"
                         checked: booleansettings.get(0).value
@@ -608,11 +613,6 @@ Rectangle {
                         text: "Max"
                         checked: booleansettings.get(1).value
                         onCheckedChanged: booleansettings.setProperty(1, "value", checked)
-                    }
-                    CheckBox {
-                        id: enablelimitx
-                        checked: booleansettings.get(6).value
-                        onCheckedChanged: booleansettings.setProperty(6, "value", checked)
                     }
 
                     TextBlack {
@@ -645,6 +645,11 @@ Rectangle {
                         onValueChanged: doublesettings.setProperty(3, "value", value)
                     }
                     CheckBox {
+                        id: enablelimity
+                        checked: booleansettings.get(7).value
+                        onCheckedChanged: booleansettings.setProperty(7, "value", checked)
+                    }
+                    CheckBox {
                         id: minstopy
                         text: "Min"
                         checked: booleansettings.get(2).value
@@ -655,11 +660,6 @@ Rectangle {
                         text: "Max"
                         checked: booleansettings.get(3).value
                         onCheckedChanged: booleansettings.setProperty(3, "value", checked)
-                    }
-                    CheckBox {
-                        id: enablelimity
-                        checked: booleansettings.get(7).value
-                        onCheckedChanged: booleansettings.setProperty(7, "value", checked)
                     }
 
                     TextBlack {
@@ -692,6 +692,11 @@ Rectangle {
                         onValueChanged: doublesettings.setProperty(5, "value", value)
                     }
                     CheckBox {
+                        id: enablelimitz
+                        checked: booleansettings.get(8).value
+                        onCheckedChanged: booleansettings.setProperty(8, "value", checked)
+                    }
+                    CheckBox {
                         id: minstopz
                         text: "Min"
                         checked: booleansettings.get(4).value
@@ -702,11 +707,6 @@ Rectangle {
                         text: "Max"
                         checked: booleansettings.get(5).value
                         onCheckedChanged: booleansettings.setProperty(5, "value", checked)
-                    }
-                    CheckBox {
-                        id: enablelimitz
-                        checked: booleansettings.get(8).value
-                        onCheckedChanged: booleansettings.setProperty(8, "value", checked)
                     }
 
                 }
@@ -894,6 +894,21 @@ Rectangle {
                         }
                     }
 
+                    TextRegular {
+                        text: "Frame Overlap"
+                    }
+
+                    SpinBox {
+                        id: gridoverlap
+                        value: doublesettings.get(9).value * 100
+                        maximumValue: 100
+                        minimumValue: 0
+                        suffix: " %"
+                        Layout.preferredWidth: 100
+                        Layout.alignment: Qt.AlignLeft
+                        onValueChanged: doublesettings.setProperty(9, "value", value / 100.0)
+                    }
+
                     Item { height: 10 }
 
                     TextBlack {
@@ -915,6 +930,21 @@ Rectangle {
                         Layout.preferredWidth: 100
                         Layout.alignment: Qt.AlignLeft
                         onValueChanged: doublesettings.set(8, { "value": 1/value })
+                    }
+
+                    TextRegular {
+                        text: "Frame Overlap"
+                    }
+
+                    SpinBox {
+                        id: mapoverlap
+                        value: doublesettings.get(10).value * 100
+                        maximumValue: 100
+                        minimumValue: 0
+                        suffix: " %"
+                        Layout.preferredWidth: 100
+                        Layout.alignment: Qt.AlignLeft
+                        onValueChanged: doublesettings.setProperty(10, "value", value / 100.0)
                     }
                 }
             }
@@ -1191,27 +1221,65 @@ Rectangle {
         // Frame Jog
         ListElement {
             name: "FrameUp"
-            command: "(Global) Move up one frame"
+            command: "(Global) Move up by one frame"
             shortcut: "W"
             keys: "W"
         }
         ListElement {
             name: "FrameRight"
-            command: "(Global) Move right one frame"
+            command: "(Global) Move right by one frame"
             shortcut: "D"
             keys: "D"
         }
         ListElement {
             name: "FrameDown"
-            command: "(Global) Move down one frame"
+            command: "(Global) Move down by one frame"
             shortcut: "S"
             keys: "S"
         }
         ListElement {
             name: "FrameLeft"
-            command: "(Global) Move left one frame"
+            command: "(Global) Move left by one frame"
             shortcut: "A"
             keys: "A"
+        }
+
+        // Micron Jog
+        ListElement {
+            name: "MicronUp"
+            command: "(Global) Move up by one micron"
+            shortcut: "Ctrl+W"
+            keys: "Ctrl+W"
+        }
+        ListElement {
+            name: "MicronRight"
+            command: "(Global) Move right by one micron"
+            shortcut: "Ctrl+D"
+            keys: "Ctrl+D"
+        }
+        ListElement {
+            name: "MicronDown"
+            command: "(Global) Move down by one micron"
+            shortcut: "Ctrl+S"
+            keys: "Ctrl+S"
+        }
+        ListElement {
+            name: "MicronLeft"
+            command: "(Global) Move left by one micron"
+            shortcut: "Ctrl+A"
+            keys: "Ctrl+A"
+        }
+        ListElement {
+            name: "MicronZUp"
+            command: "(Global) Move up along z axis by one micron"
+            shortcut: "Alt+PgUp"
+            keys: "Alt+PgUp"
+        }
+        ListElement {
+            name: "MicronZDown"
+            command: "(Global) Move down along z axis by one micron"
+            shortcut: "Alt+PgDown"
+            keys: "Alt+PgDown"
         }
 
         // Slow Jog
@@ -1556,6 +1624,16 @@ Rectangle {
             name: "MapScale"
             value: 0.01
             defval: 0.01
+        }
+        ListElement {
+            name: "GridOverlap"
+            value: 0.25
+            defval: 0.25
+        }
+        ListElement {
+            name: "MapOverlap"
+            value: 0.25
+            defval: 0.25
         }
     }
 

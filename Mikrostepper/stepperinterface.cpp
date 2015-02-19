@@ -115,6 +115,8 @@ void StepperInterface::initSettings() {
     AppSettings s(this);
     QSizeF sz = QSizeF(s.readProfileWidth(s.getActiveProfileId()), s.readProfileHeight(s.getActiveProfileId()));
 
+	m_overlap = s.readDouble("GridOverlap", 0.25);
+
     sz_profile = QSizeF((1.0 - m_overlap) * sz.width() / 1000.0,
                         (1.0 - m_overlap) * sz.height() / 1000.0);
 
