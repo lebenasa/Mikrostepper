@@ -2,7 +2,7 @@
 #include "optilabviewer.h"
 
 OptilabViewer::OptilabViewer(Camera *parent)
-    : QObject(parent), m_camera(parent), m_recorder(this), en_recording(WaitForFile)
+    : QObject(parent), m_camera(parent), en_recording(WaitForFile)
 {
     //Set working directory:
     QString tempPath = QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0) + "/Optilab/";
@@ -15,14 +15,12 @@ OptilabViewer::OptilabViewer(Camera *parent)
     }
     auto list = workdir.entryList(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
     for (auto file : list)
-        workdir.remove(file);
-    connect(m_camera, &Camera::frameReady, &m_recorder, &BaseRecorder::imgProc);
-    connect(&m_recorder, &BaseRecorder::timestatus, this, &OptilabViewer::recordingTime);
+		workdir.remove(file);
+	connect(&m_camera->recorder, &BaseRecorder::timestatus, this, &OptilabViewer::recordingTime);
 }
 
 OptilabViewer::~OptilabViewer()
 {
-    m_recorder.stop();
 }
 
 QSize OptilabViewer::calculateAspectRatio(int screenWidth, int screenHeight) const {
@@ -114,26 +112,26 @@ QStringList OptilabViewer::startSerialCapture(int interval, int fcount) {
 }
 
 void OptilabViewer::initRecorder(const QUrl &video) {
-    m_recorder.initRecorder(video.toLocalFile());
-    m_recorder.start();
+    m_camera->recorder.initRecorder(video.toLocalFile());
+	m_camera->recorder.start();
     en_recording = Recording;
     emit recordingStatusChanged();
 }
 
 void OptilabViewer::pauseRecording() {
-    m_recorder.pause();
+	m_camera->recorder.pause();
     en_recording = Paused;
     emit recordingStatusChanged();
 }
 
 void OptilabViewer::resumeRecording() {
-    m_recorder.start();
+	m_camera->recorder.start();
     en_recording = Recording;
     emit recordingStatusChanged();
 }
 
 void OptilabViewer::stopRecording() {
-    m_recorder.stop();
+	m_camera->recorder.stop();
     en_recording = WaitForFile;
     emit recordingStatusChanged();
 }

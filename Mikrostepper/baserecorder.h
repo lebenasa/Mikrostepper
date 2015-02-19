@@ -12,19 +12,20 @@ class BaseRecorder : public QObject
     QTime timestarted;
     QString m_file;
     double m_fps;
-	QImage im_frame;
 
-	cv::VideoWriter writer;
+	std::unique_ptr<cv::VideoWriter> writer;
 public:
     explicit BaseRecorder(QObject *parent = 0);
     ~BaseRecorder();
+
+	cv::Mat frame;
+	cv::Size frameSize;
 
 signals:
     void timestatus(const QString&);
 
 public slots:
     virtual void initRecorder(const QString& video_file, double frame_rate = 25.0);
-    virtual void imgProc(const QImage& img);
     virtual void timeout();
 
     virtual void start();

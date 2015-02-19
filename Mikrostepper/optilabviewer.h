@@ -54,7 +54,6 @@ private:
 
     CommandPool commandPool;
     RecordingStatus en_recording;
-    BaseRecorder m_recorder;
 };
 
 #endif // OPTILABVIEWER_H

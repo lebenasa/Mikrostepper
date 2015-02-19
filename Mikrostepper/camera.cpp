@@ -8,7 +8,7 @@
 #include "DSCAMAPI.h"
 
 Camera::Camera(QObject *parent)
-    : QObject(parent)
+	: QObject(parent), recorder(this)
 {
     
 }
@@ -76,9 +76,13 @@ int CALLBACK SnapThreadCallback(BYTE* pBuffer) {
 
 void DSCamera::imageProc(BYTE* pBuffer) {
 	auto sz = size();
-	cv::Mat frame = cv::Mat(sz.height(), sz.width(), CV_8UC3, pBuffer);
+	QMutex mutex;
+	mutex.lock();
+	cv::Mat frame = cv::Mat(sz.height(), sz.width(), CV_8UC3, pBuffer).clone();
 	cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+	recorder.frame = frame;
 	cv::flip(frame, frame, 0);
+	mutex.unlock();
 	m_buffer = QImage(frame.data, sz.width(), sz.height(), QImage::Format_RGB888);
 	emit frameReady(m_buffer);
 }
@@ -104,6 +108,8 @@ void DSCamera::setResolution(int res) {
 		m_size = QSize(W, H);
 		m_available = true;
 		emit sourceSizeChanged(m_size);
+
+		recorder.frameSize = cv::Size(W, H);
 	}
 }
 

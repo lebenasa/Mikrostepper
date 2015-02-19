@@ -927,6 +927,7 @@ Rectangle {
                         value: 1/doublesettings.get(8).value
                         minimumValue: 1
                         maximumValue: 500
+                        prefix: "1 : "
                         Layout.preferredWidth: 100
                         Layout.alignment: Qt.AlignLeft
                         onValueChanged: doublesettings.set(8, { "value": 1/value })

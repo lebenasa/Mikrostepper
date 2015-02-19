@@ -13,8 +13,8 @@ BaseRecorder::BaseRecorder(QObject *parent)
 
 BaseRecorder::~BaseRecorder()
 {
-	if (writer.isOpened())
-		writer.release();
+	if (writer->isOpened())
+		writer->release();
 }
 
 void BaseRecorder::initRecorder(const QString &video_file, double frame_rate) {
@@ -24,18 +24,18 @@ void BaseRecorder::initRecorder(const QString &video_file, double frame_rate) {
     timestarted = QTime(0, 0, 0, 0);
     timer->setInterval(1000/frame_rate);
 	if (QFile::exists(video_file)) QFile::remove(video_file);
-	auto writer = cv::VideoWriter{ };
-	bool result = writer.open(QDir::toNativeSeparators(video_file).toStdString(), cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 
-		frame_rate, cv::Size(im_frame.width(), im_frame.height()));
-}
-
-void BaseRecorder::imgProc(const QImage &img) {
-    im_frame = img.copy();
+	writer = std::make_unique<cv::VideoWriter>(cv::VideoWriter{});
+	bool result = writer->open(QDir::toNativeSeparators(video_file).toStdString(), cv::VideoWriter::fourcc('D', 'I', 'V', 'X'), 
+		frame_rate, frameSize);
 }
 
 void BaseRecorder::timeout() {
-	cv::Mat cFrame{ im_frame.width(), im_frame.height(), CV_8UC3, im_frame.bits(), (size_t)im_frame.bytesPerLine() };
-	writer.write(cFrame);
+	QMutex mutex;
+	mutex.lock();
+	auto cframe = frame.clone();
+	cv::cvtColor(cframe, cframe, cv::COLOR_BGR2RGB);
+	writer->write(cframe);
+	mutex.unlock();
     timestarted = timestarted.addMSecs(1000/m_fps);
     emit timestatus(timestarted.toString("hh:mm:ss"));
 }
@@ -50,5 +50,6 @@ void BaseRecorder::pause() {
 
 void BaseRecorder::stop() {
     timer->stop();
+	writer->release();
 	writer.release();
 }

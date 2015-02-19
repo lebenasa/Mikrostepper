@@ -9,6 +9,7 @@ Base implementation of Camera
 */
 
 #include <QObject>
+#include "baserecorder.h"
 
 class Camera : public QObject
 {
@@ -19,6 +20,8 @@ public:
 	virtual ~Camera();
 
     virtual bool isAvailable() = 0;
+
+	BaseRecorder recorder;
 
 public slots:
 	virtual void setResolution(int res) = 0;
