@@ -34,11 +34,11 @@ Button {
                 fillMode: Image.PreserveAspectFit
                 visible: false
             }
-            Desaturate {
+            HueSaturation {
                 id: desaturate
                 anchors.fill: icon
                 source: icon
-                desaturation: control.enabled ? 0.0 : 0.75
+                lightness: control.enabled ? 0.0 : 0.35
             }
             TextRegular {
                 width: 60
