@@ -117,6 +117,15 @@ Rectangle {
     function setZeroY() { stepper.setZeroY() }
     function setZeroZ() { stepper.setZeroZ() }
 
+    BusyDialog {
+        id: initbusy
+    }
+
+    Connections {
+        target: navigator
+        onInitializeDone: initbusy.close()
+    }
+
     RowLayout {
         id: rowLayout1
         spacing: 0
@@ -776,6 +785,31 @@ Rectangle {
                         tooltip: "Set current Z to 0.0"
                         onClicked: setZeroZ()
                     }
+
+                    TextBlack {
+                        text: "Initialize"
+                        font.pointSize: 9
+                        Layout.columnSpan: 3
+                    }
+                    Button {
+                        id: xinit
+                        text: "X"
+                        tooltip: "Initialize X axis"
+                        onClicked: {
+                            initbusy.open()
+                            navigator.initializeXAx()
+                        }
+                    }
+                    Button {
+                        id: yinit
+                        text: "Y"
+                        tooltip: "Initialize Y axis"
+                        onClicked: {
+                            initbusy.open()
+                            navigator.initializeYAx()
+                        }
+                    }
+                    Item { width: 2 }
                 }
             }
 

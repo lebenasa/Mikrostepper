@@ -235,3 +235,39 @@ std::pair<double, double> StepperNavigator::getLimitZ() {
     auto max = s.readDouble("LimitZMax", 150.0);
     return std::pair<double, double> {min, max};
 }
+
+void StepperNavigator::initializeXAx() {
+	if (switchx.first) {
+		zeroXDc();
+		return;
+	}
+	enableLimitX = false;
+	connect(stepper, &Stepper::limit0Changed, [this](bool v){ if (v) stop(); switchx.first = v; });
+	connect(this, &StepperNavigator::bufferFull, this, &StepperNavigator::zeroXDc, Qt::UniqueConnection);
+	jogXY(-1, 0);
+}
+
+void StepperNavigator::initializeYAx() {
+	if (switchy.first) {
+		zeroYDc();
+		return;
+	}
+	enableLimitY = false;
+	connect(stepper, &Stepper::limit2Changed, [this](bool v){ if (v) stop(); switchy.first = v; });
+	connect(this, &StepperNavigator::bufferFull, this, &StepperNavigator::zeroYDc, Qt::UniqueConnection);
+	jogXY(0, -1);
+}
+
+void StepperNavigator::zeroXDc() {
+	stepper->setZeroX();
+	disconnect(this, &StepperNavigator::bufferFull, this, &StepperNavigator::zeroXDc);
+	initSettings();
+	emit initializeDone();
+}
+
+void StepperNavigator::zeroYDc() {
+	stepper->setZeroY();
+	disconnect(this, &StepperNavigator::bufferFull, this, &StepperNavigator::zeroYDc);
+	initSettings();
+	emit initializeDone();
+}

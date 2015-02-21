@@ -53,6 +53,12 @@ public slots:
 
     QString coordinateString();
 
+	void initializeXAx();
+	void initializeYAx();
+
+	void zeroXDc();
+	void zeroYDc();
+
 signals:
     void limitXMaxChanged(double);
     void limitYMaxChanged(double);
@@ -67,6 +73,8 @@ signals:
     void zChanged(const double&);
 
     void coordinateStringChanged(const QString&);
+
+	void initializeDone();
 
 private:
     std::pair<double, double> m_limitx, m_limity, m_limitz, m_speed;

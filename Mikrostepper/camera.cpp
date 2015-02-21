@@ -78,12 +78,12 @@ void DSCamera::imageProc(BYTE* pBuffer) {
 	auto sz = size();
 	QMutex mutex;
 	mutex.lock();
-	cv::Mat frame = cv::Mat(sz.height(), sz.width(), CV_8UC3, pBuffer).clone();
+	cv::Mat frame = cv::Mat(sz.height(), sz.width(), CV_8UC3, pBuffer);
 	cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
-	recorder.frame = frame;
 	cv::flip(frame, frame, 0);
-	mutex.unlock();
+	recorder.frame = frame.clone();
 	m_buffer = QImage(frame.data, sz.width(), sz.height(), QImage::Format_RGB888);
+	mutex.unlock();
 	emit frameReady(m_buffer);
 }
 
