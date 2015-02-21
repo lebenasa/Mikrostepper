@@ -14,6 +14,7 @@ Rectangle {
     ButtonRibbon {
         id: buttonRibbon1
         text: "Save Calibration"
+        iconSource: "Images/SaveCalibration.png"
         anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.verticalCenterOffset: -10

@@ -117,11 +117,10 @@ Rectangle {
                 spacing: 10
                 Item { id: item1; width: 82; height: 35; }
 
-                ButtonSimple {
+                Button {
                     id: buttonSave
                     text: "Save"
                     anchors.horizontalCenter: parent.horizontalCenter
-                    drawBorder: true
                     enabled: tableview.selection.count > 0
                     onClicked: {
                         _model.setProperty(tableview.currentRow, "x", 1.0 * camera.sourceSize.width / pixelWidth * realWidth)
@@ -140,21 +139,19 @@ Rectangle {
                 Item { id: item2; height: 22; Layout.fillHeight: true; }
 
 
-                ButtonSimple {
+                Button {
                     id: buttonAdd
                     text: "Add"
                     anchors.horizontalCenter: parent.horizontalCenter
-                    drawBorder: true
                     onClicked: {
                         dgadd.open()
                     }
                 }
 
-                ButtonSimple {
+                Button {
                     id: buttonEdit
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: "Edit"
-                    drawBorder: true
                     enabled: tableview.selection.count > 0
                     onClicked: {
                         nameEdit.text = _model.get(tableview.currentRow).name
@@ -163,22 +160,20 @@ Rectangle {
                     }
                 }
 
-                ButtonSimple {
+                Button {
                     id: buttonRemove
                     text: "Remove"
                     anchors.horizontalCenter: parent.horizontalCenter
-                    drawBorder: true
                     enabled: (tableview.selection.count > 0 && _model.count > 1)
                     onClicked: {
                         warning.open()
                     }
                 }
 
-                ButtonSimple {
+                Button {
                     id: buttonReset
                     text: "Load Default"
                     anchors.horizontalCenter: parent.horizontalCenter
-                    drawBorder: true
                     onClicked: {
                         warning2.open()
                     }

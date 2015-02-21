@@ -66,5 +66,6 @@
         <file>Images/SaveSelected.png</file>
         <file>Images/Mikrostepper.ico</file>
         <file>Mikrostepper.ico</file>
+        <file>Images/SaveCalibration.png</file>
     </qresource>
 </RCC>
