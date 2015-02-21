@@ -13,8 +13,10 @@ BaseRecorder::BaseRecorder(QObject *parent)
 
 BaseRecorder::~BaseRecorder()
 {
-	if (writer->isOpened())
-		writer->release();
+	if (writer) {
+		if (writer->isOpened())
+			writer->release();
+	}
 }
 
 void BaseRecorder::initRecorder(const QString &video_file, double frame_rate) {

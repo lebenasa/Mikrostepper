@@ -20,8 +20,8 @@ Rectangle {
     FileDialog {
         id: fileDialog
         title: "Save Image"
-        nameFilters: [ "JPEG Standard Format (*.jpg)",
-            "Portable Network Graphics (*.png)",
+        nameFilters: [ "Portable Network Graphics (*.png)",
+            "JPEG Standard Format (*.jpg)",
             "Windows Bitmap (*.bmp)" ]
         selectExisting: false
         selectMultiple: false

@@ -64,6 +64,9 @@ void OptilabViewer::copyToFolder(const QUrl &image, const QUrl &folder) {
     QString path = folder.toLocalFile();
     QFileInfo imfile(img);
     path += "/" + imfile.fileName();
+	qDebug() << path;
+	if (QFile::exists(path))
+		bool suc = QFile::remove(path);
     QFile::copy(img, path);
 }
 
@@ -103,7 +106,7 @@ void OptilabViewer::flushCommands() {
 QStringList OptilabViewer::startSerialCapture(int interval, int fcount) {
     QStringList namelist;
     for (int i = 0; i < fcount; ++i) {
-        QString fn = QString("IMG_%1.jpg").arg(i, 4, 10, QChar('0'));
+        QString fn = QString("IMG_%1.png").arg(i, 4, 10, QChar('0'));
         addCaptureWaitCommand(fn, interval);
         namelist.append(fn);
     }

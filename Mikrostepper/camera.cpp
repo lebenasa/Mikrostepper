@@ -131,10 +131,13 @@ void DSCamera::capture(int res, const QString &fileName) {
 		return;
 	if (QFile::exists(fileName))
 		QFile::remove(fileName);
-	if (fileName.contains("*.jpg"))
+	if (fileName.contains(".jpg"))
 		QFile::copy("Z.jpg", fileName);
-	else if (fileName.contains("*.png") || fileName.contains("*.bmp"))
-		QImage("Z.jpg").save(fileName);
+	else if (fileName.contains(".png") || fileName.contains(".bmp")) {
+		QImage zz("Z.jpg");
+		bool success = zz.save(fileName);
+		if (!success) QFile::copy("Z.jpg", fileName);
+	}
 	else
 		QFile::copy("Z.jpg", fileName);
 }
