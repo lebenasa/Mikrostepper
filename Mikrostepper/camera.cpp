@@ -143,7 +143,11 @@ void DSCamera::capture(int res, const QString &fileName) {
 }
 
 void DSCamera::saveBuffer(const QString& fileName) {
-	m_buffer.save(fileName);
+	QMutex mutex;
+	mutex.lock();
+	auto im = m_buffer.copy();
+	mutex.unlock();
+	im.save(fileName);
 }
 
 //QuickCam implementation

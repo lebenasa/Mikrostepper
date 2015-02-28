@@ -49,8 +49,17 @@ QUrl OptilabViewer::captureToTemp(const QString& imgName) {
     QString img = appPath + "/" + imgName;
     if (QFile::exists(img))
         QFile::remove(img);
-    m_camera->capture(1, img); // 0 = Highest, 2 = Lowest
+    m_camera->capture(0, img); // 0 = Highest, 2 = Lowest
     return QUrl::fromLocalFile(img);
+}
+
+QUrl OptilabViewer::saveToTemp(const QString& imgName) {
+	QString appPath = QDir::currentPath();
+	QString img = appPath + "/" + imgName;
+	if (QFile::exists(img))
+		QFile::remove(img);
+	m_camera->saveBuffer(img);
+	return QUrl::fromLocalFile(img);
 }
 
 void OptilabViewer::copyFromTemp(const QString &imgName, const QUrl &fullPath) {
@@ -84,7 +93,7 @@ void OptilabViewer::nextCommand() {
 }
 
 void OptilabViewer::addCaptureCommand(const QString &imgName) {
-    addCommand([=]() { captureToTemp(imgName); nextCommand(); });
+    addCommand([=]() { saveToTemp(imgName); nextCommand(); });
 }
 
 void OptilabViewer::addWaitCommand(int msecond) {
@@ -93,7 +102,7 @@ void OptilabViewer::addWaitCommand(int msecond) {
 
 void OptilabViewer::addCaptureWaitCommand(const QString &imgName, int msecond){
     addCommand([=]() {
-        emit imageSaved(captureToTemp(imgName));
+        emit imageSaved(saveToTemp(imgName));
         QTimer::singleShot(msecond, this, SLOT(nextCommand()));
     });
 }

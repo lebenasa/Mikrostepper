@@ -32,6 +32,7 @@ signals:
 public slots:
     QSize calculateAspectRatio(int screenWidth, int screenHeight) const;
     QUrl captureToTemp(const QString& imgName);
+	QUrl saveToTemp(const QString& imgName);
     void copyFromTemp(const QString& imgName, const QUrl& fullPath);
     void copyToFolder(const QUrl& image, const QUrl& folder);
 
