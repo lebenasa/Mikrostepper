@@ -19,7 +19,10 @@ Rectangle {
         anchors.leftMargin: 10
         anchors.verticalCenterOffset: -10
         anchors.verticalCenter: parent.verticalCenter
-        onClicked: requestSave()
+        onClicked: {
+            focus = true
+            requestSave()
+        }
     }
 
     Rectangle {

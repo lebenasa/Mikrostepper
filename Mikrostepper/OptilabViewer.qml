@@ -14,10 +14,12 @@ Rectangle {
     focus: visible
     property bool calibrationSwitch: false
 
-    property real pixelWidth : hspacer.length
-    property real pixelHeight: vspacer.length
-    property real realWidth: hspacer.realLength
-    property real realHeight: vspacer.realLength
+    property alias pixelWidth : hspacer.length
+    property alias pixelHeight: vspacer.length
+    property alias realWidth: hspacer.realLength
+    property alias realHeight: vspacer.realLength
+    property alias screenWidth: viewer.width
+    property alias screenHeight: viewer.height
 
     function updateAspectRatio() {
         viewer.offsetSize = optilab.calculateAspectRatio(bg.width, bg.height)

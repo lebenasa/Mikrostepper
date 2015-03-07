@@ -27,8 +27,8 @@ Rectangle {
         cammodel.clearBuffers()
         serialcapture.flushCommand()
         istep.initSettings()
-        serialcapture.updateCenter()
         cammodel.clearBuffers()
+        if (root.visible) serialcapture.updateCenter()
     }
 
     Connections {
@@ -55,6 +55,7 @@ Rectangle {
                     anchors {
                         bottom: innergridarea.top; left: innergridarea.left; right: innergridarea.right
                     }
+                    iconSource: "Images/ArrowSmall.png"
                     onClicked: shiftUp()
                 }
                 ToolButton {
@@ -62,6 +63,8 @@ Rectangle {
                     anchors {
                         top: innergridarea.bottom; left: innergridarea.left; right: innergridarea.right
                     }
+                    iconSource: "Images/ArrowSmall.png"
+                    rotation: 180
                     onClicked: shiftDown()
                 }
                 ToolButton {
@@ -69,6 +72,8 @@ Rectangle {
                     anchors {
                         left: innergridarea.right; top: innergridarea.top; bottom: innergridarea.bottom
                     }
+                    iconSource: "Images/ArrowLSmall.png"
+                    rotation: 180
                     onClicked: shiftRight()
                 }
                 ToolButton {
@@ -76,6 +81,7 @@ Rectangle {
                     anchors {
                         right: innergridarea.left; top: innergridarea.top; bottom: innergridarea.bottom
                     }
+                    iconSource: "Images/ArrowLSmall.png"
                     onClicked: shiftLeft()
                 }
 
@@ -137,6 +143,7 @@ Rectangle {
                 }
             }
         }
+        flickableItem.interactive: false
     }
 }
 

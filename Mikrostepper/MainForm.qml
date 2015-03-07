@@ -86,6 +86,7 @@ Item {
             id: editor
             pixelWidth: singlecontent.pixelWidth; pixelHeight: singlecontent.pixelHeight
             realWidth: singlecontent.realWidth; realHeight: singlecontent.realHeight
+            screenWidth: singlecontent.screenWidth; screenHeight: singlecontent.screenHeight
             onDone: dgProfile.visible = false
         }
     }

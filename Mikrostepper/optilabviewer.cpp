@@ -100,10 +100,16 @@ void OptilabViewer::addWaitCommand(int msecond) {
     addCommand([=]() { QTimer::singleShot(msecond, this, SLOT(nextCommand())); });
 }
 
+using Clock = std::chrono::high_resolution_clock;
+using Ms = std::chrono::milliseconds;
+
 void OptilabViewer::addCaptureWaitCommand(const QString &imgName, int msecond){
     addCommand([=]() {
+		auto start = Clock::now();
         emit imageSaved(saveToTemp(imgName));
-        QTimer::singleShot(msecond, this, SLOT(nextCommand()));
+		auto end = Clock::now();
+		auto elapsed = std::chrono::duration_cast<Ms>(end - start);
+        QTimer::singleShot(msecond - elapsed.count(), this, SLOT(nextCommand()));
     });
 }
 

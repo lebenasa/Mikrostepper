@@ -12,6 +12,8 @@ Rectangle {
     property real pixelHeight
     property real realWidth
     property real realHeight
+    property real screenWidth
+    property real screenHeight
 
     signal done
 
@@ -102,8 +104,8 @@ Rectangle {
             width: 200
             height: 200
             TableViewColumn{ role: "name"  ; title: "Profile Name" ; width: 150 }
-            TableViewColumn{ role: "x"  ; title: "Width" ; width: 50 }
-            TableViewColumn{ role: "y"  ; title: "Height" ; width: 50 }
+            TableViewColumn{ role: "x"  ; title: "Width (μm)" ; width: 100 }
+            TableViewColumn{ role: "y"  ; title: "Height (μm)" ; width: 100 }
             model: _model
             Layout.fillWidth: true
             Layout.minimumWidth: 250
@@ -123,8 +125,12 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     enabled: tableview.selection.count > 0
                     onClicked: {
-                        _model.setProperty(tableview.currentRow, "x", 1.0 * camera.sourceSize.width / pixelWidth * realWidth)
-                        _model.setProperty(tableview.currentRow, "y", 1.0 * camera.sourceSize.height / pixelHeight * realHeight)
+                        console.log(pixelWidth)
+                        console.log(pixelHeight)
+                        console.log(realWidth)
+                        console.log(realHeight)
+                        _model.setProperty(tableview.currentRow, "x", screenWidth * (realWidth / pixelWidth))
+                        _model.setProperty(tableview.currentRow, "y", screenHeight* (realHeight  / pixelHeight))
                         appsettings.beginUpdateProfile()
                         for (var i = 0; i < _model.count; ++i)
                             appsettings.updateProfile(_model.get(i).name, _model.get(i).x, _model.get(i).y)

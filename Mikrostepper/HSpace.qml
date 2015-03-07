@@ -2,11 +2,39 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 
 Item {
+    id: root
     property int length: h2.x - h1.x
     property real realLength
     property int _index: cbUnit.currentIndex
     property real _tlength: tLength.text
 //    anchors.fill: parent
+
+    property real profileLength
+
+    function updateProfile() {
+        profileLength = appsettings.readProfileWidth(appsettings.profileId)
+        updateText()
+    }
+
+    function updateText() {
+        var mod = 0
+        switch(_index) {
+        case 0:
+            mod = 1
+            break
+        case 1:
+            mod = 0.001
+            break
+        case 2:
+            mod = 0.0001
+            break
+        default:
+            mod = 1
+            break
+        }
+        var rl = (length / root.width) * profileLength * mod
+        tLength.text = Math.round(rl)
+    }
 
     function getRealLength() {
         var mod = 0
@@ -26,6 +54,15 @@ Item {
         }
         return mod * _tlength
     }
+
+    Connections {
+        target: appsettings
+        onProfileIdChanged: updateProfile()
+    }
+    onVisibleChanged: updateProfile()
+
+    onLengthChanged: updateText()
+    on_IndexChanged: updateText()
 
     LineWidget {
         id: h1
@@ -63,8 +100,8 @@ Item {
                     font.pointSize: 10
                     text: "100"
                     validator: IntValidator { }
-                    onAccepted: focus = false
                     onTextChanged: realLength = getRealLength()
+                    onFocusChanged: realLength = getRealLength()
                 }
                 ComboBox {
                     id: cbUnit

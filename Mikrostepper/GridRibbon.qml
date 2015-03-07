@@ -23,9 +23,11 @@ Rectangle {
     }
     function fillSelected() {
         if (!btnFill.enabled) return
+        camprop.autoexposure = false
         serialcapture.boxFill()
     }
     function autoFill() {
+        camprop.autoexposure = false
         serialcapture.autoFill()
     }
     function clearSelected() {

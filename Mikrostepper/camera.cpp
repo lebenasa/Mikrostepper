@@ -127,19 +127,19 @@ void DSCamera::deinitialize() {
 
 void DSCamera::capture(int res, const QString &fileName) {
 	LPCTSTR fn = L"Z";
-	if (CameraCaptureFile(fn, FILE_JPG, 100, (DS_RESOLUTION)res) != STATUS_OK)
+	if (CameraCaptureFile(fn, FILE_PNG, 80, (DS_RESOLUTION)res) != STATUS_OK)
 		return;
 	if (QFile::exists(fileName))
 		QFile::remove(fileName);
-	if (fileName.contains(".jpg"))
-		QFile::copy("Z.jpg", fileName);
-	else if (fileName.contains(".png") || fileName.contains(".bmp")) {
-		QImage zz("Z.jpg");
+	if (fileName.contains(".png"))
+		QFile::copy("Z.png", fileName);
+	else if (fileName.contains(".jpg") || fileName.contains(".bmp")) {
+		QImage zz("Z.png");
 		bool success = zz.save(fileName);
-		if (!success) QFile::copy("Z.jpg", fileName);
+		if (!success) QFile::copy("Z.png", fileName);
 	}
 	else
-		QFile::copy("Z.jpg", fileName);
+		QFile::copy("Z.png", fileName);
 }
 
 void DSCamera::saveBuffer(const QString& fileName) {

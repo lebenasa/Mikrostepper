@@ -8,6 +8,33 @@ Item {
     property real _tlength: tLength.text
 //    anchors.fill: parent
 
+    property real profileLength
+
+    function updateProfile() {
+        profileLength = appsettings.readProfileHeight(appsettings.profileId)
+        updateText()
+    }
+
+    function updateText() {
+        var mod = 0
+        switch(_index) {
+        case 0:
+            mod = 1
+            break
+        case 1:
+            mod = 0.001
+            break
+        case 2:
+            mod = 0.0001
+            break
+        default:
+            mod = 1
+            break
+        }
+        var rl = (length / root.height) * profileLength * mod
+        tLength.text = Math.round(rl)
+    }
+
     function getRealLength() {
         var mod = 0
         switch(_index) {
@@ -26,6 +53,15 @@ Item {
         }
         return mod * _tlength
     }
+
+    Connections {
+        target: appsettings
+        onProfileIdChanged: updateProfile()
+    }
+    onVisibleChanged: updateProfile()
+
+    onLengthChanged: updateText()
+    on_IndexChanged: updateText()
 
     LineWidget {
         id: h1
@@ -68,8 +104,8 @@ Item {
             font.pointSize: 10
             text: "100"
             validator: IntValidator { }
-            onAccepted: focus = false
             onTextChanged: realLength = getRealLength()
+            onFocusChanged: realLength = getRealLength()
         }
     }
 }

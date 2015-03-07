@@ -36,6 +36,7 @@ Rectangle {
         title: "Select Images Directory"
         selectFolder: true
         onAccepted: {
+            camprop.autoexposure = false
             startCapture()
             dgProgress.visible = true
             atlas.startCapture(folder)
