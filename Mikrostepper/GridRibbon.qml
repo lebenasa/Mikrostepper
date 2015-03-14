@@ -152,7 +152,7 @@ Rectangle {
         anchors.left: rectangle1.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        enabled: (serialcapture.selectCounter === 1)
+        enabled: (serialcapture.selectCounter === 1 & navigator.bufferFree === 14)
         onClicked: moveToSelected()
     }
 

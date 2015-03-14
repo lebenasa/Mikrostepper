@@ -38,10 +38,12 @@ void SerialCapture::setQmlContext(QQmlContext *context) {
 
 void SerialCapture::updateCenter() {
     auto shift = m_interface->setTopLeft(currentCoord());
-    flushCommand();
-    blockStream();
-	auto mv = [this]() { m_navigator->moveTo(m_interface->indexToCoord(QPoint(0, 0))); };
-	QTimer::singleShot(100, mv);
+	flushCommand();
+	auto cmd = [=]() {
+		blockStream();
+		QTimer::singleShot(100, [=]() { m_navigator->moveTo(m_interface->indexToCoord(QPoint(0, 0))); });
+	};
+	QTimer::singleShot(100, cmd);
     m_model->shiftData(shift);
 }
 
@@ -105,10 +107,10 @@ void SerialCapture::zoomOut() {
 }
 
 void SerialCapture::moveToSelected() {
+	if (m_navigator->bufferFree() < 14) return;
     flushCommand();
 	auto cmd = [=]() {
 		blockStream();
-		connect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::nextCommand);
 		QTimer::singleShot(100, [=]() { m_navigator->moveTo(m_interface->indexToCoord(m_model->selectedCell())); });
 	};
 	QTimer::singleShot(100, cmd);

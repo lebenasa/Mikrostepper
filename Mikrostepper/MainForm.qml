@@ -942,7 +942,7 @@ Item {
     Action {
         id: actionGridMoveToSelected
         shortcut: keysModel.get(getIndex("Grid.MoveToSelected")).shortcut
-        enabled: gridRibbon.visible
+        enabled: gridRibbon.visible & navigator.bufferFree === 14
         onTriggered: gridRibbon.moveToSelected()
     }
     Action {

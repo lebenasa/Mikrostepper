@@ -11,7 +11,8 @@ StepperNavigator::StepperNavigator(Stepper *parent)
     connect(stepper, &Stepper::zChanged, this, &StepperNavigator::zChanged);
     connect(this, &StepperNavigator::xyChanged, [this]() { emit coordinateStringChanged(coordinateString());});
     connect(this, &StepperNavigator::zChanged, [this]() { emit coordinateStringChanged(coordinateString());});
-	connect(stepper, &Stepper::bufferFreeChanged, [this]() { emit coordinateStringChanged(coordinateString());});
+	connect(stepper, &Stepper::bufferFreeChanged, [this]() { emit coordinateStringChanged(coordinateString()); });
+	connect(stepper, &Stepper::bufferFreeChanged, this, &StepperNavigator::bufferFree);
     connect(stepper, &Stepper::bufferFull, this, &StepperNavigator::bufferFull);
     initSettings();
 	switchx = { false, false };
@@ -209,9 +210,9 @@ double StepperNavigator::adjustz(double z) {
 }
 
 QString StepperNavigator::coordinateString() {
-    QString xyz = "Coordinate in mm: (%1, %2, %3), Buffer : %4";
+    QString xyz = "Coordinate in mm: (%1, %2, %3), %4";
     auto p = xy();
-	auto bf = (stepper->bufferFree() == 14) ? "Full" : "Not Full";
+	auto bf = (stepper->bufferFree() == 14) ? "Idle" : "Moving";
     return xyz.arg(p.x(), 0, 'f', 3).arg(p.y(), 0, 'f', 3).arg(z(), 0, 'f', 3).arg(bf);
 }
 
@@ -272,6 +273,6 @@ void StepperNavigator::zeroYDc() {
 	emit initializeDone();
 }
 
-int StepperNavigator::remainingStream() const {
+int StepperNavigator::bufferFree() const {
 	return stepper->bufferFree();
 }
