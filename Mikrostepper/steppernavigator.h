@@ -31,6 +31,8 @@ public:
     static std::pair<double, double> getLimitY();
 	static std::pair<double, double> getLimitZ();
 
+	int remainingStream() const;
+
 public slots:
     void initSettings();
 

@@ -53,17 +53,13 @@ void SerialCapture::setFocus(bool focus) {
 }
 
 void SerialCapture::blockStream() {
-    if (!m_block) {
-        m_block = true;
-        emit blockChanged(true);
-    }
+    m_block = true;
+    emit blockChanged(true);
 }
 
 void SerialCapture::unblockStream() {
-    if (m_block) {
-        m_block = false;
-        emit blockChanged(false);
-    }
+    m_block = false;
+    emit blockChanged(false);
 }
 
 QPoint SerialCapture::currentIndex() {
@@ -110,9 +106,12 @@ void SerialCapture::zoomOut() {
 
 void SerialCapture::moveToSelected() {
     flushCommand();
-    blockStream();
-	auto mv = [this]() { m_navigator->moveTo(m_interface->indexToCoord(m_model->selectedCell())); };
-	QTimer::singleShot(100, mv);
+	auto cmd = [=]() {
+		blockStream();
+		connect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::nextCommand);
+		QTimer::singleShot(100, [=]() { m_navigator->moveTo(m_interface->indexToCoord(m_model->selectedCell())); });
+	};
+	QTimer::singleShot(100, cmd);
 }
 
 void SerialCapture::procSelect(const QPoint &pos) {

@@ -100,7 +100,7 @@ int CALLBACK SnapThreadCallback(BYTE* pBuffer) {
 
 void DSCamera::imageProc(const BuffObj& pBuffer) {
 	auto sz = size();
-	m_buffer = QImage(pBuffer.getData(), sz.width(), sz.height(), QImage::Format_RGB888).copy();
+	m_buffer = QImage(pBuffer.getData(), sz.width(), sz.height(), QImage::Format_RGB888).copy().rgbSwapped().mirrored(false, true);
 	cv::Mat fr{ sz.height(), sz.width(), CV_8UC3, (uchar*)m_buffer.bits(), (size_t)m_buffer.bytesPerLine() };
 	recorder.setFrame(fr);
 	emit frameReady(m_buffer);
@@ -209,8 +209,11 @@ void QuickCam::updateImage(const QImage &frame) {
 	if (!m_blocked) {
 		auto src = frame;
         if (m_overlap > 0.00) {
-            src = frame.copy(0, 0, int(m_overlap * frame.width()),
-                             int(m_overlap * frame.height()));
+			int tlx = m_overlap * frame.width();
+			int tly = m_overlap * frame.height();
+			int brx = frame.width() - tlx;
+			int bry = frame.height() - tly;
+            src = frame.copy(tlx, tly, brx, bry);
         }
         int w = (width() > 0) ? width() : src.width() / 10;
         int h = (height() > 0) ? height() : src.height() / 10;

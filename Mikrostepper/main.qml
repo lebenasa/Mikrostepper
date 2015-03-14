@@ -77,6 +77,6 @@ LebenWindow {
 
 
     Component.onCompleted: {
-        applicationWindow1.showMaximized()
+//        applicationWindow1.showMaximized()
     }
 }

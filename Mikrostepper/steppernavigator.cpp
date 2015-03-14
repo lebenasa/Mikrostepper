@@ -209,10 +209,10 @@ double StepperNavigator::adjustz(double z) {
 }
 
 QString StepperNavigator::coordinateString() {
-    QString xyz = "Coordinate in mm: (%1, %2, %3)";
+    QString xyz = "Coordinate in mm: (%1, %2, %3), Buffer : %4";
     auto p = xy();
-	//auto bf = stepper->bufferFree();
-    return xyz.arg(p.x(), 0, 'f', 3).arg(p.y(), 0, 'f', 3).arg(z(), 0, 'f', 3)/*.arg(bf)*/;
+	auto bf = (stepper->bufferFree() == 14) ? "Full" : "Not Full";
+    return xyz.arg(p.x(), 0, 'f', 3).arg(p.y(), 0, 'f', 3).arg(z(), 0, 'f', 3).arg(bf);
 }
 
 std::pair<double, double> StepperNavigator::getLimitX() {
@@ -270,4 +270,8 @@ void StepperNavigator::zeroYDc() {
 	disconnect(this, &StepperNavigator::bufferFull, this, &StepperNavigator::zeroYDc);
 	initSettings();
 	emit initializeDone();
+}
+
+int StepperNavigator::remainingStream() const {
+	return stepper->bufferFree();
 }
