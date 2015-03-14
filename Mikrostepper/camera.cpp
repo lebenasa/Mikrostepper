@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "camera.h"
 
+#include <future>
+
 #include <qsgsimpletexturenode.h>
 #include <qquickwindow.h>
 
@@ -67,23 +69,40 @@ DSCamera::~DSCamera()
 	deinitialize();
 }
 
+class BuffObj
+{
+	BYTE* data;
+	int w, h, c;
+public:
+	BuffObj(BYTE* pData, int w, int h, int c) {
+		size_t sz = w * h *c;
+		data = new BYTE[sz];
+		memcpy(data, pData, sz);
+	}
+	~BuffObj() {
+		delete[] data;
+	}
+	BuffObj(BuffObj&) = delete;
+	BuffObj(BuffObj&&) = delete;
+	BuffObj operator=(BuffObj&) = delete;
+	uchar* getData() const { return data; }
+};
+
 int CALLBACK SnapThreadCallback(BYTE* pBuffer) {
+	int w, h;
+	CameraGetImageSize(&w, &h);
 	BYTE *pBmp24 = CameraISP(pBuffer);
+	BuffObj bf(pBmp24, w, h, 3);
 	if (pBmp24 && dscamera)
-		dscamera->imageProc(pBmp24);
+		dscamera->imageProc(bf);
 	return TRUE;
 }
 
-void DSCamera::imageProc(BYTE* pBuffer) {
+void DSCamera::imageProc(const BuffObj& pBuffer) {
 	auto sz = size();
-	QMutex mutex;
-	mutex.lock();
-	cv::Mat frame = cv::Mat(sz.height(), sz.width(), CV_8UC3, pBuffer);
-	cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
-	cv::flip(frame, frame, 0);
-	recorder.frame = frame.clone();
-	m_buffer = QImage(frame.data, sz.width(), sz.height(), QImage::Format_RGB888);
-	mutex.unlock();
+	m_buffer = QImage(pBuffer.getData(), sz.width(), sz.height(), QImage::Format_RGB888).copy();
+	cv::Mat fr{ sz.height(), sz.width(), CV_8UC3, (uchar*)m_buffer.bits(), (size_t)m_buffer.bytesPerLine() };
+	recorder.setFrame(fr);
 	emit frameReady(m_buffer);
 }
 
@@ -143,11 +162,19 @@ void DSCamera::capture(int res, const QString &fileName) {
 }
 
 void DSCamera::saveBuffer(const QString& fileName) {
-	QMutex mutex;
-	mutex.lock();
-	auto im = m_buffer.copy();
-	mutex.unlock();
-	im.save(fileName);
+	std::packaged_task<bool(QString)> task{ [&](const QString& fn) -> bool {
+		std::mutex m;
+		m.lock();
+		auto im = m_buffer.copy();
+		m.unlock();
+		return im.save(fn);
+	} 
+	};
+	auto result = task.get_future();
+	task(fileName);
+	if (result.get()) return;
+	else 
+		m_buffer.save(fileName);
 }
 
 //QuickCam implementation

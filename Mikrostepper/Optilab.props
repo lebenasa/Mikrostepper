@@ -25,7 +25,8 @@ copy "$(OPENCV_DIR)\bin\opencv_imgproc300.dll" "$(OutDir)\"
 copy "$(OPENCV_DIR)\bin\opencv_videoio300.dll" "$(OutDir)\"
 copy "$(DSCAM_DIR)\DSCAMSDK.dll" "$(OutDir)\"
 copy "$(CNCAPI_DIR)\CNCUSBControllerAPI.dll" "$(OutDir)\"
-copy "$(CNCAPI_DIR)\CNCUSBControllerLib.dll" "$(OutDir)\"</Command>
+copy "$(CNCAPI_DIR)\CNCUSBControllerLib.dll" "$(OutDir)\"
+copy "$(OPENCV_DIR)\bin\cudart32_65.dll" "$(OutDir)\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

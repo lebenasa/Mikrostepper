@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 	if (!camera.isAvailable()) {
 		return 0;
 	}
-    MockStepper stepper(&camera);
+    CNCStepper stepper(&camera);
 	if (!stepper.isAvailable()) {
 		return 0;
 	}

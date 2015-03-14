@@ -43,6 +43,10 @@ Dialog {
             orientation: Qt.Horizontal
             snapMode: ListView.SnapOneItem
             clip: true
+            displaced: Transition {
+                NumberAnimation { properties: "x"; duration: 10 }
+            }
+
             model: immodel
             delegate: Component {
                 Image {

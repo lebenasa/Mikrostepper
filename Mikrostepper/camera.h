@@ -68,6 +68,8 @@ protected:
     void deinitialize() { }
 };
 
+class BuffObj;
+
 class DSCamera : public Camera
 {
 	Q_OBJECT
@@ -89,7 +91,7 @@ public slots:
 	void capture(int resolution, const QString &fileName);
 	void saveBuffer(const QString& fileName);
 
-	void imageProc(BYTE* pBuffer);
+	void imageProc(const BuffObj& pBuffer);
 
 protected:
 	void initialize();

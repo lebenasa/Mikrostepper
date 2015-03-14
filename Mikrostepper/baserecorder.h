@@ -13,13 +13,16 @@ class BaseRecorder : public QObject
     QString m_file;
     double m_fps;
 
+	cv::Mat m_frame;
+
 	std::unique_ptr<cv::VideoWriter> writer;
 public:
     explicit BaseRecorder(QObject *parent = 0);
     ~BaseRecorder();
-
-	cv::Mat frame;
 	cv::Size frameSize;
+
+	void setFrame(const cv::Mat& m);
+	cv::Mat frame() const;
 
 signals:
     void timestatus(const QString&);

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "baserecorder.h"
 
+#include <future>
+
 #include "DSCAMAPI.h"
 
 BaseRecorder::BaseRecorder(QObject *parent)
@@ -32,14 +34,22 @@ void BaseRecorder::initRecorder(const QString &video_file, double frame_rate) {
 }
 
 void BaseRecorder::timeout() {
-	QMutex mutex;
-	mutex.lock();
-	auto cframe = frame.clone();
-	cv::cvtColor(cframe, cframe, cv::COLOR_BGR2RGB);
-	writer->write(cframe);
-	mutex.unlock();
+	//auto cframe = frame;
+	//cv::cvtColor(cframe, cframe, cv::COLOR_BGR2RGB);
+	std::mutex m;
+	m.lock();
+	writer->write(frame());
+	m.unlock();
     timestarted = timestarted.addMSecs(1000/m_fps);
     emit timestatus(timestarted.toString("hh:mm:ss"));
+}
+
+void BaseRecorder::setFrame(const cv::Mat& fr) {
+	m_frame = fr;
+}
+
+cv::Mat BaseRecorder::frame() const {
+	return m_frame;
 }
 
 void BaseRecorder::start() {
