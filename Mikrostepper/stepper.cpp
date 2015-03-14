@@ -144,6 +144,8 @@ CNCStepper::CNCStepper(QObject* parent)
 	connect(statusUpdater, &QTimer::timeout, this, &CNCStepper::updateStatus);
 	statusUpdater->start(1);
 	m_isActive = init();
+	m_limit[7] = false;
+	powerStat(false);
 }
 
 CNCStepper::~CNCStepper()
@@ -175,6 +177,7 @@ bool CNCStepper::init() {
 	}
 
 	connect(this, &CNCStepper::limit7Changed, this, &CNCStepper::powerStat);
+
 	ControllerEventCallBack();
 
 	m_bufferSize = cncAPI->mObject->GetBufferSize();

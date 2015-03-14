@@ -124,6 +124,19 @@ Item {
         standardButtons: StandardButton.Ok
     }
 
+    Connections {
+        target: navigator
+        onPowerOnChanged: if (!navigator.powerOn) requestPower.open()
+    }
+
+    MessageDialog {
+        id: requestPower
+        title: "Microstepper Power Loss"
+        text: "Please turn-on your Mikrostepper device."
+        standardButtons: StandardButton.Ok
+        icon: StandardIcon.Warning
+    }
+
     Item {
         id: ribbon
         height: 150

@@ -125,12 +125,10 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     enabled: tableview.selection.count > 0
                     onClicked: {
-                        console.log(pixelWidth)
-                        console.log(pixelHeight)
-                        console.log(realWidth)
-                        console.log(realHeight)
-                        _model.setProperty(tableview.currentRow, "x", screenWidth * (realWidth / pixelWidth))
-                        _model.setProperty(tableview.currentRow, "y", screenHeight* (realHeight  / pixelHeight))
+                        console.log(screenWidth, pixelWidth, realWidth)
+                        console.log(screenHeight, pixelHeight, realHeight)
+                        _model.setProperty(tableview.currentRow, "x", Math.round((screenWidth  / pixelWidth) * realWidth))
+                        _model.setProperty(tableview.currentRow, "y", Math.round((screenHeight / pixelHeight) * realHeight))
                         appsettings.beginUpdateProfile()
                         for (var i = 0; i < _model.count; ++i)
                             appsettings.updateProfile(_model.get(i).name, _model.get(i).x, _model.get(i).y)

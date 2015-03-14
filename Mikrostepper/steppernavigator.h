@@ -17,6 +17,7 @@ class StepperNavigator : public QObject
     Q_PROPERTY(double limitYMin READ limitYMin NOTIFY limitYMinChanged)
     Q_PROPERTY(double limitZMin READ limitZMin NOTIFY limitZMinChanged)
 	Q_PROPERTY(int bufferFree READ bufferFree NOTIFY bufferFreeChanged)
+	Q_PROPERTY(bool powerOn READ powerOn NOTIFY powerOnChanged)
 public:
     explicit StepperNavigator(Stepper *parent);
     ~StepperNavigator();
@@ -33,6 +34,8 @@ public:
 	static std::pair<double, double> getLimitZ();
 
 	int bufferFree() const;
+
+	bool powerOn() const;
 
 public slots:
     void initSettings();
@@ -71,7 +74,7 @@ signals:
     void limitZMinChanged(double);
 
     void bufferFull();
-	void bufferFreeChanged();
+	void bufferFreeChanged(int);
 
     void xyChanged(const QPointF&);
     void zChanged(const double&);
@@ -79,6 +82,8 @@ signals:
     void coordinateStringChanged(const QString&);
 
 	void initializeDone();
+
+	void powerOnChanged(bool);
 
 private:
     std::pair<double, double> m_limitx, m_limity, m_limitz, m_speed;

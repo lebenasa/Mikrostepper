@@ -6,35 +6,8 @@ Item {
     property int length: h2.x - h1.x
     property real realLength
     property int _index: cbUnit.currentIndex
-    property real _tlength: tLength.text
+    property alias _tlength: tLength.text
 //    anchors.fill: parent
-
-    property real profileLength
-
-    function updateProfile() {
-        profileLength = appsettings.readProfileWidth(appsettings.profileId)
-        updateText()
-    }
-
-    function updateText() {
-        var mod = 0
-        switch(_index) {
-        case 0:
-            mod = 1
-            break
-        case 1:
-            mod = 0.001
-            break
-        case 2:
-            mod = 0.0001
-            break
-        default:
-            mod = 1
-            break
-        }
-        var rl = (length / root.width) * profileLength * mod
-        tLength.text = Math.round(rl)
-    }
 
     function getRealLength() {
         var mod = 0
@@ -52,7 +25,8 @@ Item {
             mod = 1
             break
         }
-        return mod * _tlength
+        var txt = parseInt(tLength.text)
+        return mod * txt
     }
 
     Connections {

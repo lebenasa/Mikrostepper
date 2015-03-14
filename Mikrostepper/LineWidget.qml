@@ -12,6 +12,10 @@ Rectangle {
     MouseArea {
         id: ctrl
         anchors.fill: parent
+        anchors.leftMargin: orientation == 0 ? 0 : -1
+        anchors.rightMargin: orientation == 0 ? 0 : -1
+        anchors.topMargin: orientation == 0 ? -1 : 0
+        anchors.bottomMargin: orientation == 0 ? -1 : 0
         cursorShape: orientation == 0 ? Qt.SizeVerCursor : Qt.SizeHorCursor
         drag.target: root
         drag.axis: orientation == 0 ? Drag.YAxis : Drag.XAxis

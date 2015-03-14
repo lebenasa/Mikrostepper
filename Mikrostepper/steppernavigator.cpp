@@ -86,6 +86,7 @@ void StepperNavigator::initSettings() {
 		connect(stepper, &Stepper::limit5Changed, [this](bool v){ if (v) stop(); switchz.second = v; });
 	}
 	else disconnect(stepper, SIGNAL(limit5Changed()), 0, 0);
+	connect(stepper, &Stepper::limit7Changed, this, &StepperNavigator::powerOnChanged);
 }
 
 QPointF StepperNavigator::xy() const {
@@ -101,6 +102,7 @@ void StepperNavigator::moveTo(const QPointF &target) {
 }
 
 void StepperNavigator::moveXY(double x, double y) {
+	if (!stepper->limit7()) emit powerOnChanged(false);
     stepper->moveTo(QPointF(adjustx(x), adjusty(y)));
 }
 
@@ -275,4 +277,8 @@ void StepperNavigator::zeroYDc() {
 
 int StepperNavigator::bufferFree() const {
 	return stepper->bufferFree();
+}
+
+bool StepperNavigator::powerOn() const {
+	return stepper->limit7();
 }

@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
 		return 0;
 	}
     CNCStepper stepper(&camera);
-	if (!stepper.isAvailable()) {
-		return 0;
-	}
+	//if (!stepper.isAvailable()) {
+	//	return 0;
+	//}
 
     CameraControl camctr(&camera);
     StepperNavigator nav(&stepper);

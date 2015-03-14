@@ -21,6 +21,9 @@ Rectangle {
     property alias screenWidth: viewer.width
     property alias screenHeight: viewer.height
 
+    property real profileWidth
+    property real profileHeight
+
     function updateAspectRatio() {
         viewer.offsetSize = optilab.calculateAspectRatio(bg.width, bg.height)
     }
@@ -31,6 +34,23 @@ Rectangle {
     Connections {
         target: camera
         onFrameReady: viewer.source = frame
+    }
+
+    Connections {
+        target: appsettings
+        onProfileIdChanged: updateProfile()
+    }
+
+    function updateProfile() {
+        profileWidth = appsettings.readProfileWidth(appsettings.profileId)
+        profileHeight = appsettings.readProfileHeight(appsettings.profileId)
+    }
+
+    function updateCalibrationText() {
+        var twidth = (pixelWidth / screenWidth) * profileWidth
+        var theight = (pixelHeight / screenHeight) * profileHeight
+        hspacer._tlength = Math.round(twidth)
+        vspacer._tlength = Math.round(theight)
     }
 
     CameraItem {
@@ -47,12 +67,14 @@ Rectangle {
             id: hspacer
             anchors.fill: parent
             visible: calibrationSwitch
+            onLengthChanged: updateCalibrationText()
         }
 
         VSpace {
             id: vspacer
             anchors.fill: parent
             visible: calibrationSwitch
+            onLengthChanged: updateCalibrationText()
         }
     }
 }
