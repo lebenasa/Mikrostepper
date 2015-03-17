@@ -1617,23 +1617,23 @@ Rectangle {
         id: doublesettings
         ListElement {
             name: "LimitXMin"
-            value: 0.0
-            defval: 0.0
+            value: 1.0
+            defval: 1.0
         }
         ListElement {
             name: "LimitXMax"
-            value: 150.0
-            defval: 150.0
+            value: 50.0
+            defval: 50.0
         }
         ListElement {
             name: "LimitYMin"
-            value: 0.0
-            defval: 0.0
+            value: 1.0
+            defval: 1.0
         }
         ListElement {
             name: "LimitYMax"
-            value: 100.0
-            defval: 100.0
+            value: 25.0
+            defval: 25.0
         }
         ListElement {
             name: "LimitZMin"
@@ -1716,8 +1716,8 @@ Rectangle {
         }
         ListElement {
             name: "EnableLimitZ"
-            value: true
-            defval: true
+            value: false
+            defval: false
         }
     }
 

@@ -48,7 +48,7 @@ void StepperNavigator::initSettings() {
 
     enableLimitX = s.readBool("EnableLimitX", true);
     enableLimitY = s.readBool("EnableLimitY", true);
-    enableLimitZ = s.readBool("EnableLimitZ", true);
+    enableLimitZ = s.readBool("EnableLimitZ", false);
 
 	bool swt = s.readBool("StopOnMinX", true);
 	if (swt) {
