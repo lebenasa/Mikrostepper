@@ -37,11 +37,12 @@ void SerialCapture::setQmlContext(QQmlContext *context) {
 }
 
 void SerialCapture::updateCenter() {
-    auto shift = m_interface->setTopLeft(currentCoord());
+	auto tl = m_interface->indexToCoord(QPoint(0, 0));
+    auto shift = m_interface->setTopLeft(tl);
 	flushCommand();
 	auto cmd = [=]() {
 		blockStream();
-		QTimer::singleShot(100, [=]() { m_navigator->moveTo(m_interface->indexToCoord(QPoint(0, 0))); });
+		QTimer::singleShot(100, [=]() { m_navigator->moveTo(m_interface->indexToCoord(currentIndex())); });
 	};
 	QTimer::singleShot(100, cmd);
     m_model->shiftData(shift);

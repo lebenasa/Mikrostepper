@@ -35,10 +35,11 @@ void BaseRecorder::initRecorder(const QString &video_file, double frame_rate) {
 
 void BaseRecorder::timeout() {
 	//auto cframe = frame;
-	//cv::cvtColor(cframe, cframe, cv::COLOR_BGR2RGB);
+	cv::Mat cframe;
 	std::mutex m;
 	m.lock();
-	writer->write(frame());
+	cv::cvtColor(frame(), cframe, cv::COLOR_BGR2RGB);
+	writer->write(cframe);
 	m.unlock();
     timestarted = timestarted.addMSecs(1000/m_fps);
     emit timestatus(timestarted.toString("hh:mm:ss"));
