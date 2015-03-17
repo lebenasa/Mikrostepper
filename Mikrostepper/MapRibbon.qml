@@ -7,7 +7,7 @@ Rectangle {
     id: ribbonBar
     width: 720
     height: 120
-    color: "#ecf0f1"
+    color: "white"
     anchors.top: parent.top
     anchors.right: parent.right
     anchors.left: parent.left

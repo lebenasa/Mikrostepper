@@ -8,15 +8,25 @@ Rectangle {
     id: ribbonBar
     width: 720
     height: 120
-    color: "#ecf0f1"
+    color: "white"
     anchors.top: parent.top
     anchors.right: parent.right
     anchors.left: parent.left
 
     function singleCapture() {
-        var temp = optilab.captureToTemp("swrdaol.jpg")
-        preview1.source = temp
-        preview1.show()
+        camprop.setFrameSpeed(0);
+        captureTimer.start()
+    }
+
+    Timer {
+        id: captureTimer
+        interval: 1000
+        onTriggered: {
+            var temp = optilab.captureToTemp("swrdaol.jpg")
+            preview1.source = temp
+            preview1.show()
+            camprop.setFrameSpeed(2);
+        }
     }
 
     function countCapture() {
@@ -25,7 +35,7 @@ Rectangle {
         if (count == 0 || interval === 0) return
         previewsc.totalCount = count
         previewsc.open()
-        optilab.startSerialCapture(interval * 1000, count)
+        optilab.startSerialCaptureAsync(interval * 1000, count)
     }
 
     function countUp() { spinSCount.val += 1 }
@@ -40,7 +50,7 @@ Rectangle {
         if (count == 0 || interval === 0) return
         previewsc.totalCount = count
         previewsc.open()
-        optilab.startSerialCapture(interval * 1000, count)
+        optilab.startSerialCaptureAsync(interval * 1000, count)
     }
 
     function durationUp() { ie3.addInterval() }

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "optilabviewer.h"
 
+#include <thread>
+#include <future>
+
 OptilabViewer::OptilabViewer(Camera *parent)
     : QObject(parent), m_camera(parent), en_recording(WaitForFile)
 {
@@ -128,6 +131,28 @@ QStringList OptilabViewer::startSerialCapture(int interval, int fcount) {
     }
     nextCommand();
     return namelist;
+}
+
+QStringList OptilabViewer::startSerialCaptureAsync(int interval, int fcount) {
+	QStringList namelist;
+	for (int i = 0; i < fcount; ++i) {
+		QString fn = QString("IMG_%1.png").arg(i, 4, 10, QChar('0'));
+		namelist.append(fn);
+	}
+	auto sc = [=](int itr, int fc) {
+			auto msecond = Ms(itr);
+		for (int i = 0; i < fc; ++i) {
+			auto start = Clock::now();
+			emit imageSaved(saveToTemp(namelist.at(i)));
+			auto end = Clock::now();
+			auto elapsed = std::chrono::duration_cast<Ms>(end - start);
+			auto dur = msecond - elapsed;
+			if (dur.count() < 1) dur = Ms(1);
+			std::this_thread::sleep_for(dur);
+		}
+	};
+	std::async(std::launch::async, sc, interval, fcount);
+	return namelist;
 }
 
 void OptilabViewer::initRecorder(const QUrl &video) {

@@ -132,7 +132,7 @@ Item {
     MessageDialog {
         id: requestPower
         title: "Microstepper Power Loss"
-        text: "Please turn-on your Mikrostepper device."
+        text: "Please turn-on your Microstepper device."
         standardButtons: StandardButton.Ok
         icon: StandardIcon.Warning
     }
@@ -333,7 +333,7 @@ Item {
     Rectangle {
         id: status
         height: 25
-        color: "#ffffff"
+        color: "white"
         border.color: "#95a5a6"
         anchors.bottom: parent.bottom
         anchors.right: parent.right

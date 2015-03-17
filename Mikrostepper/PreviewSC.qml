@@ -56,6 +56,7 @@ Dialog {
                     source: Qt.resolvedUrl(imageFile.toString())
                     anchors.verticalCenter: parent.verticalCenter
                     mipmap: true
+                    asynchronous: true
                 }
             }
         }

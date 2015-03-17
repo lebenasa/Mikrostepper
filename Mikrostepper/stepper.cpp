@@ -21,7 +21,7 @@ MockStepper::MockStepper(QObject* parent)
     : Stepper(parent), m_z(0), m_bufferSize(14),
       m_bufferFree(14), m_ztarget(0)
 {
-    m_limit = std::bitset<8>(false);
+    m_limit = std::bitset<8>(true);
     eventDriver = new QTimer(this);
     eventDriver->setInterval(1);
     connect(eventDriver, &QTimer::timeout, this, &MockStepper::updateStatus);

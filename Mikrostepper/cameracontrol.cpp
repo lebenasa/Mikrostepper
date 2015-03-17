@@ -241,7 +241,10 @@ int CameraControl::getCurrentParameterTeam() {
 	return (int)pt;
 }
 
-
+void CameraControl::setFrameSpeed(int speed) {
+	auto spd = (speed < 0) ? 0 : (speed > 2) ? 2 : speed;
+	CameraSetFrameSpeed((DS_FRAME_SPEED)spd);
+}
 
 
 

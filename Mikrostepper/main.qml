@@ -10,7 +10,7 @@ LebenWindow {
     visible: true
     width: 1280
     height: 720
-    title: qsTr("Mikrostepper")
+    title: qsTr("Microstepper")
 //    x: (Screen.width - width) / 2
 //    y: (Screen.height - height) / 2
 
@@ -30,7 +30,7 @@ LebenWindow {
                 TextRegular {
                     id: title
                     Layout.fillWidth: true
-                    text: "MICONOS MIKROSTEPPER"
+                    text: "MICONOS Microstepper"
                     font.pointSize: 10
                     font.letterSpacing: 1
                     horizontalAlignment: Text.AlignHCenter

@@ -8,7 +8,7 @@ Rectangle {
     id: ribbonbar
     height: 120
     width: 720
-    color: "#ecf0f1"
+    color: "white"
 
     function saveSelected() {
         if (!btnSaveSelected) return

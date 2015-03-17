@@ -45,11 +45,13 @@ public slots:
     void flushCommands();
 
     QStringList startSerialCapture(int interval, int fcount);
+	QStringList startSerialCaptureAsync(int interval, int fcount);
 
     void initRecorder(const QUrl& video);
     void pauseRecording();
     void resumeRecording();
     void stopRecording();
+
 private:
     Camera* m_camera;
 

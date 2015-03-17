@@ -74,6 +74,8 @@ public slots:
 
 	int getCurrentParameterTeam();
 
+	void setFrameSpeed(int);
+
 private:
     double _rg, _gg, _bg, _gamma, _contrast, _saturation, _aegain, _aetarget, _exptime;
     bool _ae;

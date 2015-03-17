@@ -118,7 +118,7 @@ void DSCamera::setResolution(int res) {
 		CameraSetB2RGBMode(DS_B2RGB_MODE::B2RGB_MODE_LINE);
 		CameraSetColorEnhancement(TRUE);
 		CameraSetLightFrquency(DS_LIGHT_FREQUENCY::LIGHT_FREQUENCY_60HZ);
-		CameraSetFrameSpeed(DS_FRAME_SPEED::FRAME_SPEED_NORMAL);
+		CameraSetFrameSpeed(DS_FRAME_SPEED::FRAME_SPEED_SUPER);
 		CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_HORIZONTAL, FALSE);
 		CameraSetMirror(DS_MIRROR_DIRECTION::MIRROR_DIRECTION_VERTICAL, FALSE);
 		CameraPlay();
