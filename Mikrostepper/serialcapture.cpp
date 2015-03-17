@@ -38,7 +38,7 @@ void SerialCapture::setQmlContext(QQmlContext *context) {
 
 void SerialCapture::updateCenter() {
 	auto tl = m_interface->indexToCoord(QPoint(0, 0));
-    auto shift = m_interface->setTopLeft(tl);
+    auto shift = m_interface->setTopLeft(currentCoord());
 	flushCommand();
 	auto cmd = [=]() {
 		blockStream();
