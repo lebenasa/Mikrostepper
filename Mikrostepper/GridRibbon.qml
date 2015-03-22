@@ -10,6 +10,20 @@ Rectangle {
     width: 720
     color: "white"
 
+    property bool _lastAE: false
+
+    function toggleAE() {
+        if (_lastAE) {
+            camprop.autoexposure = false
+        }
+    }
+
+    function untoggleAE() {
+        if (_lastAE) {
+            camprop.autoexposure = true
+        }
+    }
+
     function saveSelected() {
         if (!btnSaveSelected) return
         dgSaveSelected.open()
@@ -19,15 +33,16 @@ Rectangle {
     }
     function moveToSelected() {
         if (!btnMove.enabled) return
+        toggleAE()
         serialcapture.moveToSelected()
     }
     function fillSelected() {
         if (!btnFill.enabled) return
-        camprop.autoexposure = false
+        toggleAE()
         serialcapture.boxFill()
     }
     function autoFill() {
-        camprop.autoexposure = false
+        toggleAE()
         serialcapture.autoFill()
     }
     function clearSelected() {

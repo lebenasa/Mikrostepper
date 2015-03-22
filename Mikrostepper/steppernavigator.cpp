@@ -12,7 +12,7 @@ StepperNavigator::StepperNavigator(Stepper *parent)
     connect(this, &StepperNavigator::xyChanged, [this]() { emit coordinateStringChanged(coordinateString());});
     connect(this, &StepperNavigator::zChanged, [this]() { emit coordinateStringChanged(coordinateString());});
 	connect(stepper, &Stepper::bufferFreeChanged, [this]() { emit coordinateStringChanged(coordinateString()); });
-	connect(stepper, &Stepper::bufferFreeChanged, this, &StepperNavigator::bufferFree);
+	connect(stepper, &Stepper::bufferFreeChanged, this, &StepperNavigator::bufferFreeChanged);
     connect(stepper, &Stepper::bufferFull, this, &StepperNavigator::bufferFull);
     initSettings();
 	switchx = { false, false };
@@ -35,6 +35,7 @@ void StepperNavigator::initSettings() {
     m_limitz.second = s.readDouble("LimitZMax", 100.0);
     m_speed.first = s.readDouble("SpeedLo", 10.0);
     m_speed.second = s.readDouble("SpeedHi", 100.0);
+	stepper->setSpeed(m_speed.second);
     emit limitXMinChanged(m_limitx.first );
     emit limitXMaxChanged(m_limitx.second);
     emit limitYMinChanged(m_limity.first);
@@ -170,7 +171,7 @@ void StepperNavigator::micronZ(int z) {
 	double zinc = 0;
 	if (z > 0) zinc = 0.001;
 	else if (z < 0) zinc = -0.001;
-	moveZ(zbase + zinc);
+	moveZ(zinc);
 }
 
 void StepperNavigator::stop() {

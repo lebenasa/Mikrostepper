@@ -177,7 +177,7 @@ double AppSettings::readCNCStepsPerUnitX() {
 		QString txt{ spx->Value() };
 		return txt.toDouble();
 	}
-	return 0.0;
+	return 5096.0;
 }
 
 double AppSettings::readCNCStepsPerUnitY() {
@@ -191,7 +191,7 @@ double AppSettings::readCNCStepsPerUnitY() {
 		QString txt{ spx->Value() };
 		return txt.toDouble();
 	}
-	return 0.0;
+	return 5096.0;
 }
 
 double AppSettings::readCNCStepsPerUnitZ() {
@@ -205,7 +205,7 @@ double AppSettings::readCNCStepsPerUnitZ() {
 		QString txt{ spx->Value() };
 		return txt.toDouble();
 	}
-	return 0.0;
+	return 10667.0;
 }
 
 void AppSettings::updateCNCSettings() {
@@ -215,7 +215,7 @@ void AppSettings::updateCNCSettings() {
 	if (spx != readCNCStepsPerUnitX()) cx = true;
 	auto spy = readDouble("StepPerUnitY", 5096.0);
 	if (spy != readCNCStepsPerUnitY()) cy = true;
-	auto spz = readDouble("StepPerUnitZ", 1067.0);
+	auto spz = readDouble("StepPerUnitZ", 10667.0);
 	if (spz != readCNCStepsPerUnitZ()) cz = true;
 	QStringList args;
 	args << QString().setNum((int)spx) << QString().setNum((int)spy) << QString().setNum((int)spz);

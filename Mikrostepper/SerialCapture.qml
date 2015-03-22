@@ -56,6 +56,7 @@ Rectangle {
                         bottom: innergridarea.top; left: innergridarea.left; right: innergridarea.right
                     }
                     iconSource: "Images/ArrowSmall.png"
+                    enabled: navigator.bufferFree === 14
                     onClicked: shiftUp()
                 }
                 ToolButton {
@@ -65,6 +66,7 @@ Rectangle {
                     }
                     iconSource: "Images/ArrowSmall.png"
                     rotation: 180
+                    enabled: navigator.bufferFree === 14
                     onClicked: shiftDown()
                 }
                 ToolButton {
@@ -74,6 +76,7 @@ Rectangle {
                     }
                     iconSource: "Images/ArrowLSmall.png"
                     rotation: 180
+                    enabled: navigator.bufferFree === 14
                     onClicked: shiftRight()
                 }
                 ToolButton {
@@ -82,6 +85,7 @@ Rectangle {
                         right: innergridarea.left; top: innergridarea.top; bottom: innergridarea.bottom
                     }
                     iconSource: "Images/ArrowLSmall.png"
+                    enabled: navigator.bufferFree === 14
                     onClicked: shiftLeft()
                 }
 

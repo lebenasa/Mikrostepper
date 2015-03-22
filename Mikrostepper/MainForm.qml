@@ -192,6 +192,10 @@ Item {
                     if (checked) {
                         serialcapture.updateCenter()
                         root.state = "grid_view"
+                        gridRibbon._lastAE = camprop.autoexposure
+                    }
+                    else {
+                        gridRibbon.untoggleAE()
                     }
                 }
             }
@@ -210,6 +214,10 @@ Item {
                     if (checked) {
                         serialcapture.flushCommand()
                         root.state = "map_view"
+                        mapRibbon._lastAE = camprop.autoexposure
+                    }
+                    else {
+                        mapRibbon.untoggleAE()
                     }
                 }
             }

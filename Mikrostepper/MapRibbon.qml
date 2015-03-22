@@ -18,6 +18,20 @@ Rectangle {
     signal mark3Changed
     signal mark4Changed
 
+    property bool _lastAE: false
+
+    function toggleAE() {
+        if (_lastAE) {
+            camprop.autoexposure = false
+        }
+    }
+
+    function untoggleAE() {
+        if (_lastAE) {
+            camprop.autoexposure = true
+        }
+    }
+
     function capture() {
         if (!btnStartCapture.enabled) return
         dgApproximate.visible = true
@@ -36,7 +50,7 @@ Rectangle {
         title: "Select Images Directory"
         selectFolder: true
         onAccepted: {
-            camprop.autoexposure = false
+            toggleAE()
             startCapture()
             dgProgress.visible = true
             atlas.startCapture(folder)

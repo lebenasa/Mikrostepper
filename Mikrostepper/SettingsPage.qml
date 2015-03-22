@@ -98,17 +98,17 @@ Rectangle {
 
         if (5096.0 !== appsettings.readCNCStepsPerUnitX()) {
             stepperunitx.value = 5096.0
-            appsettings.saveSettings("StepPerUnitX", 5096.0)
+            appsettings.eraseSettings("StepPerUnitX")
             requireRestart = true
         }
         if (5096.0 !== appsettings.readCNCStepsPerUnitY()) {
             stepperunity.value = 5096.0
-            appsettings.saveSettings("StepPerUnitY", 5096.0)
+            appsettings.eraseSettings("StepPerUnitY")
             requireRestart = true
         }
-        if (1067.0 !== appsettings.readCNCStepsPerUnitZ()) {
-            stepperunitz.value = 1067.0
-            appsettings.saveSettings("StepPerUnitZ", 1067.0)
+        if (10667.0 !== appsettings.readCNCStepsPerUnitZ()) {
+            stepperunitz.value = 10667.0
+            appsettings.eraseSettings("StepPerUnitZ")
             requireRestart = true
         }
     }
@@ -585,9 +585,8 @@ Rectangle {
                         id: stepperunitx
                         value: appsettings.readCNCStepsPerUnitX()
                         stepSize: 100
-                        maximumValue: 10000
                         minimumValue: 10
-                        decimals: 3
+                        maximumValue: 99999
                     }
                     SpinBox {
                         id: limitminx
@@ -633,8 +632,7 @@ Rectangle {
                         value: appsettings.readCNCStepsPerUnitY()
                         stepSize: 100
                         minimumValue: 10
-                        maximumValue: 10000
-                        decimals: 3
+                        maximumValue: 99999
                     }
                     SpinBox {
                         id: limitminy
@@ -680,8 +678,7 @@ Rectangle {
                         value: appsettings.readCNCStepsPerUnitZ()
                         stepSize: 100
                         minimumValue: 10
-                        maximumValue: 10000
-                        decimals: 3
+                        maximumValue: 99999
                     }
                     SpinBox {
                         id: limitminz
