@@ -13,19 +13,26 @@ Rectangle {
     anchors.right: parent.right
     anchors.left: parent.left
 
+    property bool _lastAE
+
     function singleCapture() {
-        camprop.setFrameSpeed(0);
+        _lastAE = camprop.autoexposure
+        camprop.autoexposure = false
+        var et = camprop.exposureTime * 0.5
+        camprop.setFrameSpeed(0)
+        camprop.exposureTime = et
         captureTimer.start()
     }
 
     Timer {
         id: captureTimer
-        interval: 1000
+        interval: 100
         onTriggered: {
             var temp = optilab.captureToTemp("swrdaol.jpg")
             preview1.source = temp
             preview1.show()
-            camprop.setFrameSpeed(2);
+            camprop.setFrameSpeed(2)
+            camprop.autoexposure = _lastAE
         }
     }
 
@@ -87,6 +94,10 @@ Rectangle {
 
         function show() { preview1.visible = true }
         function hide() { preview1.visible = false }
+
+        onVisibleChanged: {
+            if (!visible) preview1.source = ""
+        }
 
         contentItem: PreviewImage {
             id: singlePreview

@@ -54,7 +54,6 @@ void MockCamera::imageProc() {
         state += 5;
 }
 
-
 //DSCamera implementation
 DSCamera* dscamera;
 DSCamera::DSCamera(QObject *parent)
