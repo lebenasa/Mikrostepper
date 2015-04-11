@@ -13,6 +13,7 @@
 #include "appsettings.h"
 #include "steppernavigator.h"
 #include "cameracontrol.h"
+#include "autofocus.h"
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +37,7 @@ int main(int argc, char *argv[])
     OptilabViewer ov(&camera);
     SerialCapture sc(&camera, &nav, &camera);
     AtlasCapture ac(&camera, &nav);
+	Autofocus af(&camera, &stepper);
     QQmlApplicationEngine engine(&camera);
     auto ctx = engine.rootContext();
     ctx->setContextProperty("appsettings", &settings);
@@ -45,6 +47,7 @@ int main(int argc, char *argv[])
     ctx->setContextProperty("optilab", &ov);
     ctx->setContextProperty("atlas", &ac);
     ctx->setContextProperty("camprop", &camctr);
+	ctx->setContextProperty("autofocus", &af);
     sc.setQmlContext(ctx);
 
     engine.load(QUrl(QStringLiteral("qrc:///main.qml")));

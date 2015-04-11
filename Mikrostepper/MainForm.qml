@@ -1064,6 +1064,22 @@ Item {
         }
     }
 
+    function printFocus() {
+        console.log(camera.focusValue());
+    }
+
+    Action {
+        id: actionPrintFocus
+        shortcut: "F1"
+        onTriggered: printFocus()
+    }
+
+    Action {
+        id: actionGlobalSearch
+        shortcut: "f"
+        onTriggered: autofocus.globalSearch()
+    }
+
     Component.onDestruction: {
         profilemenu.visible = false
         dgProfile.visible = false

@@ -120,6 +120,10 @@ void MockStepper::moveTo(const QPointF& npos) {
     }
 }
 
+void MockStepper::moveToZ(const double& npos) {
+
+}
+
 void MockStepper::setZeroX() {
     m_pos.setX(0.0);
     updateStatus();
@@ -312,6 +316,16 @@ void CNCStepper::moveTo(const QPointF& npos) {
 	coord = cncAPI->mObject->GetPosition();
 	coord->X = npos.x();
 	coord->Y = npos.y();
+	cncAPI->mObject->SendMovePos(coord, m_speed);
+	coord->Release();
+	coord = nullptr;
+}
+
+void CNCStepper::moveToZ(const double& nz) {
+	if (!m_isActive) return;
+	ICoord* coord = 0;
+	coord = cncAPI->mObject->GetPosition();
+	coord->Z = nz;
 	cncAPI->mObject->SendMovePos(coord, m_speed);
 	coord->Release();
 	coord = nullptr;

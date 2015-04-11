@@ -50,6 +50,7 @@ public slots:
 	virtual void moveZ(double) = 0;
 
 	virtual void moveTo(const QPointF&) = 0;
+	virtual void moveToZ(const double&) = 0;
 
     void setSpeed(double);
 
@@ -111,6 +112,7 @@ public slots:
 	void moveZ(double);
 
 	void moveTo(const QPointF& npos);
+	void moveToZ(const double&);
 
 	void updateStatus();
 
@@ -156,6 +158,7 @@ public slots:
 	void moveZ(double);
 
 	void moveTo(const QPointF& npos);
+	void moveToZ(const double&);
 
 	void setZeroX();
 	void setZeroY();

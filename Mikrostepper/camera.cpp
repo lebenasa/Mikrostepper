@@ -2,6 +2,11 @@
 #include "camera.h"
 
 #include <future>
+#include <thread>
+#include <type_traits>
+#include <algorithm>
+#include <numeric>
+#include <chrono>
 
 #include <qsgsimpletexturenode.h>
 #include <qquickwindow.h>
@@ -17,6 +22,10 @@ Camera::Camera(QObject *parent)
 
 Camera::~Camera()
 {
+}
+
+double Camera::focusValue() {
+	return 0.0;
 }
 
 //MockCamera implementation
@@ -174,6 +183,32 @@ void DSCamera::saveBuffer(const QString& fileName) {
 	if (result.get()) return;
 	else 
 		m_buffer.save(fileName);
+}
+
+cv::Mat toMat(const QImage& im, int w, int h) {
+	return cv::Mat{ h, w, CV_8UC3, (uchar*)im.bits(), (size_t)im.bytesPerLine() };
+}
+
+cv::Mat toGray(const cv::Mat& im) {
+	cv::Mat gr;
+	cv::cvtColor(im, gr, cv::COLOR_RGB2GRAY);
+	return gr;
+}
+
+double DSCamera::focusValue() {
+	using namespace cv;
+	using namespace std;
+	using namespace std::chrono;
+	auto mat = toMat(m_buffer, size().width(), size().height());
+	auto gray = toGray(mat);
+	//auto now = steady_clock::now();
+	Scalar mean, stddev;
+	meanStdDev(gray, mean, stddev);
+	auto res = stddev[0] * stddev[0] / mean[0];
+	//auto elapsed = steady_clock::now() - now;
+	//cout << duration_cast<milliseconds>(elapsed).count() << " ms\n";
+	cout << res << "\n";
+	return res;
 }
 
 //QuickCam implementation

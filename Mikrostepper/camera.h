@@ -31,6 +31,8 @@ public slots:
 	virtual void capture(int resolution, const QString &fileName) = 0;
 	virtual void saveBuffer(const QString& fileName) = 0;
 
+	virtual double focusValue();
+
 signals :
 	void frameReady(const QImage& frame);
     void sourceSizeChanged(const QSize& sz);
@@ -92,6 +94,8 @@ public slots:
 	void saveBuffer(const QString& fileName);
 
 	void imageProc(const BuffObj& pBuffer);
+
+	double focusValue() override;
 
 protected:
 	void initialize();

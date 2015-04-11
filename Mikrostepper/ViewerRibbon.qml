@@ -14,11 +14,13 @@ Rectangle {
     anchors.left: parent.left
 
     property bool _lastAE
+    property real _lastExpTime
 
     function singleCapture() {
         _lastAE = camprop.autoexposure
         camprop.autoexposure = false
-        var et = camprop.exposureTime * 0.5
+        _lastExpTime = camprop.exposureTime
+        var et = _lastExpTime / 2.295
         camprop.setFrameSpeed(0)
         camprop.exposureTime = et
         captureTimer.start()
@@ -32,6 +34,7 @@ Rectangle {
             preview1.source = temp
             preview1.show()
             camprop.setFrameSpeed(2)
+            camprop.exposureTime = _lastExpTime
             camprop.autoexposure = _lastAE
         }
     }
