@@ -250,6 +250,77 @@ Rectangle {
             onWidthChanged: updateAspectRatio()
             onHeightChanged: updateAspectRatio()
 
+            MouseArea {
+                id: maresize
+                anchors.fill: parent
+                property bool resizing: false
+                property int resizeCode: 0
+                hoverEnabled: true
+                cursorShape: {
+                    var shape = procMouseCursor()
+                    if (shape === Qt.SizeHorCursor + 128) return Qt.SizeHorCursor
+                    else return shape
+                }
+                onPressed: {
+                    resizeCode = procMouseCursor()
+                    resizing = true
+                }
+                onReleased: resizing = false
+                onPositionChanged: {
+                    if (resizing) {
+                        procResize()
+                    }
+                }
+                function procMouseCursor() {
+                    if (mouseX <= 3 && mouseY >= parent.height - 3)
+                        return Qt.SizeBDiagCursor
+                    else if (mouseX >= parent.width - 3 && mouseY >= parent.height - 3)
+                        return Qt.SizeFDiagCursor
+                    else if (mouseX <= 3 && mouseY < parent.height)
+                        return Qt.SizeHorCursor
+                    else if (mouseX >= parent.width - 3 && mouseY < parent.height)
+                        return Qt.SizeHorCursor + 128
+                    else if (mouseX > 0 && mouseY >= parent.height - 3)
+                        return Qt.SizeVerCursor
+                    else
+                        return Qt.ArrowCursor
+                }
+                property point lastXY: Qt.point(preview.x, preview.height)
+                function resizeAlg(code) {
+                    var xy = mapToItem(null, mouseX, mouseY)
+                    var nw = preview.width + (lastXY.x - xy.x)
+                    var nh = preview.height + (xy.y - lastXY.y)
+                    if (code === Qt.SizeBDiagCursor) {
+                        preview.x = (nw < 640 && nw > 240) ? xy.x : preview.x
+                        preview.width = (nw < 640 && nw > 240) ? nw : preview.width
+                        preview.height = (nh < 480 && nh > 215) ? nh : preview.height
+                    }
+                    else if (code === Qt.SizeFDiagCursor) {
+                        nw = preview.width + (xy.x - lastXY.x)
+                        nh = preview.height + (xy.y - lastXY.y)
+                        preview.width = (nw < 640 && nw > 240) ? nw : preview.width
+                        preview.height = (nh < 480 && nh > 215) ? nh : preview.height
+                    }
+                    else if (code === Qt.SizeHorCursor) {
+                        preview.x = (nw < 640 && nw > 240) ? xy.x : preview.x
+                        preview.width = (nw < 640 && nw > 240) ? nw : preview.width
+                    }
+                    else if (code === Qt.SizeHorCursor + 128) {
+                        nw = preview.width + (xy.x - lastXY.x)
+                        var ox = preview.x
+                        preview.width = (nw < 640 && nw > 240) ? nw : preview.width
+                        preview.x = ox
+                    }
+                    else if (code === Qt.SizeVerCursor) {
+                        preview.height = (nh < 480 && nh > 215) ? nh : preview.height
+                    }
+                    lastXY = Qt.point(xy.x, xy.y)
+                }
+                function procResize() {
+                    resizeAlg(resizeCode)
+                }
+            }
+
             Connections {
                 target: camera
                 onFrameReady: viewer.source = frame

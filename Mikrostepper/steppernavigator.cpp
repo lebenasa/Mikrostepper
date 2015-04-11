@@ -27,10 +27,10 @@ StepperNavigator::~StepperNavigator()
 
 void StepperNavigator::initSettings() {
     AppSettings s;
-    m_limitx.first = s.readDouble("LimitXMin", 0.0);
-    m_limitx.second = s.readDouble("LimitXMax", 150.0);
-    m_limity.first = s.readDouble("LimitYMin", 0.0);
-    m_limity.second = s.readDouble("LimitYMax", 100.0);
+    m_limitx.first = s.readDouble("LimitXMin", 1.0);
+    m_limitx.second = s.readDouble("LimitXMax", 50.0);
+    m_limity.first = s.readDouble("LimitYMin", 1.0);
+    m_limity.second = s.readDouble("LimitYMax", 25.0);
     m_limitz.first = s.readDouble("LimitZMin", 0.0);
     m_limitz.second = s.readDouble("LimitZMax", 100.0);
     m_speed.first = s.readDouble("SpeedLo", 10.0);
@@ -221,15 +221,15 @@ QString StepperNavigator::coordinateString() {
 
 std::pair<double, double> StepperNavigator::getLimitX() {
     AppSettings s;
-    auto min = s.readDouble("LimitXMin", 0.0);
-    auto max = s.readDouble("LimitXMax", 150.0);
+    auto min = s.readDouble("LimitXMin", 1.0);
+    auto max = s.readDouble("LimitXMax", 50.0);
     return std::pair<double, double> {min, max};
 }
 
 std::pair<double, double> StepperNavigator::getLimitY() {
     AppSettings s;
-    auto min = s.readDouble("LimitYMin", 0.0);
-    auto max = s.readDouble("LimitYMax", 150.0);
+    auto min = s.readDouble("LimitYMin", 1.0);
+    auto max = s.readDouble("LimitYMax", 25.0);
     return std::pair<double, double> {min, max};
 }
 
