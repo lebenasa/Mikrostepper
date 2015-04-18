@@ -66,7 +66,10 @@ Rectangle {
     }
     function updateSettings() {
         _autofocus = appsettings.readBool("GridAutofocus", true)
+        cammodel.toggleGigapan(appsettings.readBool("GridGigapan", true))
     }
+
+    Component.onCompleted: cammodel.toggleGigapan(appsettings.readBool("GridGigapan", true))
 
     Connections {
         target: appsettings

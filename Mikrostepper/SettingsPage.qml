@@ -940,14 +940,18 @@ Rectangle {
                         onValueChanged: doublesettings.setProperty(9, "value", value / 100.0)
                     }
 
-                    TextRegular {
+                    CheckBox {
+                        id: gridAutofocus
                         text: "Autofocus"
+                        checked: booleansettings.get(9).value
+                        onCheckedChanged: booleansettings.setProperty(9, "value", checked)
                     }
 
                     CheckBox {
-                        id: gridAutofocus
-                        checked: booleansettings.get(9).value
-                        onCheckedChanged: booleansettings.setProperty(9, "value", checked)
+                        id: gridGigapan
+                        text: "Gigapan integration"
+                        checked: booleansettings.get(11).value
+                        onCheckedChanged: booleansettings.setProperty(11, "value", checked)
                     }
 
                     Item { height: 10 }
@@ -989,14 +993,18 @@ Rectangle {
                         onValueChanged: doublesettings.setProperty(10, "value", value / 100.0)
                     }
 
-                    TextRegular {
+                    CheckBox {
+                        id: mapAutofocus
                         text: "Autofocus"
+                        checked: booleansettings.get(10).value
+                        onCheckedChanged: booleansettings.setProperty(10, "value", checked)
                     }
 
                     CheckBox {
-                        id: mapAutofocus
-                        checked: booleansettings.get(10).value
-                        onCheckedChanged: booleansettings.setProperty(10, "value", checked)
+                        id: mapGigapan
+                        text: "Gigapan integration"
+                        checked: booleansettings.get(12).value
+                        onCheckedChanged: booleansettings.setProperty(12, "value", checked)
                     }
                 }
             }
@@ -1743,6 +1751,16 @@ Rectangle {
         }
         ListElement {
             name: "MapAutofocus"
+            value: true
+            defval: true
+        }
+        ListElement {
+            name: "GridGigapan"
+            value: true
+            defval: true
+        }
+        ListElement {
+            name: "MapGigapan"
             value: true
             defval: true
         }
