@@ -25,6 +25,10 @@ StepperNavigator::~StepperNavigator()
 
 }
 
+Stepper* StepperNavigator::getStepper() {
+	return stepper;
+}
+
 void StepperNavigator::initSettings() {
     AppSettings s;
     m_limitx.first = s.readDouble("LimitXMin", 1.0);

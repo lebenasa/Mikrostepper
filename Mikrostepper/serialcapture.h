@@ -5,6 +5,8 @@
 #include "qqmlapplicationengine.h"
 #include "qqmlcontext.h"
 
+#include "autofocus.h"
+
 class Camera;
 class StepperNavigator;
 class CameraModel;
@@ -54,8 +56,8 @@ public slots:
     void beginMultiSelect(const QPoint& pos);
     void endMultiSelect(const QPoint& pos);
     
-    void boxFill();
-    void autoFill();
+    void boxFill(bool autofocus);
+    void autoFill(bool autofocus);
 
     void shiftUp();
     void shiftDown();
@@ -67,6 +69,7 @@ public slots:
     void addCommand(Command);
     void addMoveToCommand(const QPointF& target);
     void addBlockCommand(int msecond);
+	void addSearchFocusCommand();
     void flushCommand();
 
 signals:
@@ -76,10 +79,12 @@ signals:
     void selectCounterChanged(int nv);
     void autoFillFailed();
     void focusChanged(bool);
+	void searchFocusChanged(bool);
 
 private:
     Camera* m_camera;
     StepperNavigator* m_navigator;
+	Autofocus autofocus;
 	CameraModel* m_model;
     StepperInterface* m_interface;
 	QQmlContext* rootContext;

@@ -940,6 +940,16 @@ Rectangle {
                         onValueChanged: doublesettings.setProperty(9, "value", value / 100.0)
                     }
 
+                    TextRegular {
+                        text: "Autofocus"
+                    }
+
+                    CheckBox {
+                        id: gridAutofocus
+                        checked: booleansettings.get(9).value
+                        onCheckedChanged: booleansettings.setProperty(9, "value", checked)
+                    }
+
                     Item { height: 10 }
 
                     TextBlack {
@@ -977,6 +987,16 @@ Rectangle {
                         Layout.preferredWidth: 100
                         Layout.alignment: Qt.AlignLeft
                         onValueChanged: doublesettings.setProperty(10, "value", value / 100.0)
+                    }
+
+                    TextRegular {
+                        text: "Autofocus"
+                    }
+
+                    CheckBox {
+                        id: mapAutofocus
+                        checked: booleansettings.get(10).value
+                        onCheckedChanged: booleansettings.setProperty(10, "value", checked)
                     }
                 }
             }
@@ -1715,6 +1735,16 @@ Rectangle {
             name: "EnableLimitZ"
             value: false
             defval: false
+        }
+        ListElement {
+            name: "GridAutofocus"
+            value: true
+            defval: true
+        }
+        ListElement {
+            name: "MapAutofocus"
+            value: true
+            defval: true
         }
     }
 

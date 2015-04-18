@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "autofocus.h"
+
 using Command = std::function < void() > ;
 using CommandPool = std::queue < Command >;
 
@@ -28,7 +30,8 @@ class AtlasCapture : public QObject
     std::vector<QPoint> v_marks, v_targets;
 
     StepperNavigator* m_navigator;
-    Camera* m_camera;
+	Camera* m_camera;
+	Autofocus autofocus;
     int m_progress;
     QRect rc_capture;
     int ct_mark;
@@ -67,14 +70,15 @@ public slots:
     bool setPt4();
 
     void moveToPixel(int x, int y);
-    void startCapture(const QUrl& saveDir);
+    void startCapture(const QUrl& saveDir, bool autofocus);
 
     void nextCommand();
 
     void addCommand(Command);
     void addMoveToCommand(const QPointF& target);
     void addBlockCommand(int msecond);
-    void addCaptureCommand();
+	void addCaptureCommand();
+	void addSearchFocusCommand();
     void flushCommand();
 
 signals:

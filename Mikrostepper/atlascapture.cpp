@@ -8,12 +8,14 @@ using namespace std;
 
 AtlasCapture::AtlasCapture(Camera *camera, StepperNavigator *parent)
     : QObject(parent), m_camera(camera), m_navigator(parent),
+	  autofocus(camera, parent->getStepper()),
       m_scale(0.01), m_overlap(0.25), v_marks(4), ct_mark(0)
 {
     setProgress(0);
     pt1ok = pt2ok = pt3ok = pt4ok = false;
     connect(m_navigator, &StepperNavigator::xyChanged, this, &AtlasCapture::procStepperPos);
-    initSettings();
+	initSettings();
+	connect(&autofocus, &Autofocus::focusFound, this, &AtlasCapture::nextCommand);
 }
 
 AtlasCapture::~AtlasCapture()
@@ -80,7 +82,7 @@ QPoint AtlasCapture::currentPos() const {
     return m_currentPos;
 }
 
-void AtlasCapture::startCapture(const QUrl& saveDir) {
+void AtlasCapture::startCapture(const QUrl& saveDir, bool foc) {
     QPointF tl = pxToCoord(rc_capture.topLeft());
     QSize ct = approxSize();
     int x = 0;
@@ -101,7 +103,8 @@ void AtlasCapture::startCapture(const QUrl& saveDir) {
     m_saveDir = saveDir.toLocalFile();
     for (auto target : targets) {
         addMoveToCommand(target);
-        addBlockCommand(750);
+        addBlockCommand(500);
+		if (foc) addSearchFocusCommand();
         addCaptureCommand();
     }
     nextCommand();
@@ -114,7 +117,7 @@ void AtlasCapture::addCommand(Command cmd) {
 void AtlasCapture::addMoveToCommand(const QPointF &target) {
     addCommand([=]() {
         connect(m_navigator, &StepperNavigator::bufferFull, this, &AtlasCapture::nextCommand);
-		QTimer::singleShot(100, [=]() { m_navigator->moveTo(target); });
+		QTimer::singleShot(500, [=]() { m_navigator->moveTo(target); });
     });
 }
 
@@ -137,6 +140,10 @@ void AtlasCapture::addCaptureCommand() {
         QTimer::singleShot(100, this, SLOT(nextCommand()));
     };
     addCommand(cmd);
+}
+
+void AtlasCapture::addSearchFocusCommand() {
+	addCommand([this](){ autofocus.slowSearch(); });
 }
 
 void AtlasCapture::nextCommand() {

@@ -19,6 +19,7 @@ Rectangle {
     signal mark4Changed
 
     property bool _lastAE: false
+    property bool _autofocus: appsettings.readBool("MapAutofocus", true)
 
     function toggleAE() {
         if (_lastAE) {
@@ -37,6 +38,17 @@ Rectangle {
         dgApproximate.visible = true
     }
 
+    function updateSettings() {
+        _autofocus = appsettings.readBool("MapAutofocus", true)
+    }
+
+    Connections {
+        target: appsettings
+        onProfileIdChanged: updateSettings()
+        onProfileUpdated: updateSettings()
+        onSettingsChanged: updateSettings()
+    }
+
     MessageDialog {
         id: dgApproximate
         title: "Confirm capture"
@@ -53,7 +65,7 @@ Rectangle {
             toggleAE()
             startCapture()
             dgProgress.visible = true
-            atlas.startCapture(folder)
+            atlas.startCapture(folder, _autofocus)
         }
     }
 

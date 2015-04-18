@@ -7,7 +7,8 @@
 using namespace std;
 
 SerialCapture::SerialCapture(Camera *camera, StepperNavigator *navigator, QObject *parent)
-    : QObject(parent), m_camera(camera), m_navigator(navigator), m_zoom(15), m_block(true), m_focus(true)
+    : QObject(parent), m_camera(camera), m_navigator(navigator),
+	  autofocus(camera, navigator->getStepper()), m_zoom(15), m_block(true), m_focus(true)
 {
     m_interface = new StepperInterface(this);
     m_model = new CameraModel(m_interface->cellDims(), this);
@@ -22,6 +23,7 @@ SerialCapture::SerialCapture(Camera *camera, StepperNavigator *navigator, QObjec
         m_model->initModel(m_interface->cellDims().height(), m_interface->cellDims().width());});
     connect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::unblockStream);
     connect(m_camera, &Camera::frameReady, this, &SerialCapture::redirectImage);
+	connect(&autofocus, &Autofocus::focusFound, this, &SerialCapture::nextCommand);
 }
 
 SerialCapture::~SerialCapture()
@@ -155,21 +157,22 @@ void SerialCapture::endMultiSelect(const QPoint &pos) {
     emit selectCounterChanged(selectCounter);
 }
 
-void SerialCapture::boxFill() {
+void SerialCapture::boxFill(bool foc) {
     flushCommand();
     auto ts = m_model->boxFill();
     vector<QPointF> targets;
     for (const auto& t : ts)
 		targets.push_back(m_interface->indexToCoord(t));
-	addBlockCommand(750);
+	addBlockCommand(500);
     for (auto f : targets) {
         addMoveToCommand(f);
-        addBlockCommand(750);
+		addBlockCommand(500);
+		if (foc) addSearchFocusCommand();
     }
     nextCommand();
 }
 
-void SerialCapture::autoFill() {
+void SerialCapture::autoFill(bool foc) {
     flushCommand();
     auto ts = m_model->autoFill();
     if (ts.empty()) {
@@ -179,10 +182,11 @@ void SerialCapture::autoFill() {
     vector<QPointF> targets;
     for (const auto& t : ts)
         targets.push_back(m_interface->indexToCoord(t));
-	addBlockCommand(750);
+	addBlockCommand(500);
     for (auto f : targets) {
         addMoveToCommand(f);
-        addBlockCommand(750);
+        addBlockCommand(500);
+		if (foc) addSearchFocusCommand();
     }
     nextCommand();
 }
@@ -223,7 +227,7 @@ void SerialCapture::addMoveToCommand(const QPointF &target) {
     addCommand([=]() {
         blockStream();
         connect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::nextCommand);
-		QTimer::singleShot(100, [=]() { m_navigator->moveTo(target); });
+		QTimer::singleShot(500, [=]() { m_navigator->moveTo(target); });
     });
 }
 
@@ -232,6 +236,10 @@ void SerialCapture::addBlockCommand(int msecond) {
         QTimer::singleShot(msecond, this, SLOT(nextCommand()));
     };
     addCommand(cmd);
+}
+
+void SerialCapture::addSearchFocusCommand() {
+	addCommand([this](){ autofocus.slowSearch(); });
 }
 
 void SerialCapture::nextCommand() {

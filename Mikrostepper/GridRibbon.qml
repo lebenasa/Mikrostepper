@@ -11,6 +11,7 @@ Rectangle {
     color: "white"
 
     property bool _lastAE: false
+    property bool _autofocus: appsettings.readBool("GridAutofocus", true)
 
     function toggleAE() {
         if (_lastAE) {
@@ -39,11 +40,11 @@ Rectangle {
     function fillSelected() {
         if (!btnFill.enabled) return
         toggleAE()
-        serialcapture.boxFill()
+        serialcapture.boxFill(_autofocus)
     }
     function autoFill() {
         toggleAE()
-        serialcapture.autoFill()
+        serialcapture.autoFill(_autofocus)
     }
     function clearSelected() {
         if (!btnClear.enabled) return
@@ -62,6 +63,16 @@ Rectangle {
     }
     function shrinkCells() {
         serialcapture.zoomOut()
+    }
+    function updateSettings() {
+        _autofocus = appsettings.readBool("GridAutofocus", true)
+    }
+
+    Connections {
+        target: appsettings
+        onProfileIdChanged: updateSettings()
+        onProfileUpdated: updateSettings()
+        onSettingsChanged: updateSettings()
     }
 
     Binding {

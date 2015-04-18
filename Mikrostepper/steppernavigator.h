@@ -37,6 +37,8 @@ public:
 
 	bool powerOn() const;
 
+	Stepper* getStepper();
+
 public slots:
     void initSettings();
 
