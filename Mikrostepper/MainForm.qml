@@ -1064,21 +1064,27 @@ Item {
         }
     }
 
-    function printFocus() {
-        console.log(camera.focusValue());
-    }
+//    function printFocus() {
+//        console.log(camera.focusValue());
+//    }
 
-    Action {
-        id: actionPrintFocus
-        shortcut: "F1"
-        onTriggered: printFocus()
-    }
+//    Action {
+//        id: actionPrintFocus
+//        shortcut: "F1"
+//        onTriggered: printFocus()
+//    }
 
-    Action {
-        id: actionGlobalSearch
-        shortcut: "f"
-        onTriggered: autofocus.globalSearch()
-    }
+//    Action {
+//        id: actionGlobalSearch
+//        shortcut: "g"
+//        onTriggered: autofocus.globalSearch()
+//    }
+
+//    Action {
+//        id: actionScanSearch
+//        shortcut: "f"
+//        onTriggered: autofocus.scanSearch()
+//    }
 
     Component.onDestruction: {
         profilemenu.visible = false

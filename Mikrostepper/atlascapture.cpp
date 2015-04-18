@@ -101,7 +101,7 @@ void AtlasCapture::startCapture(const QUrl& saveDir) {
     m_saveDir = saveDir.toLocalFile();
     for (auto target : targets) {
         addMoveToCommand(target);
-        addBlockCommand(250);
+        addBlockCommand(750);
         addCaptureCommand();
     }
     nextCommand();

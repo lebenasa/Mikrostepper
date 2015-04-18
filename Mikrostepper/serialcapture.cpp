@@ -161,10 +161,10 @@ void SerialCapture::boxFill() {
     vector<QPointF> targets;
     for (const auto& t : ts)
 		targets.push_back(m_interface->indexToCoord(t));
-	addBlockCommand(500);
+	addBlockCommand(750);
     for (auto f : targets) {
         addMoveToCommand(f);
-        addBlockCommand(500);
+        addBlockCommand(750);
     }
     nextCommand();
 }
@@ -179,10 +179,10 @@ void SerialCapture::autoFill() {
     vector<QPointF> targets;
     for (const auto& t : ts)
         targets.push_back(m_interface->indexToCoord(t));
-	addBlockCommand(500);
+	addBlockCommand(750);
     for (auto f : targets) {
         addMoveToCommand(f);
-        addBlockCommand(500);
+        addBlockCommand(750);
     }
     nextCommand();
 }

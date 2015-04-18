@@ -89,6 +89,11 @@ Rectangle {
                 anchors.bottom: progressbar1.top; anchors.bottomMargin: 5
                 font.pointSize: 9
             }
+
+            Connections {
+                target: atlas
+                onProgressChanged: progressbar1.value = atlas.progress
+            }
         }
     }
 

@@ -206,8 +206,8 @@ double DSCamera::focusValue() {
 	meanStdDev(gray, mean, stddev);
 	auto res = stddev[0] * stddev[0] / mean[0];
 	//auto elapsed = steady_clock::now() - now;
-	//cout << duration_cast<milliseconds>(elapsed).count() << " ms\n";
-	cout << res << "\n";
+	//cout << duration_cast<microseconds>(elapsed).count() << " us\n";
+	//cout << res << "\n";
 	return res;
 }
 

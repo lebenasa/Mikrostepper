@@ -76,6 +76,42 @@ Rectangle {
             visible: calibrationSwitch
             onLengthChanged: updateCalibrationText()
         }
+
+        Rectangle {
+            id: focus
+            width: parent.width * 0.5; height: parent.height * 0.5;
+            anchors.centerIn: parent
+            border.width: 2
+            border.color: "yellow"
+            color: "transparent"
+            visible: false
+        }
+
+        MouseArea {
+            id: mafocus
+            anchors.fill: parent
+            onClicked: {
+                focus.visible = true
+                autofocus.scanSearch()
+            }
+        }
+
+        Connections {
+            target: autofocus
+            onFocusFound: {
+                focus.border.color = "lime"
+                timerfocus.start()
+            }
+        }
+
+        Timer {
+            id: timerfocus
+            interval: 500
+            onTriggered: {
+                focus.visible = false
+                focus.border.color = "yellow"
+            }
+        }
     }
 }
 

@@ -18,6 +18,14 @@ public:
 
 public slots:
 	void globalSearch();
+	void adaptiveSearch();
+	void derivativeSearch();
+	void scanSearch();
+	void slowSearch();
+
+signals:
+	void focusFound();
+	void focusLost();
 
 private:
 	void moveWait(zs target);
@@ -25,6 +33,9 @@ private:
 	bool lastCheck(zs step = 0.001);
 	void searchGlobal(zs step = 0.001);
 	void searchAdaptive();
+	void searchDerivative();
+	
+	void searchScan(double speed = 2.0);
 };
 
 #endif // AUTOFOCUS_H
