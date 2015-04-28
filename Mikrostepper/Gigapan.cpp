@@ -10,7 +10,7 @@
 using namespace std;
 
 string gigapanRegistryRemove() {
-	return "reg delete HKEY_CURRENT_USER\\Software\\GigaPan\\GigaPan /f";
+	return "reg delete HKEY_CURRENT_USER\\Software\\GigaPan /f";
 }
 
 string gigapanCommand(const vector<string>& files, int rows) {
