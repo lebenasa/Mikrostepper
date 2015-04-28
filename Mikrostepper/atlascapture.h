@@ -40,7 +40,9 @@ class AtlasCapture : public QObject
     CommandPool commandPool;
     QString m_saveDir;
 
-    bool checkCoord();
+	bool checkCoord();
+
+	QStringList m_files;
 public:
     explicit AtlasCapture(Camera* camera, StepperNavigator *parent = 0);
     ~AtlasCapture();
@@ -81,6 +83,9 @@ public slots:
 	void addSearchFocusCommand();
     void flushCommand();
 
+	void toggleGigapan(bool t);
+	void runGigapan();
+
 signals:
     void currentPosChanged(const QPoint& xy);
     void profileChanged();
@@ -88,6 +93,7 @@ signals:
     void captureRectChanged(const QRect caprect);
     void approxSizeChanged();
     void approxTimeChanged();
+	void captureDone();
 };
 
 #endif // ATLASCAPTURE_H

@@ -35,7 +35,7 @@ Rectangle {
     function moveToSelected() {
         if (!btnMove.enabled) return
         toggleAE()
-        serialcapture.moveToSelected()
+        serialcapture.moveToSelected(_autofocus)
     }
     function fillSelected() {
         if (!btnFill.enabled) return

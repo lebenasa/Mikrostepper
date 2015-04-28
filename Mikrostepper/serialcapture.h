@@ -48,7 +48,7 @@ public slots:
 	void unblockStream();
 	void redirectImage(const QImage& img);
 
-	void moveToSelected();
+	void moveToSelected(bool autofocus);
 
     void procSelect(const QPoint& pos);
     void procHighlight(const QPoint& pos);

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "atlascapture.h"
-
+#include <future>
 #include "camera.h"
 #include "appsettings.h"
 #include "steppernavigator.h"
+#include "Gigapan.h"
 using namespace std;
 
 AtlasCapture::AtlasCapture(Camera *camera, StepperNavigator *parent)
@@ -101,12 +102,14 @@ void AtlasCapture::startCapture(const QUrl& saveDir, bool foc) {
     }
     setProgress(0);
     m_saveDir = saveDir.toLocalFile();
+	m_files.clear();
     for (auto target : targets) {
         addMoveToCommand(target);
         addBlockCommand(500);
 		if (foc) addSearchFocusCommand();
         addCaptureCommand();
     }
+	addCommand([this]() { emit captureDone(); });
     nextCommand();
 }
 
@@ -138,6 +141,8 @@ void AtlasCapture::addCaptureCommand() {
 		m_camera->saveBuffer(fn);
         setProgress(m_progress + 1);
         QTimer::singleShot(100, this, SLOT(nextCommand()));
+		
+		m_files.push_back(fn);
     };
     addCommand(cmd);
 }
@@ -278,4 +283,13 @@ QString AtlasCapture::approxTime() {
 
 void AtlasCapture::moveToPixel(int x, int y) {
     m_navigator->moveTo(pxToCoord(QPoint(x, y)));
+}
+
+void AtlasCapture::toggleGigapan(bool t) {
+	if (t) connect(this, &AtlasCapture::captureDone, this, &AtlasCapture::runGigapan);
+	else disconnect(this, &AtlasCapture::captureDone, this, &AtlasCapture::runGigapan);
+}
+
+void AtlasCapture::runGigapan() {
+	runGigapanEx(m_saveDir, m_files);
 }

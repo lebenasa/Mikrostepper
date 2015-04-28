@@ -40,7 +40,10 @@ Rectangle {
 
     function updateSettings() {
         _autofocus = appsettings.readBool("MapAutofocus", true)
+        atlas.toggleGigapan(appsettings.readBool("MapGigapan", true))
     }
+
+    Component.onCompleted: atlas.toggleGigapan(appsettings.readBool("MapGigapan", true))
 
     Connections {
         target: appsettings

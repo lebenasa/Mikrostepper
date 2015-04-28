@@ -11,7 +11,8 @@ class CameraModel : public QAbstractListModel
 	int m_row, m_col;
     std::vector<bool> m_selected, m_hasImage, m_highlight;
     std::vector<QImage> m_buffer;
-	std::string gigapan;
+	QStringList m_files;
+	QString m_saveDir;
 public:
 	enum CameraRole {
 		BufferRole = Qt::UserRole + 1,
@@ -58,7 +59,6 @@ public slots:
     void saveSelectedBuffers(const QUrl& baseDir);
 
 	void toggleGigapan(bool t);
-	void prepareGigapan(const std::vector<std::string>& files, int rows);
 	void runGigapan();
 
 	// Clear selection
@@ -85,6 +85,7 @@ protected:
 	QHash<int, QByteArray> roleNames() const;
 
 private:
+	void saveBuffersPrivate(const QUrl& baseDir, std::function<bool(size_t)> comp);
 
 signals :
 	void rowsChanged(int row);

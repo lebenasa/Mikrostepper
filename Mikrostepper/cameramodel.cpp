@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "cameramodel.h"
+#include <future>
 #include <QtConcurrent>
-#include <QFuture>
-#include <QFutureWatcher>
-#include "qprocess.h"
 
 #include "Gigapan.h"
 
@@ -167,60 +165,37 @@ void saveimages(const std::vector<SaveImage>& jobs) {
     }
 }
 
-void CameraModel::saveBuffers(const QUrl &baseDir) {
+void CameraModel::saveBuffersPrivate(const QUrl& baseDir, std::function<bool(size_t)> comp)
+{
 	std::vector<SaveImage> workit;
-	std::vector<std::string> files;
-	int row = 0;
+	m_files.clear();
+	m_saveDir = baseDir.toLocalFile();
+
     for (size_t i = 0; i < m_hasImage.size(); ++i) {
-        if (m_hasImage.at(i)) {
+        if (m_hasImage.at(i) && comp(i)) {
             auto pt = indexToPoint(i);
             auto base = baseDir.toLocalFile();
             auto fn = base + "/" + QString("%1_%2.png").arg(pt.y()+1, 5, 10, QChar('0')).
 				arg(pt.x()+1, 5, 10, QChar('0'));
-			files.push_back(fn.toStdString());
-			if (pt.y() > row) row = pt.y();
-            //            m_buffer[i].save(fn);
             SaveImage saveit;
             saveit.first = m_buffer[i].copy();
             saveit.second = fn;
             workit.push_back(saveit);
+
+			m_files.push_back(fn);
         }
 	}
 
-	prepareGigapan(files, row+1);
+	auto saveFn = [=]() { saveimages(workit); emit saveCompleted(); };
+	async(launch::async, saveFn);
+}
 
-    auto watcher = new QFutureWatcher<void>(this);
-    connect(watcher, SIGNAL(finished()), this, SIGNAL(saveCompleted()));
-    auto future = QtConcurrent::run(saveimages, workit);
-    watcher->setFuture(future);
+void CameraModel::saveBuffers(const QUrl &baseDir) {
+	saveBuffersPrivate(baseDir, [](size_t){ return true; });
 }
 
 void CameraModel::saveSelectedBuffers(const QUrl &baseDir) {
-    std::vector<SaveImage> workit;
-	std::vector<std::string> files;
-	int row = 0;
-    for (size_t i = 0; i < m_hasImage.size(); ++i) {
-        if (m_hasImage.at(i) && m_selected.at(i)) {
-            auto pt = indexToPoint(i);
-            auto base = baseDir.toLocalFile();
-            auto fn = base + "/" + QString("%1_%2.png").arg(pt.y()+1, 5, 10, QChar('0')).
-                    arg(pt.x()+1, 5, 10, QChar('0'));
-			files.push_back(fn.toStdString());
-			if (pt.y() > row) row = pt.y();
-            //            m_buffer[i].save(fn);
-            SaveImage saveit;
-            saveit.first = m_buffer[i].copy();
-            saveit.second = fn;
-            workit.push_back(saveit);
-        }
-    }
-
-	prepareGigapan(files, row+1);
-
-    auto watcher = new QFutureWatcher<void>(this);
-    connect(watcher, SIGNAL(finished()), this, SIGNAL(saveCompleted()));
-    auto future = QtConcurrent::run(saveimages, workit);
-    watcher->setFuture(future);
+	saveBuffersPrivate(baseDir, [this](size_t i){ return m_selected.at(i); });
 }
 
 void CameraModel::clearSelection() {
@@ -474,15 +449,6 @@ void CameraModel::toggleGigapan(bool t) {
 	else disconnect(this, &CameraModel::saveCompleted, this, &CameraModel::runGigapan);
 }
 
-void CameraModel::prepareGigapan(const vector<string>& files, int rows) {
-	gigapan = gigapanCommand(files, rows);
-}
-
 void CameraModel::runGigapan() {
-	QProcess::execute(gigapanRegistryRemove().c_str());
-	auto exe = QCoreApplication::applicationDirPath();
-	auto exenat = QDir::toNativeSeparators(exe).toStdString();
-	auto cmd = "\"" + exenat + "\\GigaPan\\stitch.exe" "\"" + gigapan;
-	cout << cmd << "\n";
-	QProcess::execute(cmd.c_str());
+	runGigapanEx(m_saveDir, m_files);
 }

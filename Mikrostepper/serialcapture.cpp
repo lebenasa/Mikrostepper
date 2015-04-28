@@ -109,13 +109,12 @@ void SerialCapture::zoomOut() {
     }
 }
 
-void SerialCapture::moveToSelected() {
+void SerialCapture::moveToSelected(bool foc) {
 	if (m_navigator->bufferFree() < 14) return;
     flushCommand();
-	auto cmd = [=]() {
-		blockStream();
-		QTimer::singleShot(100, [=]() { m_navigator->moveTo(m_interface->indexToCoord(m_model->selectedCell())); });
-	};
+	auto cmd = [this]() { nextCommand(); };
+	addMoveToCommand(m_interface->indexToCoord(m_model->selectedCell()));
+	if (foc) addSearchFocusCommand();
 	QTimer::singleShot(100, cmd);
 }
 
