@@ -1091,5 +1091,9 @@ Item {
         dgProfile.visible = false
         dgSettings.visible = false
     }
+
+    Component.onCompleted: {
+        settingspage.initSettings()
+    }
 }
 

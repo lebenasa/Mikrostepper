@@ -52,12 +52,6 @@ void runGigapan(const QString& savedir, const QStringList& files, int rows)
 		command << checkSpace(f);
 	command << "--translational" << "--large-blend-region" << "--force-vignette-correction"
 		<< "--save-as" << checkSpace(savedir + "/GigaPan/stitch.gigapan") << "--stitch";
-	for (auto cmd : command)
-		cout << cmd.toStdString() << "\n";
-	//QProcess proc;
-	//proc.setProgram(gigapan);
-	//proc.setArguments(command);
-	//proc.start();
 	async([=](){ QProcess::execute(gigapan, command); });
 }
 

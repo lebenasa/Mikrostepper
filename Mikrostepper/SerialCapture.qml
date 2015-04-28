@@ -10,6 +10,8 @@ Rectangle {
     height: 720
     color: "#34495e"
 
+    property real _overlap: istep.overlap()
+
     function shiftUp() {
         serialcapture.shiftUp()
     }
@@ -27,6 +29,7 @@ Rectangle {
         cammodel.clearBuffers()
         serialcapture.flushCommand()
         istep.initSettings()
+        _overlap = istep.overlap()
         cammodel.clearBuffers()
         if (root.visible) serialcapture.updateCenter()
     }
@@ -115,7 +118,7 @@ Rectangle {
                                     blocked: false
                                     source: buffer
                                     renderParams: CameraItem.ScaledToItem
-                                    overlap: istep.overlap()
+                                    overlap: _overlap
                                 }
                                 Behavior on width { NumberAnimation { duration: 200 } }
                                 Behavior on height { NumberAnimation { duration: 200 } }
