@@ -87,12 +87,22 @@ Rectangle {
             visible: false
         }
 
+        BookmarkMenu {
+            id: bookmarkmenu
+        }
+
         MouseArea {
             id: mafocus
             anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: {
-                focus.visible = true
-                autofocus.scanSearch()
+                if (mouse.button == Qt.LeftButton) {
+                    focus.visible = true
+                    autofocus.scanSearch()
+                }
+                else if (mouse.button == Qt.RightButton) {
+                    bookmarkmenu.popup()
+                }
             }
         }
 

@@ -69,5 +69,6 @@
         <file>Images/SaveCalibration.png</file>
         <file>Images/ArrowSmall.png</file>
         <file>Images/ArrowLSmall.png</file>
+        <file>BookmarkMenu.qml</file>
     </qresource>
 </RCC>
