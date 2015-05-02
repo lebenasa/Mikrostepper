@@ -162,7 +162,8 @@ void AtlasCapture::nextCommand() {
 
 void AtlasCapture::flushCommand() {
     disconnect(m_navigator, &StepperNavigator::bufferFull, this, &AtlasCapture::nextCommand);
-    m_navigator->stop();
+	m_navigator->stop();
+	autofocus.cancel();
     commandPool = {};
 }
 
@@ -286,7 +287,7 @@ void AtlasCapture::moveToPixel(int x, int y) {
 }
 
 void AtlasCapture::toggleGigapan(bool t) {
-	if (t) connect(this, &AtlasCapture::captureDone, this, &AtlasCapture::runGigapan);
+	if (t) connect(this, &AtlasCapture::captureDone, this, &AtlasCapture::runGigapan, Qt::UniqueConnection);
 	else disconnect(this, &AtlasCapture::captureDone, this, &AtlasCapture::runGigapan);
 }
 

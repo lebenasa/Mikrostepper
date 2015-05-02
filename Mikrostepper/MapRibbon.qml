@@ -22,9 +22,11 @@ Rectangle {
     property bool _autofocus: appsettings.readBool("MapAutofocus", true)
 
     function toggleAE() {
-        if (_lastAE) {
+        if (camprop.autoexposure) {
             camprop.autoexposure = false
+            _lastAE = true
         }
+        else _lastAE = false
     }
 
     function untoggleAE() {

@@ -9,7 +9,7 @@ using namespace std;
 using namespace std::chrono;
 
 Autofocus::Autofocus(Camera* c, Stepper* n)
-	: QObject(c), cam(c), navi(n)
+	: QObject(c), cam(c), navi(n), m_stop(true)
 {
 
 }
@@ -138,7 +138,8 @@ void Autofocus::searchDerivative() {
 }
 
 void Autofocus::searchScan(double speed) {
-	zs guess = initialGuess(0.005);
+	m_stop = false;
+	zs guess = initialGuess(0.002);
 	zs h = 40.0 * guess;
 	if (h == 0.0) return;
 	double oval = 0.0;
@@ -149,7 +150,7 @@ void Autofocus::searchScan(double speed) {
 	zs bz = navi->z();
 	zs cz = bz;
 	double bv = nval;
-	while (fail < 4) {
+	while (fail < 4 && !m_stop) {
 		while (cam->focusValue() == nval) this_thread::sleep_for(milliseconds{ 5 });
 		oval = nval;
 		nval = cam->focusValue();
@@ -165,6 +166,7 @@ void Autofocus::searchScan(double speed) {
 	this_thread::sleep_for(milliseconds{ 5 });
 	moveWait(bz);
 	//cout << cam->focusValue() << "\t" << bz << "\n";
+	m_stop = true;
 	navi->setSpeed(100.0);
 }
 
@@ -186,4 +188,12 @@ void Autofocus::scanSearch() {
 
 void Autofocus::slowSearch() {
 	async(launch::async, [this]() { searchScan(0.5); emit focusFound(); });
+}
+
+void Autofocus::cancel() {
+	m_stop = true;
+}
+
+bool Autofocus::isWorking() const {
+	return !m_stop;
 }

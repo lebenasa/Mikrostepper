@@ -445,7 +445,7 @@ void CameraModel::selectLeft() {
 }
 
 void CameraModel::toggleGigapan(bool t) {
-	if (t) connect(this, &CameraModel::saveCompleted, this, &CameraModel::runGigapan);
+	if (t) connect(this, &CameraModel::saveCompleted, this, &CameraModel::runGigapan, Qt::UniqueConnection);
 	else disconnect(this, &CameraModel::saveCompleted, this, &CameraModel::runGigapan);
 }
 

@@ -97,8 +97,12 @@ Rectangle {
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: {
                 if (mouse.button == Qt.LeftButton) {
-                    focus.visible = true
-                    autofocus.scanSearch()
+                    if (autofocus.isWorking())
+                        autofocus.cancel()
+                    else {
+                        focus.visible = true
+                        autofocus.scanSearch()
+                    }
                 }
                 else if (mouse.button == Qt.RightButton) {
                     bookmarkmenu.popup()

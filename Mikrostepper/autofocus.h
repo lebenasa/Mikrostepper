@@ -12,6 +12,7 @@ class Autofocus : public QObject
 	using zs = double;
 	Camera* cam;
 	Stepper* navi;
+	bool m_stop;
 public:
 	Autofocus(Camera* cam, Stepper* navi);
 	~Autofocus();
@@ -22,6 +23,9 @@ public slots:
 	void derivativeSearch();
 	void scanSearch();
 	void slowSearch();
+
+	bool isWorking() const;
+	void cancel();
 
 signals:
 	void focusFound();

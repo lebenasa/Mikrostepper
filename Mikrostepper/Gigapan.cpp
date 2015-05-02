@@ -52,7 +52,7 @@ void runGigapan(const QString& savedir, const QStringList& files, int rows)
 		command << checkSpace(f);
 	command << "--translational" << "--large-blend-region" << "--force-vignette-correction"
 		<< "--save-as" << checkSpace(savedir + "/GigaPan/stitch.gigapan") << "--stitch";
-	async([=](){ QProcess::execute(gigapan, command); });
+	async([=](){ cout << "Called GigaPan\n"; QProcess::execute(gigapan, command); });
 }
 
 int extractNum(const QString& s)

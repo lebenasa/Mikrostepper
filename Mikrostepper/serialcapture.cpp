@@ -253,8 +253,8 @@ void SerialCapture::nextCommand() {
 void SerialCapture::flushCommand() {
     disconnect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::nextCommand);
     m_navigator->stop();
-    while (!commandPool.empty())
-        commandPool.pop();
+	autofocus.cancel();
+	commandPool = {};
 }
 
 
