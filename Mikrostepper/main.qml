@@ -6,13 +6,43 @@ import QtQuick.Dialogs 1.2
 import Leben.Asa 1.0
 
 LebenWindow {
-    id: applicationWindow1
+    id: win
     visible: true
     width: 1280
     height: 720
     title: qsTr("Microstepper")
 //    x: (Screen.width - width) / 2
 //    y: (Screen.height - height) / 2
+
+    property rect _lastRect
+    property int _winstate: 0
+    function maximize() {
+        _lastRect = Qt.rect(win.x, win.y, win.width, win.height)
+//        var _w = Screen.desktopAvailableWidth
+//        var _h = Screen.desktopAvailableHeight
+//        var _x = (_w == Screen.width) ? 0 : Screen.width - _w
+//        var _y = (_h == Screen.height) ? 0 : Screen.height - _h
+        var _w = Screen.width - 1
+        var _h = Screen.height - 1
+        var _x = 0; var _y = 0;
+        win.x = _x; win.y = _y
+        win.width = _w; win.height = _h
+        _winstate = 1
+    }
+
+    function restore() {
+        win.x = _lastRect.x; win.y = _lastRect.y
+        win.width = _lastRect.width; win.height = _lastRect.height
+        _winstate = 0
+    }
+
+    function minimize() {
+//        if (_winstate == 1) {
+//            restore()
+//            _winstate = 0
+//        }
+        win.showMinimized()
+    }
 
     Item {
         id: base
@@ -40,21 +70,21 @@ LebenWindow {
                 ToolButton {
                     id: minimizeBtn
                     iconSource: hovered ? "Images/MinimizeHover.png" : "Images/Minimize.png"
-                    onClicked: applicationWindow1.showMinimized()
+                    onClicked: win.minimize()
                 }
                 ToolButton {
                     id: maximizeBtn
                     iconSource: {
-                        if (applicationWindow1.visibility == Window.Maximized)
+                        if (win._winstate == 1)
                             hovered ? "Images/RestoreHover.png" : "Images/Restore.png"
                         else
                             hovered ? "Images/MaximizeHover.png" : "Images/Maximize.png"
                     }
                     onClicked: {
-                        if (applicationWindow1.visibility == Window.Maximized)
-                            applicationWindow1.showNormal()
+                        if (win._winstate == 1)
+                            win.restore()
                         else
-                            applicationWindow1.showMaximized()
+                            win.maximize()
                     }
                 }
                 ToolButton {
@@ -77,6 +107,6 @@ LebenWindow {
 
 
     Component.onCompleted: {
-//        applicationWindow1.showMaximized()
+//        win.showMaximized()
     }
 }

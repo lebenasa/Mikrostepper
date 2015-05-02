@@ -1,50 +1,8 @@
 import QtQuick 2.3
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.3
+import QtQuick.Controls.Styles 1.3
 
 Menu {
-    Menu {
-        title: "Bookmark"
-        MenuItem {
-            text: "Slot 1"
-            onTriggered: bookmark(0)
-        }
-        MenuItem {
-            text: "Slot 2"
-            onTriggered: bookmark(1)
-        }
-        MenuItem {
-            text: "Slot 3"
-            onTriggered: bookmark(2)
-        }
-        MenuItem {
-            text: "Slot 4"
-            onTriggered: bookmark(3)
-        }
-        MenuItem {
-            text: "Slot 5"
-            onTriggered: bookmark(4)
-        }
-        MenuItem {
-            text: "Slot 6"
-            onTriggered: bookmark(5)
-        }
-        MenuItem {
-            text: "Slot 7"
-            onTriggered: bookmark(6)
-        }
-        MenuItem {
-            text: "Slot 8"
-            onTriggered: bookmark(7)
-        }
-        MenuItem {
-            text: "Slot 9"
-            onTriggered: bookmark(8)
-        }
-        MenuItem {
-            text: "Slot 10"
-            onTriggered: bookmark(9)
-        }
-    }
     Menu {
         title: "Go to..."
         MenuItem {
@@ -96,6 +54,49 @@ Menu {
             text: bookmarksettings.get(9).text
             enabled: bookmarksettings.get(9).enabled
             onTriggered: gotoBookmark(9)
+        }
+    }
+    Menu {
+        title: "Bookmark"
+        MenuItem {
+            text: "Slot 1"
+            onTriggered: bookmark(0)
+        }
+        MenuItem {
+            text: "Slot 2"
+            onTriggered: bookmark(1)
+        }
+        MenuItem {
+            text: "Slot 3"
+            onTriggered: bookmark(2)
+        }
+        MenuItem {
+            text: "Slot 4"
+            onTriggered: bookmark(3)
+        }
+        MenuItem {
+            text: "Slot 5"
+            onTriggered: bookmark(4)
+        }
+        MenuItem {
+            text: "Slot 6"
+            onTriggered: bookmark(5)
+        }
+        MenuItem {
+            text: "Slot 7"
+            onTriggered: bookmark(6)
+        }
+        MenuItem {
+            text: "Slot 8"
+            onTriggered: bookmark(7)
+        }
+        MenuItem {
+            text: "Slot 9"
+            onTriggered: bookmark(8)
+        }
+        MenuItem {
+            text: "Slot 10"
+            onTriggered: bookmark(9)
         }
     }
 

@@ -193,3 +193,4 @@ ModelManifest.xml
 [Ii]mages*/
 *.db
 Mikrostepper/Thumbs.db
+dist/
