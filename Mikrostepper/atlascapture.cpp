@@ -119,7 +119,7 @@ void AtlasCapture::addCommand(Command cmd) {
 
 void AtlasCapture::addMoveToCommand(const QPointF &target) {
     addCommand([=]() {
-        connect(m_navigator, &StepperNavigator::bufferFull, this, &AtlasCapture::nextCommand);
+        connect(m_navigator, &StepperNavigator::bufferFull, this, &AtlasCapture::nextCommand, Qt::UniqueConnection);
 		QTimer::singleShot(500, [=]() { m_navigator->moveTo(target); });
     });
 }

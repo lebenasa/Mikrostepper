@@ -225,7 +225,7 @@ void SerialCapture::addCommand(Command cmd) {
 void SerialCapture::addMoveToCommand(const QPointF &target) {
     addCommand([=]() {
         blockStream();
-        connect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::nextCommand);
+        connect(m_navigator, &StepperNavigator::bufferFull, this, &SerialCapture::nextCommand, Qt::UniqueConnection);
 		QTimer::singleShot(500, [=]() { m_navigator->moveTo(target); });
     });
 }

@@ -95,6 +95,7 @@ Rectangle {
             id: mafocus
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
+            visible: !calibrationSwitch
             onClicked: {
                 if (mouse.button == Qt.LeftButton) {
                     if (autofocus.isWorking())
