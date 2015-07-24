@@ -44,7 +44,6 @@ dlldata.c
 *.pgd
 *.rsp
 *.sbr
-*.tlb
 *.tli
 *.tlh
 *.tmp
@@ -189,8 +188,6 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 [Gg]eneratedFiles*/
-[Ff]onts*/
-[Ii]mages*/
 *.db
 Mikrostepper/Thumbs.db
 dist/
