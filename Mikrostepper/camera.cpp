@@ -13,6 +13,7 @@
 
 #include "opencv2\opencv.hpp"
 #include "DSCAMAPI.h"
+using namespace std;
 
 Camera::Camera(QObject *parent)
 	: QObject(parent), recorder(this)
@@ -209,6 +210,73 @@ double DSCamera::focusValue() {
 	//cout << duration_cast<microseconds>(elapsed).count() << " us\n";
 	//cout << res << "\n";
 	return res;
+}
+
+//ToupCamera implementation
+ToupCamera::ToupCamera(QObject* parent)
+	: Camera{ parent }, m_camera{ this }
+{
+	connect(&m_camera, &ToupWrapper::imageReady, this, &ToupCamera::pullImage);
+	connect(&m_camera, &ToupWrapper::stillImageReady, this, &ToupCamera::pullStillImage);
+}
+
+bool ToupCamera::isAvailable()
+{
+	return m_camera.isAvailable();
+}
+
+QSize ToupCamera::size() const
+{
+	return m_camera.size();
+}
+
+void ToupCamera::setResolution(int res)
+{
+	m_camera.setResolution(res);
+}
+
+void ToupCamera::capture(int resolution, const QString& filename)
+{
+	m_filename = filename;
+	m_camera.snap(resolution);
+}
+
+void ToupCamera::saveBuffer(const QString& filename)
+{
+	if (QFile::exists(filename))
+		QFile::remove(filename);
+	m_buffer.save(filename);
+}
+
+double ToupCamera::focusValue()
+{
+	using namespace cv;
+	using namespace std;
+	using namespace std::chrono;
+	auto mat = toMat(m_buffer, size().width(), size().height());
+	auto gray = toGray(mat);
+	//auto now = steady_clock::now();
+	Scalar mean, stddev;
+	meanStdDev(gray, mean, stddev);
+	auto res = stddev[0] * stddev[0] / mean[0];
+	//auto elapsed = steady_clock::now() - now;
+	//cout << duration_cast<microseconds>(elapsed).count() << " us\n";
+	//cout << res << "\n";
+	return res;
+}
+
+void ToupCamera::pullImage()
+{
+	m_buffer = m_camera.pullImage();
+	emit frameReady(m_buffer);
+}
+
+void ToupCamera::pullStillImage()
+{
+	auto still = m_camera.pullStillImage();
+	if (QFile::exists(m_filename))
+		QFile::remove(m_filename);
+	still.save(m_filename);
 }
 
 //QuickCam implementation

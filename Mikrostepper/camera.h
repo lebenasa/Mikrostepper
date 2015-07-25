@@ -9,6 +9,7 @@ Base implementation of Camera
 */
 
 #include <QObject>
+#include "toupwrapper.h"
 #include "baserecorder.h"
 
 class Camera : public QObject
@@ -101,6 +102,38 @@ protected:
 	void initialize();
 	void deinitialize();
 
+};
+
+class ToupCamera : public Camera
+{
+	Q_OBJECT
+public:
+	ToupCamera(QObject* parent = 0);
+
+	bool isAvailable();
+
+public slots:
+	void setResolution(int res);
+
+	QSize size() const;
+
+	void capture(int resolution, const QString &fileName);
+	void saveBuffer(const QString& fileName);
+
+	double focusValue() override;
+
+protected:
+	void initialize(){ };
+	void deinitialize(){ };
+	
+private:
+	ToupWrapper m_camera;
+	QImage m_buffer;
+	QString m_filename;
+
+private slots:
+	void pullImage();
+	void pullStillImage();
 };
 
 /*

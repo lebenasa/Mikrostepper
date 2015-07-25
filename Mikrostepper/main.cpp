@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     AppSettings settings;
 	settings.updateCNCSettings();
-    MockCamera camera;
+    ToupCamera camera;
 	if (!camera.isAvailable()) {
 		return 0;
 	}
