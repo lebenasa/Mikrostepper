@@ -267,7 +267,8 @@ double ToupCamera::focusValue()
 
 void ToupCamera::pullImage()
 {
-	m_buffer = m_camera.pullImage();
+	m_buffer = m_camera.pullImage().image();
+	//qDebug() << "osc: " << m_buffer.bits();
 	emit frameReady(m_buffer);
 }
 

@@ -6,21 +6,24 @@
 
 #include "toupcam.h"
 
-class Image : public QObject
+class Image
 {
 public:
 	Image() = default;
 	Image(int w, int h, int c);
 	~Image();
 
-	Image(const Image&) = delete;
-	Image& operator=(const Image&) = delete;
+	Image(const Image&);
+	Image& operator=(const Image&);
 
+	Image(Image&& im);
 	Image& operator=(Image&&);
 
 	QImage image();
 	uchar* buffer();
 	uchar* buffer() const;
+
+	QSize size() const;
 
 protected:
 	int width, height, channel;
@@ -37,6 +40,7 @@ class ToupWrapper : public QObject
 	bool m_available;
 	QSize m_size;
 	size_t m_still;
+	Image m_image;
 public:
 	ToupWrapper(QObject* parent = nullptr);
 	~ToupWrapper();
@@ -55,7 +59,7 @@ public:
 	QSize stillSize();
 	std::vector<QSize> stillSizes();
 
-	QImage& pullImage();
+	Image& pullImage();
 	QImage& pullStillImage();
 
 public slots:

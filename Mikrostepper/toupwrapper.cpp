@@ -11,6 +11,34 @@ Image::~Image()
 	if (m_buffer) delete[] m_buffer;
 }
 
+Image::Image(const Image& o)
+	: width{ o.width }, height{ o.height }, channel{ o.channel }, 
+	m_buffer{ new uchar[width * height * channel] }
+{
+	memcpy(m_buffer, o.m_buffer, width * height * channel);
+}
+
+Image& Image::operator=(const Image& o)
+{
+	width = o.width;
+	height = o.height;
+	channel = o.channel;
+	if (m_buffer)
+		delete[] m_buffer;
+	m_buffer = new uchar[width*height*channel];
+	memcpy(m_buffer, o.m_buffer, width * height * channel);
+	return *this;
+}
+
+Image::Image(Image&& im)
+	: width{ im.width }, height{ im.height }, channel{ im.channel }, m_buffer{ im.m_buffer }
+{
+	im.width = 0;
+	im.height = 0;
+	im.channel = 0;
+	im.m_buffer = nullptr;
+}
+
 Image& Image::operator=(Image&& im)
 {
 	width = im.width;
@@ -34,6 +62,11 @@ uchar* Image::buffer()
 uchar* Image::buffer() const
 {
 	return m_buffer;
+}
+
+QSize Image::size() const
+{
+	return QSize{ width, height };
 }
 
 ToupWrapper::ToupWrapper(QObject* parent)
@@ -82,6 +115,7 @@ void ToupWrapper::updateSize()
 	int w, h;
 	Toupcam_get_Resolution(htoupcam, resolution(), &w, &h);
 	m_size = QSize{ w, h };
+	m_image = Image{ w, h, 3 };
 	emit sizeChanged(m_size);
 }
 
@@ -97,6 +131,8 @@ void CALLBACK toup_callback(unsigned nEvent, void* pCallbackCtx)
 		toup->cbStillImageReady();
 		break;
 	case TOUPCAM_EVENT_ERROR:
+		toup->cbCameraError();
+		break;
 	case TOUPCAM_EVENT_DISCONNECTED:
 		toup->cbCameraError();
 		break;
@@ -124,12 +160,11 @@ void ToupWrapper::cbImageReady()
 	emit imageReady();
 }
 
-QImage& ToupWrapper::pullImage()
+Image& ToupWrapper::pullImage()
 {
-	Image im{ m_size.width(), m_size.height(), 3 };
-	Toupcam_PullImage(htoupcam, im.buffer(), 24, nullptr, nullptr);
-	auto img = im.image().copy();
-	return move(img);
+	Toupcam_PullImage(htoupcam, m_image.buffer(), 24, nullptr, nullptr);
+	//qDebug() << "buf: " << m_image.buffer();
+	return m_image;
 }
 
 void ToupWrapper::snap(size_t res)
