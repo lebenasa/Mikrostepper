@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "stepper.h"
 #include "appsettings.h"
+using namespace std;
 
 //Stepper
 Stepper::Stepper(QObject *parent)
@@ -271,6 +272,8 @@ void CNCStepper::setZeroX() {
 	cncAPI->mObject->SendSetPos(coord);
 	coord->Release();
 	coord = nullptr;
+
+	//internalCount();
 }
 
 void CNCStepper::setZeroY() {
@@ -280,6 +283,8 @@ void CNCStepper::setZeroY() {
 	cncAPI->mObject->SendSetPos(coord);
 	coord->Release();
 	coord = nullptr;
+
+	//internalCount();
 }
 
 void CNCStepper::setZeroZ() {
@@ -289,25 +294,35 @@ void CNCStepper::setZeroZ() {
 	cncAPI->mObject->SendSetPos(coord);
 	coord->Release();
 	coord = nullptr;
+
+	//internalCount();
 }
 
 void CNCStepper::stop() {
 	cncAPI->mObject->SendStop();
+
+	//internalCount();
 }
 
 void CNCStepper::moveX(double dist) {
 	if (!m_isActive) return;
 	cncAPI->mObject->SendMoveDeltaAxis(AxisEnum_X, dist, m_speed, UnitsEnum_Millimeters);
+
+	//internalCount();
 }
 
 void CNCStepper::moveY(double dist) {
 	if (!m_isActive) return;
 	cncAPI->mObject->SendMoveDeltaAxis(AxisEnum_Y, dist, m_speed, UnitsEnum_Millimeters);
+
+	//internalCount();
 }
 
 void CNCStepper::moveZ(double dist) {
 	if (!m_isActive) return;
 	cncAPI->mObject->SendMoveDeltaAxis(AxisEnum_Z, dist, m_speed, UnitsEnum_Millimeters);
+
+	//internalCount();
 }
 
 void CNCStepper::moveTo(const QPointF& npos) {
@@ -319,6 +334,8 @@ void CNCStepper::moveTo(const QPointF& npos) {
 	cncAPI->mObject->SendMovePos(coord, m_speed);
 	coord->Release();
 	coord = nullptr;
+
+	//internalCount();
 }
 
 void CNCStepper::moveToZ(const double& nz) {
@@ -329,4 +346,24 @@ void CNCStepper::moveToZ(const double& nz) {
 	cncAPI->mObject->SendMovePos(coord, m_speed);
 	coord->Release();
 	coord = nullptr;
+
+	//internalCount();
+}
+
+void CNCStepper::internalCount()
+{
+	//auto valid = cncAPI->mObject->GetLicenseValid();
+	//if (!valid)
+	//{
+		++_cnt;
+		if (_cnt > 24)
+		{
+			//auto now = chrono::system_clock::now();
+			deinit();
+			init();
+			//auto duration = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now() - now);
+			//cout << "Re-init time: " << duration.count() << endl;
+			_cnt = 0;
+		}
+	//}
 }

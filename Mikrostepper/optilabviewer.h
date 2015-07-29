@@ -29,6 +29,8 @@ signals:
     void recordingTime(const QString& time);
     void recordingStatusChanged();
 
+	void captureReady(const QUrl& filename);
+
 public slots:
     QSize calculateAspectRatio(int screenWidth, int screenHeight) const;
     QUrl captureToTemp(const QString& imgName);

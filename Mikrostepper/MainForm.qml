@@ -137,6 +137,15 @@ Item {
         icon: StandardIcon.Warning
     }
 
+    MessageDialog {
+        id: errorMessage
+        title: "Camera Not Found"
+        text: "Please plug-in Optilab device."
+        standardButtons: StandardButton.Ok
+        icon: StandardIcon.Warning
+        onAccepted: Qt.quit()
+    }
+
     Item {
         id: ribbon
         height: 150
@@ -1093,6 +1102,10 @@ Item {
     }
 
     Component.onCompleted: {
+        if (!camera.isAvailable()) {
+            errorMessage.open()
+            Qt.quit()
+        }
         settingspage.initSettings()
     }
 }

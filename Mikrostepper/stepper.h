@@ -136,6 +136,7 @@ class CNCStepper : public Stepper
 	bool m_isActive = false;
 	QTimer* statusUpdater;
 	CEventHandler* cncAPI;
+	size_t _cnt = 0;
 public:
 	CNCStepper(QObject* parent = 0);
 	~CNCStepper();
@@ -171,5 +172,7 @@ public slots:
 private:
 	bool init();
 	void deinit();
+
+	void internalCount();
 };
 #endif // STEPPER_H

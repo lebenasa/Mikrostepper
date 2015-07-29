@@ -30,12 +30,18 @@ Rectangle {
         id: captureTimer
         interval: 100
         onTriggered: {
-            var temp = optilab.captureToTemp("swrdaol.jpg")
-            preview1.source = temp
-            preview1.show()
+            optilab.captureToTemp("swrdaol.jpg")
             camprop.setFrameSpeed(2)
             camprop.exposureTime = _lastExpTime
             camprop.autoexposure = _lastAE
+        }
+    }
+
+    Connections {
+        target: optilab
+        onCaptureReady: {
+            preview1.source = filename
+            preview1.open()
         }
     }
 

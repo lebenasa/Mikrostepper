@@ -20,11 +20,11 @@ public:
 	Camera(QObject *parent = 0);
 	virtual ~Camera();
 
-    virtual bool isAvailable() = 0;
-
 	BaseRecorder recorder;
 
 public slots:
+    virtual bool isAvailable() = 0;
+
 	virtual void setResolution(int res) = 0;
 
     virtual QSize size() const = 0;
@@ -36,6 +36,7 @@ public slots:
 
 signals :
 	void frameReady(const QImage& frame);
+	void captureReady(const QString& filename);
     void sourceSizeChanged(const QSize& sz);
 
 protected:
@@ -54,9 +55,9 @@ public:
 	MockCamera(QObject *parent = 0);
 	~MockCamera();
 
+public slots:
     bool isAvailable() { return m_available; }
 
-public slots:
     void setResolution(int res) { Q_UNUSED(res) }
 
     QSize size() const { return m_buffer.size(); }
@@ -84,10 +85,10 @@ public:
 	DSCamera(QObject *parent = 0);
 	~DSCamera();
 
-	bool isAvailable() { return m_available; }
-
 public slots:
 	void setResolution(int res);
+
+	bool isAvailable() { return m_available; }
 
 	QSize size() const;
 
@@ -110,10 +111,10 @@ class ToupCamera : public Camera
 public:
 	ToupCamera(QObject* parent = 0);
 
-	bool isAvailable();
-
 public slots:
 	void setResolution(int res);
+
+	bool isAvailable();
 
 	QSize size() const;
 

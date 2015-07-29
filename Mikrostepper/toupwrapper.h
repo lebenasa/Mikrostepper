@@ -60,7 +60,7 @@ public:
 	std::vector<QSize> stillSizes();
 
 	Image& pullImage();
-	QImage& pullStillImage();
+	Image pullStillImage();
 
 public slots:
 	void setResolution(size_t res);

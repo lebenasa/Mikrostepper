@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
     AppSettings settings;
 	settings.updateCNCSettings();
     ToupCamera camera;
-	if (!camera.isAvailable()) {
-		return 0;
-	}
+	//if (!camera.isAvailable()) {
+	//	return 0;
+	//}
     MockStepper stepper(&camera);
 	//if (!stepper.isAvailable()) {
 	//	return 0;

@@ -74,7 +74,7 @@ ToupWrapper::ToupWrapper(QObject* parent)
 {
 	init();
 	start();
-	//setResolution(arrinst[0].model->preview - 2);
+	setResolution(2);
 }
 
 ToupWrapper::~ToupWrapper()
@@ -87,7 +87,6 @@ void ToupWrapper::setResolution(size_t res)
 {
 	stop();
 	Toupcam_put_eSize(htoupcam, res);
-	init();
 	start();
 }
 
@@ -97,7 +96,6 @@ void ToupWrapper::init()
 	if (cnt > 0)
 	{
 		htoupcam = Toupcam_Open(0);
-		updateSize();
 		m_available = true;
 	}
 	else
@@ -116,6 +114,7 @@ void ToupWrapper::updateSize()
 	Toupcam_get_Resolution(htoupcam, resolution(), &w, &h);
 	m_size = QSize{ w, h };
 	m_image = Image{ w, h, 3 };
+	qDebug() << m_size;
 	emit sizeChanged(m_size);
 }
 
@@ -141,8 +140,11 @@ void CALLBACK toup_callback(unsigned nEvent, void* pCallbackCtx)
 
 void ToupWrapper::start()
 {
-	if (m_available) Toupcam_StartPullModeWithCallback(htoupcam,
-		toup_callback, this);
+	if (m_available)
+	{
+		updateSize();
+		Toupcam_StartPullModeWithCallback(htoupcam, toup_callback, this);
+	}
 }
 
 void ToupWrapper::stop()
@@ -178,12 +180,13 @@ void ToupWrapper::cbStillImageReady()
 	emit stillImageReady();
 }
 
-QImage& ToupWrapper::pullStillImage()
+Image ToupWrapper::pullStillImage()
 {
 	auto still_sz = stillSize();
 	Image im{ still_sz.width(), still_sz.height(), 3 };
 	Toupcam_PullStillImage(htoupcam, im.buffer(), 24, nullptr, nullptr);
-	return move(im.image().copy());
+	//qDebug() << "buf: " << im.buffer();
+	return move(im);
 }
 
 void ToupWrapper::cbCameraError()

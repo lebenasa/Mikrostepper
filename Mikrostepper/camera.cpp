@@ -277,7 +277,9 @@ void ToupCamera::pullStillImage()
 	auto still = m_camera.pullStillImage();
 	if (QFile::exists(m_filename))
 		QFile::remove(m_filename);
-	still.save(m_filename);
+	//qDebug() << "sav: " << still.buffer();
+	still.image().save(m_filename);
+	emit captureReady(m_filename);
 }
 
 //QuickCam implementation

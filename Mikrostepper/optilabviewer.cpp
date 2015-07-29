@@ -20,6 +20,9 @@ OptilabViewer::OptilabViewer(Camera *parent)
     for (auto file : list)
 		workdir.remove(file);
 	connect(&m_camera->recorder, &BaseRecorder::timestatus, this, &OptilabViewer::recordingTime);
+
+	connect(m_camera, &Camera::captureReady, 
+		[this](const QString& fn) { emit captureReady(QUrl::fromLocalFile(fn)); });
 }
 
 OptilabViewer::~OptilabViewer()
