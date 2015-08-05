@@ -62,12 +62,96 @@ public:
 	Image& pullImage();
 	Image pullStillImage();
 
+	QRect roi() const;
+	void setRoi(const QRect& roi);
+
+	unsigned int rawFormat() const;
+
+	unsigned int option(unsigned int optId) const;
+	void setOption(unsigned int optId, unsigned int value);
+
+	bool realTime() const;
+	void setRealTime(bool enable);
+
+	bool autoExposure() const;
+	void setAutoExposure(bool enable);
+	unsigned short autoExposureTarget() const;
+	void setAutoExposureTarget(unsigned short target);
+	void setMaxAutoExposureTime(unsigned int maxTime);
+	void setMaxAutoExposureAGain(unsigned int maxGain);
+
+	unsigned int exposureTime() const;
+	void setExposureTime(unsigned int time);
+	std::pair<size_t, size_t> exposureTimeRange() const;
+
+	unsigned short exposureAGain() const;
+	void setExposureAGain(unsigned short gain);
+	std::pair<size_t, size_t> exposureAGainRange() const;
+
+	int hue() const;
+	void setHue(int val);
+	int saturation() const;
+	void setSaturation(int val);
+	int brightness() const;
+	void setBrightness(int val);
+	int contrast() const;
+	void setContrast(int val);
+	int gamma() const;
+	void setGamma(int gamma);
+
+	bool chrome() const;
+	void setChrome(bool enable);
+
+	bool hFlip() const;
+	void setHFlip(bool enable);
+	bool vFlip() const;
+	void setVFlip(bool enable);
+
+	unsigned short speed() const;
+	void setSpeed(unsigned short speed);
+
+	int frequency() const;
+	void setFrequency(int hz);
+
+	bool isBinMode() const;
+	void toggleMode();
+
+	std::unique_ptr<int> whiteBalanceGain() const;
+	void setWhiteBalanceGain(std::unique_ptr<int> gain);
+
+	int rGain() const;
+	void setRGain(int r);
+	int gGain() const;
+	void setGGain(int g);
+	int bGain() const;
+	void setBGain(int b);
+
+	int whiteBalanceTemperature() const;
+	void setWhiteBalanceTemperature(int temp);
+	int whiteBalanceTint() const;
+	void setWhiteBalanceTint(int tint);
+
+	QRect whiteBalanceRect() const;
+	void setWhiteBalanceRect(const QRect& rect);
+	QRect autoExposureRect() const;
+	void setAutoExposureRect(const QRect& rect);
+
+	bool isMono() const;
+
+	std::string serialNumber() const;
+	std::string fwVersion() const;
+	std::string hwVersion() const;
+	std::string productionDate() const;
+
 public slots:
 	void setResolution(size_t res);
 	void start();
 	void stop();
 
 	void snap(size_t res);
+
+	void awbOnePush();
+	void autoEqualize();
 
 signals:
 	void imageReady();

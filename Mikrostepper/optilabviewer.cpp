@@ -79,7 +79,7 @@ void OptilabViewer::copyToFolder(const QUrl &image, const QUrl &folder) {
     QString path = folder.toLocalFile();
     QFileInfo imfile(img);
     path += "/" + imfile.fileName();
-	qDebug() << path;
+	//qDebug() << path;
 	if (QFile::exists(path))
 		bool suc = QFile::remove(path);
     QFile::copy(img, path);
