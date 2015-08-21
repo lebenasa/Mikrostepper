@@ -86,7 +86,7 @@ ToupWrapper::~ToupWrapper()
 void ToupWrapper::setResolution(size_t res)
 {
 	stop();
-	Toupcam_put_eSize(htoupcam, res);
+	if (m_available) Toupcam_put_eSize(htoupcam, res);
 	start();
 }
 
@@ -104,7 +104,7 @@ void ToupWrapper::init()
 
 void ToupWrapper::close()
 {
-	Toupcam_Close(htoupcam);
+	if (m_available) Toupcam_Close(htoupcam);
 	m_available = false;
 }
 
@@ -149,7 +149,8 @@ void ToupWrapper::start()
 
 void ToupWrapper::stop()
 {
-	Toupcam_Stop(htoupcam);
+	if (m_available)
+		Toupcam_Stop(htoupcam);
 }
 
 bool ToupWrapper::isAvailable() const

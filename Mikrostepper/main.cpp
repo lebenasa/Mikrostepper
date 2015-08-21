@@ -15,6 +15,8 @@
 #include "cameracontrol.h"
 #include "autofocus.h"
 
+using namespace std;
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -32,7 +34,12 @@ int main(int argc, char *argv[])
 	//	return 0;
 	//}
 
-    CameraControl camctr(&camera);
+    //CameraControl camctr(&camera);
+	vector<unique_ptr<CamProp>> vprop;
+	if (camera.isAvailable())
+		vprop.emplace_back(new ToupCameraProp(camera.wrapper()));
+	else
+		vprop.emplace_back(new NullCamProp(&camera));
     StepperNavigator nav(&stepper);
     OptilabViewer ov(&camera);
     SerialCapture sc(&camera, &nav, &camera);
@@ -46,7 +53,7 @@ int main(int argc, char *argv[])
     ctx->setContextProperty("navigator", &nav);
     ctx->setContextProperty("optilab", &ov);
     ctx->setContextProperty("atlas", &ac);
-    ctx->setContextProperty("camprop", &camctr);
+    ctx->setContextProperty("camprop", vprop.at(0).get());
 	ctx->setContextProperty("autofocus", &af);
     sc.setQmlContext(ctx);
 

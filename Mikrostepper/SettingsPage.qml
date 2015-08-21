@@ -1,6 +1,7 @@
 import QtQuick 2.3
 import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.0
+import QtQuick.Controls.Styles 1.3
 import QuickCam 1.0
 
 Rectangle {
@@ -236,7 +237,7 @@ Rectangle {
                     height: 200
                     color: "#2ecc71"
                     anchors.leftMargin: 40
-                    anchors.left: columnLayout1.right
+                    anchors.left: scrollView.right
                     anchors.top: parent.top
                     anchors.topMargin: 20
                     border.color: "#bdc3c7"
@@ -255,170 +256,290 @@ Rectangle {
                     }
                 }
 
-                ColumnLayout {
-                    id: columnLayout1
+                ScrollView {
+                    id: scrollView
                     width: 250
-                    height: 110
-                    spacing: 5
                     anchors.left: parent.left
                     anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     anchors.leftMargin: 20
                     anchors.topMargin: 20
-
-                    TextBlack {
-                        id: textBlack1
-                        text: "Color"
-                        font.pointSize: 10
+//                    contentHeight: columnLayout1.height
+//                    clip: true
+                    style: ScrollViewStyle {
+                        handle: Rectangle {
+                            width: 4
+                            height: scrollView.height / columnLayout1.height
+                            color: "#34495e"
+                        }
+                        frame: Item {}
+                        incrementControl: Item {}
+                        decrementControl: Item {}
+                        corner: Item {}
+                        scrollBarBackground: Rectangle {
+                            width: 4
+                            height: scrollView.height
+                            color: "black"
+                        }
                     }
 
-                    TextRegular {
-                        id: textRegular1
-                        text: "Gamma: %1".arg(Math.round(sliderBrightness.value))
-                    }
+                    ColumnLayout {
+                        id: columnLayout1
+                        width: 250
+                        height: 950
+                        anchors.left: parent.left
+                        anchors.top: parent.top
 
-                    Slider {
-                        id: sliderBrightness
-                        maximumValue: 250
-                        minimumValue: 10
-                        value: camprop.gamma
-                        stepSize: 1.0
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        TextBlack {
+                            id: textBlack1
+                            text: "Color"
+                            font.pointSize: 10
+                        }
 
-                    TextRegular {
-                        id: textRegular2
-                        text: "Contrast: %1".arg(Math.round(sliderContrast.value))
-                    }
+                        TextRegular {
+                            text: "Hue: %1".arg(Math.round(sliderHue.value))
+                        }
 
-                    Slider {
-                        id: sliderContrast
-                        value: camprop.contrast
-                        maximumValue: 100
-                        stepSize: 1
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        Slider {
+                            id: sliderHue
+                            value: camprop.hue
+                            minimumValue: -180
+                            maximumValue: 180
+                            stepSize: 1
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    TextRegular {
-                        id: textRegular3
-                        text: "Saturation: %1".arg(Math.round(sliderSaturation.value))
-                    }
+                        TextRegular {
+                            id: textRegular3
+                            text: "Saturation: %1".arg(Math.round(sliderSaturation.value))
+                        }
 
-                    Slider {
-                        id: sliderSaturation
-                        value: camprop.saturation
-                        maximumValue: 255
-                        stepSize: 1
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        Slider {
+                            id: sliderSaturation
+                            value: camprop.saturation
+                            maximumValue: 255
+                            stepSize: 1
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    Item { height: 15 }
+                        TextRegular {
+                            text: "Brightness: %1".arg(Math.round(sliderBrightness.value))
+                        }
 
-                    TextBlack {
-                        id: textBlack2
-                        text: "Exposure"
-                        font.pointSize: 10
-                    }
+                        Slider {
+                            id: sliderBrightness
+                            value: camprop.brightness
+                            minimumValue: -64
+                            maximumValue: 64
+                            stepSize: 1
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    CheckBox {
-                        id: checkboxAutoExposure
-                        text: "Automatic Exposure"
-                        checked: camprop.autoexposure
-                        onCheckedChanged: camprop.autoexposure = checked
-                    }
+                        TextRegular {
+                            id: textRegular2
+                            text: "Contrast: %1".arg(Math.round(sliderContrast.value))
+                        }
 
-                    TextRegular {
-                        id: textRegular4
-                        text: "Target: %1".arg(Math.round(sliderTarget.value))
-                    }
+                        Slider {
+                            id: sliderContrast
+                            value: camprop.contrast
+                            maximumValue: 100
+                            stepSize: 1
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    Slider {
-                        id: sliderTarget
-                        maximumValue: 200
-                        minimumValue: 50
-                        value: camprop.aeTarget
-                        stepSize: 1
-                        enabled: checkboxAutoExposure.checked
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        TextRegular {
+                            id: textRegular1
+                            text: "Gamma: %1".arg(Math.round(sliderGamma.value))
+                        }
 
-                    TextRegular {
-                        id: textRegular5
-                        text: "Exposure Time: %1".arg(Math.round(sliderTime.value))
-                    }
+                        Slider {
+                            id: sliderGamma
+                            maximumValue: 250
+                            minimumValue: 10
+                            value: camprop.gamma
+                            stepSize: 1.0
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    Slider {
-                        id: sliderTime
-                        maximumValue: 4000
-                        minimumValue: 1
-                        value: camprop.exposureTime
-                        stepSize: 1
-                        enabled: !checkboxAutoExposure.checked
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        Item { height: 15 }
 
-                    TextRegular {
-                        id: textRegular6
-                        text: "Gain: %1".arg(Math.round(sliderGain.value))
-                    }
+                        TextBlack {
+                            id: textBlack2
+                            text: "Exposure"
+                            font.pointSize: 10
+                        }
 
-                    Slider {
-                        id: sliderGain
-                        maximumValue: 80
-                        minimumValue: 1
-                        value: camprop.aeGain
-                        stepSize: 1
-                        enabled: !checkboxAutoExposure.checked
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        CheckBox {
+                            id: checkboxAutoExposure
+                            text: "Automatic Exposure"
+                            checked: camprop.autoexposure
+                            onCheckedChanged: camprop.autoexposure = checked
+                        }
 
-                    Item { height: 15 }
+                        TextRegular {
+                            id: textRegular4
+                            text: "Target: %1".arg(Math.round(sliderTarget.value))
+                        }
 
-                    TextBlack {
-                        id: textBlack3
-                        text: "Manual White Balance"
-                        font.pointSize: 10
-                    }
+                        Slider {
+                            id: sliderTarget
+                            maximumValue: 235
+                            minimumValue: 16
+                            value: camprop.aeTarget
+                            stepSize: 1
+                            enabled: checkboxAutoExposure.checked
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    TextRegular {
-                        id: textRegular7
-                        text: "Red: %1".arg(Math.round(sliderRed.value))
-                    }
+                        TextRegular {
+                            id: textRegular5
+                            text: "Exposure Time: %1".arg(Math.round(sliderTime.value))
+                        }
 
-                    Slider {
-                        id: sliderRed
-                        maximumValue: 255
-                        minimumValue: 10
-                        value: camprop.rGain
-                        stepSize: 1
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        Slider {
+                            id: sliderTime
+                            maximumValue: 4000
+                            minimumValue: 1
+                            value: camprop.exposureTime
+                            stepSize: 1
+                            enabled: !checkboxAutoExposure.checked
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    TextRegular {
-                        id: textRegular8
-                        text: "Green: %1".arg(Math.round(sliderGreen.value))
-                    }
+                        TextRegular {
+                            id: textRegular6
+                            text: "Gain: %1".arg(Math.round(sliderGain.value))
+                        }
 
-                    Slider {
-                        id: sliderGreen
-                        maximumValue: 255
-                        minimumValue: 10
-                        value: camprop.gGain
-                        stepSize: 1
-                        Layout.alignment: Qt.AlignCenter
-                    }
+                        Slider {
+                            id: sliderGain
+                            maximumValue: 80
+                            minimumValue: 1
+                            value: camprop.aeGain
+                            stepSize: 1
+                            enabled: !checkboxAutoExposure.checked
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    TextRegular {
-                        id: textRegular9
-                        text: "Blue: %1".arg(Math.round(sliderBlue.value))
-                    }
+                        Item { height: 15 }
 
-                    Slider {
-                        id: sliderBlue
-                        maximumValue: 255
-                        minimumValue: 10
-                        value: camprop.bGain
-                        stepSize: 1
-                        Layout.alignment: Qt.AlignCenter
+                        TextBlack {
+                            id: textBlack3
+                            text: "Manual White Balance"
+                            font.pointSize: 10
+                        }
+
+                        TextRegular {
+                            text: "Temperature: %1".arg(Math.round(sliderTemperature.value))
+                        }
+
+                        Slider {
+                            id: sliderTemperature
+                            minimumValue: 2000
+                            maximumValue: 15000
+                            value: camprop.whiteBalanceTemperature
+                            Layout.alignment: Qt.AlignCenter
+                        }
+
+                        TextRegular {
+                            text: "Tint: %1".arg(Math.round(sliderTint.value))
+                        }
+
+                        Slider {
+                            id: sliderTint
+                            minimumValue: 200
+                            maximumValue: 2500
+                            value: camprop.whiteBalanceTint
+                            stepSize: 1
+                            Layout.alignment: Qt.AlignCenter
+                        }
+
+                        TextBlack {
+                            text: "Miscellaneous"
+                            font.pointSize: 10
+                        }
+
+                        TextRegular {
+                            text: "Frame Rate: %1".arg(sliderFrameRate.label)
+                        }
+
+                        Slider {
+                            id: sliderFrameRate
+                            property string label: "Slowest"
+                            minimumValue: 0
+                            maximumValue: 3
+                            value: camprop.frameRate
+                            stepSize: 1
+                            Layout.alignment: Qt.AlignCenter
+                            onValueChanged: {
+                                switch (value) {
+                                case 0:
+                                    label = "Slowest"
+                                    break
+                                case 1:
+                                    label = "Slow"
+                                    break
+                                case 2:
+                                    label = "Fast"
+                                    break
+                                case 3:
+                                    label = "Fastest"
+                                    break
+                                }
+                            }
+                        }
+
+                        TextRegular {
+                            text: "Color Mode"
+                        }
+
+                        ExclusiveGroup {
+                            id: colorModeGroup
+                        }
+
+                        RadioButton {
+                            text: "Color"
+                            exclusiveGroup: colorModeGroup
+                            checked: true
+                        }
+
+                        RadioButton {
+                            text: "Black/White"
+                            exclusiveGroup: colorModeGroup
+                            checked: false
+                        }
+
+                        TextRegular {
+                            text: "Mirror"
+                        }
+
+                        CheckBox {
+                            text: "Horizontal"
+                        }
+
+                        CheckBox {
+                            text: "Vertical"
+                        }
+
+                        TextRegular {
+                            text: "Sampling method"
+                        }
+
+                        ExclusiveGroup {
+                            id: samplingGroup
+                        }
+
+                        RadioButton {
+                            text: "Bin (better image, slower)"
+                            exclusiveGroup: samplingGroup
+                            checked: true
+                        }
+
+                        RadioButton {
+                            text: "Skip (fast)"
+                            exclusiveGroup: samplingGroup
+                        }
                     }
                 }
 
@@ -1788,14 +1909,19 @@ Rectangle {
         else radioButton4.checked = true
     }
 
-    Binding { target: camprop; property: "rGain"; value: sliderRed.value   }
-    Binding { target: camprop; property: "gGain"; value: sliderGreen.value }
-    Binding { target: camprop; property: "bGain"; value: sliderBlue.value }
-    Binding { target: camprop; property: "gamma"; value: sliderBrightness.value }
-    Binding { target: camprop; property: "contrast"; value: sliderContrast.value }
+    Binding { target: camprop; property: "hue"; value: sliderHue.value }
     Binding { target: camprop; property: "saturation"; value: sliderSaturation.value }
+    Binding { target: camprop; property: "brightness"; value: sliderBrightness.value }
+    Binding { target: camprop; property: "contrast"; value: sliderContrast.value }
+    Binding { target: camprop; property: "gamma"; value: sliderGamma.value }
     Binding { target: camprop; property: "aeTarget"; value: sliderTarget.value }
     Binding { target: camprop; property: "exposureTime"; value: sliderTime.value }
     Binding { target: camprop; property: "aeGain"; value: sliderGain.value }
+    Binding { target: camprop; property: "rGain"; value: sliderRed.value   }
+    Binding { target: camprop; property: "gGain"; value: sliderGreen.value }
+    Binding { target: camprop; property: "bGain"; value: sliderBlue.value }
+    Binding { target: camprop; property: "whiteBalanceTemperature"; value: sliderTemperature.value }
+    Binding { target: camprop; property: "whiteBalanceTint"; value: sliderTint.value }
+    Binding { target: camprop; property: "frameRate"; value: sliderFrameRate.value }
 }
 

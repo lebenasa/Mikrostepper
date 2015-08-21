@@ -10,6 +10,7 @@ Base implementation of Camera
 
 #include <QObject>
 #include "toupwrapper.h"
+#include "camprop.h"
 #include "baserecorder.h"
 
 class Camera : public QObject
@@ -123,6 +124,8 @@ public slots:
 
 	double focusValue() override;
 
+	ToupWrapper* wrapper();
+
 protected:
 	void initialize(){ };
 	void deinitialize(){ };
@@ -135,6 +138,68 @@ private:
 private slots:
 	void pullImage();
 	void pullStillImage();
+};
+
+class ToupCameraProp : public CamProp
+{
+	Q_OBJECT
+	ToupWrapper* cam;
+public:
+	ToupCameraProp(ToupWrapper* camera);
+	~ToupCameraProp();
+
+	double hue() const;
+	void setHue(double);
+	double saturation() const;
+	void setSaturation(double val);
+	double brightness() const;
+	void setBrightness(double);
+	double contrast() const;
+	void setContrast(double);
+	double gamma() const;
+	void setGamma(double val);
+
+	bool autoexposure() const;
+	void setAutoexposure(bool);
+	double aeGain() const;
+	void setAeGain(double val);
+	double exposureTime() const;
+	void setExposureTime(double);
+	double aeTarget() const;
+	void setAeTarget(double);
+	double maxExposureTime();
+
+	double rGain() const;
+	void setRGain(double val);
+	double gGain() const;
+	void setGGain(double val);
+	double bGain() const;
+	void setBGain(double val);
+
+	double whiteBalanceTemperature() const;
+	void setWhiteBalanceTemperature(double);
+	double whiteBalanceTint() const;
+	void setWhiteBalanceTint(double);
+
+	int frameRate() const;
+	void setFrameRate(int);
+
+	bool isColor() const;
+	void setColorMode(bool);
+	bool isHFlip() const;
+	void setHFlip(bool);
+	bool isVFlip() const;
+	void setVFlip(bool);
+	bool isBin() const;
+	void setSamplingMode(bool);
+
+	QRect whiteBalanceBox() const;
+	void setWhiteBalanceBox(const QRect& r);
+
+public slots:
+	void oneShotWB();
+
+	void loadDefaultParameters();
 };
 
 /*

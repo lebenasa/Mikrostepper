@@ -282,6 +282,318 @@ void ToupCamera::pullStillImage()
 	emit captureReady(m_filename);
 }
 
+ToupWrapper* ToupCamera::wrapper()
+{
+	return &m_camera;
+}
+
+//ToupCameraProp implementation
+ToupCameraProp::ToupCameraProp(ToupWrapper* camera)
+	: CamProp{ camera }, cam{ camera }
+{
+
+}
+
+ToupCameraProp::~ToupCameraProp()
+{
+
+}
+
+void ToupCameraProp::oneShotWB()
+{
+	cam->awbOnePush();
+}
+
+double ToupCameraProp::hue() const
+{
+	return cam->hue();
+}
+
+void ToupCameraProp::setHue(double val)
+{
+	if (val != hue())
+	{
+		cam->setHue(val);
+		emit hueChanged(val);
+	}
+}
+
+double ToupCameraProp::saturation() const
+{
+	return cam->saturation();
+}
+
+void ToupCameraProp::setSaturation(double val)
+{
+	if (val != saturation())
+	{
+		cam->setSaturation(val);
+		emit saturationChanged(val);
+	}
+}
+
+double ToupCameraProp::brightness() const
+{
+	return cam->brightness();
+}
+
+void ToupCameraProp::setBrightness(double val)
+{
+	if (val != brightness())
+	{
+		cam->setBrightness(val);
+		emit brightnessChanged(val);
+	}
+}
+
+double ToupCameraProp::contrast() const
+{
+	return cam->contrast();
+}
+
+void ToupCameraProp::setContrast(double val)
+{
+	if (val != contrast())
+	{
+		cam->setContrast(val);
+		emit contrastChanged(val);
+	}
+}
+
+double ToupCameraProp::gamma() const
+{
+	return cam->gamma();
+}
+
+void ToupCameraProp::setGamma(double val)
+{
+	if (val != gamma())
+	{
+		cam->setGamma(val);
+		emit gammaChanged(val);
+	}
+}
+
+bool ToupCameraProp::autoexposure() const
+{
+	return cam->autoExposure();
+}
+
+void ToupCameraProp::setAutoexposure(bool val)
+{
+	if (val != autoexposure())
+	{
+		cam->setAutoExposure(val);
+		emit autoexposureChanged(val);
+	}
+}
+
+double ToupCameraProp::aeGain() const
+{
+	return cam->exposureAGain();
+}
+
+void ToupCameraProp::setAeGain(double val)
+{
+	if (val != aeGain())
+	{
+		cam->setExposureAGain(val);
+		emit aeGainChanged(val);
+	}
+}
+
+double ToupCameraProp::exposureTime() const
+{
+	return cam->exposureTime();
+}
+
+void ToupCameraProp::setExposureTime(double val)
+{
+	if (val != exposureTime())
+	{
+		cam->setExposureTime(val);
+		emit exposureTimeChanged(val);
+	}
+}
+
+double ToupCameraProp::aeTarget() const
+{
+	return cam->autoExposureTarget();
+}
+
+void ToupCameraProp::setAeTarget(double val)
+{
+	if (val != aeTarget())
+	{
+		cam->setAutoExposureTarget(val);
+		emit aeTargetChanged(val);
+	}
+}
+
+double ToupCameraProp::maxExposureTime()
+{
+	return cam->exposureTimeRange().second;
+}
+
+double ToupCameraProp::rGain() const
+{
+	return cam->rGain();
+}
+
+void ToupCameraProp::setRGain(double val)
+{
+	if (val != rGain())
+	{
+		cam->setRGain(val);
+		emit rGainChanged(val);
+	}
+}
+
+double ToupCameraProp::gGain() const
+{
+	return cam->gGain();
+}
+
+void ToupCameraProp::setGGain(double val)
+{
+	if (val != gGain())
+	{
+		cam->setGGain(val);
+		emit gGainChanged(val);
+	}
+}
+
+double ToupCameraProp::bGain() const
+{
+	return cam->bGain();
+}
+
+void ToupCameraProp::setBGain(double val)
+{
+	if (val != bGain())
+	{
+		cam->setBGain(val);
+		emit bGainChanged(val);
+	}
+}
+
+double ToupCameraProp::whiteBalanceTemperature() const
+{
+	return cam->whiteBalanceTemperature();
+}
+
+void ToupCameraProp::setWhiteBalanceTemperature(double val)
+{
+	if (val != cam->whiteBalanceTemperature())
+	{
+		cam->setWhiteBalanceTemperature(val);
+		emit whiteBalanceTintChanged(val);
+	}
+}
+
+double ToupCameraProp::whiteBalanceTint() const
+{
+	return cam->whiteBalanceTint();
+}
+
+void ToupCameraProp::setWhiteBalanceTint(double val)
+{
+	if (val != whiteBalanceTint())
+	{
+		cam->setWhiteBalanceTint(val);
+		emit whiteBalanceTintChanged(val);
+	}
+}
+
+int ToupCameraProp::frameRate() const
+{
+	return cam->speed();
+}
+
+void ToupCameraProp::setFrameRate(int fr)
+{
+	if (fr != cam->speed())
+	{
+		cam->setSpeed(fr);
+		emit frameRateChanged(fr);
+	}
+}
+
+bool ToupCameraProp::isColor() const
+{
+	return cam->chrome();
+}
+
+void ToupCameraProp::setColorMode(bool mode)
+{
+	if (mode != isColor())
+	{
+		cam->setChrome(mode);
+		emit isColorChanged(mode);
+	}
+}
+
+bool ToupCameraProp::isHFlip() const
+{
+	return cam->hFlip();
+}
+
+void ToupCameraProp::setHFlip(bool flip)
+{
+	if (flip != isHFlip())
+	{
+		cam->setHFlip(flip);
+		emit isHFlipChanged(flip);
+	}
+}
+
+bool ToupCameraProp::isVFlip() const
+{
+	return cam->vFlip();
+}
+
+void ToupCameraProp::setVFlip(bool flip)
+{
+	if (flip != isVFlip())
+	{
+		cam->setVFlip(flip);
+		emit isVFlipChanged(flip);
+	}
+}
+
+bool ToupCameraProp::isBin() const
+{
+	return cam->isBinMode();
+}
+
+void ToupCameraProp::setSamplingMode(bool mode)
+{
+	if (mode != isBin())
+	{
+		cam->toggleMode();
+		emit isBinChanged(mode);
+	}
+}
+
+QRect ToupCameraProp::whiteBalanceBox() const
+{
+	return cam->whiteBalanceRect();
+}
+
+void ToupCameraProp::setWhiteBalanceBox(const QRect& r)
+{
+	if (r != whiteBalanceBox())
+	{
+		cam->setWhiteBalanceRect(r);
+		emit whiteBalanceBoxChanged(r);
+	}
+}
+
+void ToupCameraProp::loadDefaultParameters()
+{
+
+}
+
 //QuickCam implementation
 QuickCam::QuickCam(QQuickItem* parent)
     : QQuickItem(parent), m_frame(QSize(10, 10), QImage::Format_RGB888), m_blocked(false),

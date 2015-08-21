@@ -179,6 +179,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_toupwrapper.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="camprop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_camprop.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_camprop.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -238,6 +247,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="toupwrapper.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="camprop.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
