@@ -243,9 +243,17 @@ void ToupCamera::capture(int resolution, const QString& filename)
 
 void ToupCamera::saveBuffer(const QString& filename)
 {
+	using namespace std;	
 	if (QFile::exists(filename))
 		QFile::remove(filename);
-	m_buffer.save(filename);
+	packaged_task<bool(QString)> task{ [&](const QString& fn) -> bool {
+		mutex m;
+		m.lock();
+		auto im = m_buffer.copy();
+		m.unlock();
+		return im.save(fn);
+	} };
+	task(filename);
 }
 
 double ToupCamera::focusValue()
@@ -267,7 +275,9 @@ double ToupCamera::focusValue()
 
 void ToupCamera::pullImage()
 {
-	m_buffer = m_camera.pullImage().image();
+	auto img = m_camera.pullImage();
+	m_buffer = img.image().rgbSwapped().mirrored(false, true);
+	recorder.setFrame(img);
 	//qDebug() << "osc: " << m_buffer.bits();
 	emit frameReady(m_buffer);
 }
@@ -278,7 +288,7 @@ void ToupCamera::pullStillImage()
 	if (QFile::exists(m_filename))
 		QFile::remove(m_filename);
 	//qDebug() << "sav: " << still.buffer();
-	still.image().save(m_filename);
+	still.image().rgbSwapped().mirrored().save(m_filename);
 	emit captureReady(m_filename);
 }
 
@@ -302,6 +312,11 @@ ToupCameraProp::~ToupCameraProp()
 void ToupCameraProp::oneShotWB()
 {
 	cam->awbOnePush();
+	emit whiteBalanceTemperatureChanged(whiteBalanceTemperature());
+	emit whiteBalanceTintChanged(whiteBalanceTint());
+	emit rGainChanged(rGain());
+	emit gGainChanged(gGain());
+	emit bGainChanged(bGain());
 }
 
 double ToupCameraProp::hue() const
@@ -521,14 +536,14 @@ void ToupCameraProp::setFrameRate(int fr)
 
 bool ToupCameraProp::isColor() const
 {
-	return cam->chrome();
+	return !cam->chrome();
 }
 
 void ToupCameraProp::setColorMode(bool mode)
 {
 	if (mode != isColor())
 	{
-		cam->setChrome(mode);
+		cam->setChrome(!mode);
 		emit isColorChanged(mode);
 	}
 }
@@ -591,7 +606,25 @@ void ToupCameraProp::setWhiteBalanceBox(const QRect& r)
 
 void ToupCameraProp::loadDefaultParameters()
 {
-
+	setHue(0.0);
+	setSaturation(128.0);
+	setBrightness(0.0);
+	setGamma(0.0);
+	setAutoexposure(true);
+	setAeGain(100.0);
+	setExposureTime(67000.0);
+	setAeTarget(120.0);
+	setRGain(1.0);
+	setGGain(1.0);
+	setBGain(1.0);
+	setWhiteBalanceTemperature(6503.0);
+	setWhiteBalanceTint(1000.0);
+	setFrameRate(3);
+	setColorMode(true);
+	setHFlip(false);
+	setVFlip(false);
+	setSamplingMode(true);
+	setWhiteBalanceBox(QRectF{ 50.0, 50.0, 50.0, 50.0 }.toRect());
 }
 
 //QuickCam implementation

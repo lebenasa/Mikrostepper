@@ -31,6 +31,7 @@ public slots:
     QString readString(const QString& name, const QString& defval = "");
     QSizeF readSize(const QString& name, const QSizeF& defval = QSizeF());
     QPointF readPoint(const QString& name, const QPointF& defval = QPointF());
+	QRectF readRect(const QString& name, const QRectF& defval = QRectF());
     bool readBool(const QString& name, bool defval = false);
 
     void saveSettings(const QString& name, const QVariant& val);

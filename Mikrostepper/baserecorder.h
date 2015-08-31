@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "opencv2\opencv.hpp"
 
+class Image;
 class BaseRecorder : public QObject
 {
     Q_OBJECT
@@ -22,6 +23,7 @@ public:
 	cv::Size frameSize;
 
 	void setFrame(const cv::Mat& m);
+	void setFrame(const Image& m);
 	cv::Mat frame() const;
 
 signals:

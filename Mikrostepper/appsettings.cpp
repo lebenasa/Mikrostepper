@@ -39,6 +39,11 @@ QPointF AppSettings::readPoint(const QString &name, const QPointF &defval) {
     return val;
 }
 
+QRectF AppSettings::readRect(const QString& name, const QRectF& defval)
+{
+	auto val = setting->value(name, defval).toRectF();
+	return val;
+}
 bool AppSettings::readBool(const QString &name, bool defval) {
     bool val = setting->value(name, defval).toBool();
     return val;

@@ -21,7 +21,6 @@ Rectangle {
         camprop.autoexposure = false
         _lastExpTime = camprop.exposureTime
         var et = _lastExpTime / 2.295
-        camprop.setFrameSpeed(0)
         camprop.exposureTime = et
         captureTimer.start()
     }
@@ -31,7 +30,6 @@ Rectangle {
         interval: 100
         onTriggered: {
             optilab.captureToTemp("swrdaol.jpg")
-            camprop.setFrameSpeed(2)
             camprop.exposureTime = _lastExpTime
             camprop.autoexposure = _lastAE
         }

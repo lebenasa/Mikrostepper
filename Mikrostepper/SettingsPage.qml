@@ -8,7 +8,7 @@ Rectangle {
     id: root
     property alias keysModel: _model
     property bool requireRestart: false
-    width: 800
+    width: 900
     height: 600
 
     function initSettings() {
@@ -233,13 +233,14 @@ Rectangle {
 
                 Rectangle {
                     id: preview
-                    width: 250
-                    height: 200
-                    color: "#2ecc71"
-                    anchors.leftMargin: 40
+                    height: (9/16) * width
+                    color: "#2c3e50"
+                    anchors.leftMargin: 20
                     anchors.left: scrollView.right
                     anchors.top: parent.top
                     anchors.topMargin: 20
+                    anchors.right: parent.right
+                    anchors.rightMargin: 20
                     border.color: "#bdc3c7"
                     CameraItem {
                         id: previewitem
@@ -253,35 +254,219 @@ Rectangle {
                             leftMargin: offsetSize.width; rightMargin: offsetSize.width
                             topMargin: offsetSize.height; bottomMargin: offsetSize.height
                         }
+
+                        Item {
+                            id: anchTL
+                            x: 50
+                            y: 50
+                        }
+
+                        Item {
+                            id: anchBR
+                            x: 100
+                            y: 100
+                        }
+
+                        Rectangle {
+                            id: wbRect
+                            anchors {
+                                top: anchTL.top; left: anchTL.left
+                                bottom: anchBR.bottom; right: anchBR.right
+                            }
+                            color: "transparent"
+                            border.width: 2
+                            border.color: "blue"
+
+                            property real sz: 25
+
+                            MouseArea {
+                                id: maMove
+                                anchors.fill: parent
+                                anchors.margins: 2
+                                cursorShape: Qt.SizeAllCursor
+                                property var lastXY
+                                onPressed: lastXY = Qt.point(mouse.x, mouse.y)
+                                onPositionChanged: {
+                                    if (pressed) {
+                                        var diffX = mouse.x - lastXY.x
+                                        var diffY = mouse.y - lastXY.y
+                                        if (anchTL.x + diffX > 0 && anchBR.x + diffX < previewitem.width) {
+                                            anchTL.x += diffX
+                                            anchBR.x += diffX
+                                        }
+                                        if (anchTL.y + diffY > 0 && anchBR.y + diffY < previewitem.height) {
+                                            anchTL.y += diffY
+                                            anchBR.y += diffY
+                                        }
+                                    }
+                                }
+                            }
+                            MouseArea {
+                                id: maUp
+                                height: 2
+                                anchors {
+                                    right: parent.right; left: parent.left
+                                    rightMargin: 2; leftMargin: 2
+                                    top: parent.top
+                                }
+                                cursorShape: Qt.SizeVerCursor
+                                drag.target: anchTL
+                                drag.axis: Drag.YAxis
+                                drag.minimumY: 0
+                                drag.maximumY: anchBR.y - wbRect.sz
+                            }
+                            MouseArea {
+                                id: maBot
+                                height: 2
+                                anchors {
+                                    right: parent.right; left: parent.left
+                                    rightMargin: 2; leftMargin: 2
+                                    bottom: parent.bottom
+                                }
+                                cursorShape: Qt.SizeVerCursor
+                                drag.target: anchBR
+                                drag.axis: Drag.YAxis
+                                drag.minimumY: anchTL.y + wbRect.sz
+                                drag.maximumY: previewitem.height
+                            }
+                            MouseArea {
+                                id: maLeft
+                                width: 2
+                                anchors {
+                                    top: parent.top; bottom: parent.bottom
+                                    topMargin: 2; bottomMargin: 2
+                                    left: parent.left
+                                }
+                                cursorShape: Qt.SizeHorCursor
+                                drag.target: anchTL
+                                drag.axis: Drag.XAxis
+                                drag.minimumX: 0
+                                drag.maximumX: anchBR.x - wbRect.sz
+                            }
+                            MouseArea {
+                                id: maRight
+                                width: 2
+                                anchors {
+                                    top: parent.top; bottom: parent.bottom
+                                    topMargin: 2; bottomMargin: 2
+                                    right: parent.right
+                                }
+                                cursorShape: Qt.SizeHorCursor
+                                drag.target: anchBR
+                                drag.axis: Drag.XAxis
+                                drag.minimumX: anchTL.x + wbRect.sz
+                                drag.maximumX: previewitem.width
+                            }
+                            MouseArea {
+                                id: maTL
+                                width: 2; height: 2
+                                anchors {
+                                    top: parent.top; left: parent.left
+                                }
+                                cursorShape: Qt.SizeFDiagCursor
+                                drag.target: anchTL
+                                drag.axis: Drag.XAndYAxis
+                                drag.minimumX: 0
+                                drag.minimumY: 0
+                                drag.maximumX: anchBR.x - wbRect.sz
+                                drag.maximumY: anchBR.y - wbRect.sz
+
+                            }
+                            MouseArea {
+                                id: maTR
+                                width: 2; height: 2
+                                anchors {
+                                    top: parent.top; right: parent.right
+                                }
+                                cursorShape: Qt.SizeBDiagCursor
+                                property var lastXY
+                                onPressed: lastXY = Qt.point(mouse.x, mouse.y)
+                                onPositionChanged: {
+                                    if (pressed) {
+                                        var diffX = mouse.x - lastXY.x
+                                        var diffY = mouse.y - lastXY.y
+                                        if (anchBR.x + diffX > anchTL.x + wbRect.sz && anchBR.x + diffX < previewitem.width)
+                                            anchBR.x += diffX
+                                        if (anchTL.y + diffY > 0 && anchTL.y + diffY < anchBR.y - wbRect.sz)
+                                            anchTL.y += diffY
+                                    }
+                                }
+                            }
+                            MouseArea {
+                                id: maBL
+                                width: 2; height: 2
+                                anchors {
+                                    bottom: parent.bottom; left: parent.left
+                                }
+                                cursorShape: Qt.SizeBDiagCursor
+                                property var lastXY
+                                onPressed: lastXY = Qt.point(mouse.x, mouse.y)
+                                onPositionChanged: {
+                                    if (pressed) {
+                                        var diffX = mouse.x - lastXY.x
+                                        var diffY = mouse.y - lastXY.y
+                                        if (anchTL.x + diffX > 0 && anchTL.x + diffX < anchBR.x - wbRect.sz) {
+                                            anchTL.x += diffX
+                                        }
+                                        if (anchBR.y + diffY > anchTL.y + wbRect.sz && anchBR.y + diffY < previewitem.height) {
+                                            anchBR.y += diffY
+                                        }
+                                    }
+                                }
+
+                            }
+                            MouseArea {
+                                id: maBR
+                                width: 2; height: 2
+                                anchors {
+                                    bottom: parent.bottom; right: parent.right
+                                }
+                                cursorShape: Qt.SizeFDiagCursor
+                                drag.target: anchBR
+                                drag.axis: Drag.XAndYAxis
+                                drag.minimumX: anchTL.x + wbRect.sz
+                                drag.minimumY: anchTL.y + wbRect.sz
+                                drag.maximumX: previewitem.width
+                                drag.maximumY: previewitem.height
+                            }
+
+                            onXChanged: camprop.whiteBalanceBox = getRect()
+                            onYChanged: camprop.whiteBalanceBox = getRect()
+                            onWidthChanged: camprop.whiteBalanceBox = getRect()
+                            onHeightChanged: camprop.whiteBalanceBox = getRect()
+                            function getRect() {
+                                var wRatio = camera.size().width / previewitem.width
+                                var hRatio = camera.size().height / previewitem.height
+                                var rx = wRatio * wbRect.x
+                                var ry = hRatio * wbRect.y
+                                var rw = wRatio * wbRect.width
+                                var rh = hRatio * wbRect.height
+                                return Qt.rect(rx, ry, rw, rh)
+                            }
+                        }
+
+                        Text {
+                            id: wbText
+                            text: "White Balance"
+                            anchors.left: wbRect.left
+                            anchors.top: wbRect.bottom
+                            font.pointSize: 6
+                            color: "blue"
+                        }
                     }
                 }
 
                 ScrollView {
                     id: scrollView
-                    width: 250
+                    width: 275
                     anchors.left: parent.left
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.leftMargin: 20
                     anchors.topMargin: 20
+                    anchors.bottomMargin: 20
+                    clip: true
 //                    contentHeight: columnLayout1.height
-//                    clip: true
-                    style: ScrollViewStyle {
-                        handle: Rectangle {
-                            width: 4
-                            height: scrollView.height / columnLayout1.height
-                            color: "#34495e"
-                        }
-                        frame: Item {}
-                        incrementControl: Item {}
-                        decrementControl: Item {}
-                        corner: Item {}
-                        scrollBarBackground: Rectangle {
-                            width: 4
-                            height: scrollView.height
-                            color: "black"
-                        }
-                    }
 
                     ColumnLayout {
                         id: columnLayout1
@@ -300,7 +485,7 @@ Rectangle {
                             text: "Hue: %1".arg(Math.round(sliderHue.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderHue
                             value: camprop.hue
                             minimumValue: -180
@@ -314,7 +499,7 @@ Rectangle {
                             text: "Saturation: %1".arg(Math.round(sliderSaturation.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderSaturation
                             value: camprop.saturation
                             maximumValue: 255
@@ -326,7 +511,7 @@ Rectangle {
                             text: "Brightness: %1".arg(Math.round(sliderBrightness.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderBrightness
                             value: camprop.brightness
                             minimumValue: -64
@@ -340,7 +525,7 @@ Rectangle {
                             text: "Contrast: %1".arg(Math.round(sliderContrast.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderContrast
                             value: camprop.contrast
                             maximumValue: 100
@@ -353,7 +538,7 @@ Rectangle {
                             text: "Gamma: %1".arg(Math.round(sliderGamma.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderGamma
                             maximumValue: 250
                             minimumValue: 10
@@ -382,7 +567,7 @@ Rectangle {
                             text: "Target: %1".arg(Math.round(sliderTarget.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderTarget
                             maximumValue: 235
                             minimumValue: 16
@@ -394,30 +579,30 @@ Rectangle {
 
                         TextRegular {
                             id: textRegular5
-                            text: "Exposure Time: %1".arg(Math.round(sliderTime.value))
+                            text: "Exposure Time: %1 ms".arg(sliderTime.value)
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderTime
-                            maximumValue: 4000
-                            minimumValue: 1
-                            value: camprop.exposureTime
-                            stepSize: 1
+                            maximumValue: 2000
+                            minimumValue: 0.1
+//                            value: camprop.exposureTime / 1000
+                            stepSize: 0.1
                             enabled: !checkboxAutoExposure.checked
                             Layout.alignment: Qt.AlignCenter
                         }
 
                         TextRegular {
                             id: textRegular6
-                            text: "Gain: %1".arg(Math.round(sliderGain.value))
+                            text: "Gain: %1".arg(sliderGain.value)
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderGain
-                            maximumValue: 80
+                            maximumValue: 5
                             minimumValue: 1
-                            value: camprop.aeGain
-                            stepSize: 1
+//                            value: camprop.aeGain / 100
+                            stepSize: 0.01
                             enabled: !checkboxAutoExposure.checked
                             Layout.alignment: Qt.AlignCenter
                         }
@@ -434,7 +619,7 @@ Rectangle {
                             text: "Temperature: %1".arg(Math.round(sliderTemperature.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderTemperature
                             minimumValue: 2000
                             maximumValue: 15000
@@ -446,7 +631,7 @@ Rectangle {
                             text: "Tint: %1".arg(Math.round(sliderTint.value))
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderTint
                             minimumValue: 200
                             maximumValue: 2500
@@ -464,7 +649,7 @@ Rectangle {
                             text: "Frame Rate: %1".arg(sliderFrameRate.label)
                         }
 
-                        Slider {
+                        KeySlider {
                             id: sliderFrameRate
                             property string label: "Slowest"
                             minimumValue: 0
@@ -494,20 +679,23 @@ Rectangle {
                             text: "Color Mode"
                         }
 
-                        ExclusiveGroup {
-                            id: colorModeGroup
-                        }
-
                         RadioButton {
+                            id: checkBoxColor
                             text: "Color"
-                            exclusiveGroup: colorModeGroup
-                            checked: true
+                            checked: camprop.isColor
+                            onCheckedChanged: {
+                                if (checked)
+                                    camprop.isColor = true
+                            }
                         }
 
                         RadioButton {
                             text: "Black/White"
-                            exclusiveGroup: colorModeGroup
-                            checked: false
+                            checked: !checkBoxColor.checked
+                            onCheckedChanged: {
+                                if (checked)
+                                    camprop.isColor = false
+                            }
                         }
 
                         TextRegular {
@@ -515,30 +703,42 @@ Rectangle {
                         }
 
                         CheckBox {
+                            id: cbHFlip
                             text: "Horizontal"
+                            onCheckedChanged: {
+                                camprop.isHFlip = checked
+                            }
                         }
 
                         CheckBox {
+                            id: cbVFlip
                             text: "Vertical"
+                            onCheckedChanged: {
+                                camprop.isVFlip = checked
+                            }
                         }
 
                         TextRegular {
                             text: "Sampling method"
                         }
 
-                        ExclusiveGroup {
-                            id: samplingGroup
-                        }
-
                         RadioButton {
+                            id: checkBoxBin
                             text: "Bin (better image, slower)"
-                            exclusiveGroup: samplingGroup
-                            checked: true
+                            checked: camprop.isBin
+                            onCheckedChanged: {
+                                if (checked)
+                                    camprop.isBin = true
+                            }
                         }
 
                         RadioButton {
                             text: "Skip (fast)"
-                            exclusiveGroup: samplingGroup
+                            checked: !checkBoxBin.checked
+                            onCheckedChanged: {
+                                if (checked)
+                                    camprop.isBin = false
+                            }
                         }
                     }
                 }
@@ -556,8 +756,7 @@ Rectangle {
 
                 GridLayout {
                     id: gridlayout
-                    anchors.rightMargin: 20
-                    anchors.right: preview.right
+                    width: 250
                     anchors.leftMargin: 20
                     anchors.topMargin: 10
                     anchors.left: textBlack4.left
@@ -574,6 +773,10 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersA()
+                            sliderTime.value = camprop.exposureTime / 1000.0
+                            sliderGain.value = camprop.aeGain / 100.0
+                            cbHFlip.checked = camprop.isHFlip
+                            cbVFlip.checked = camprop.isVFlip
                         }
                     }
 
@@ -584,6 +787,10 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersB()
+                            sliderTime.value = camprop.exposureTime / 1000.0
+                            sliderGain.value = camprop.aeGain / 100.0
+                            cbHFlip.checked = camprop.isHFlip
+                            cbVFlip.checked = camprop.isVFlip
                         }
                     }
 
@@ -594,6 +801,10 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersC()
+                            sliderTime.value = camprop.exposureTime / 1000.0
+                            sliderGain.value = camprop.aeGain / 100.0
+                            cbHFlip.checked = camprop.isHFlip
+                            cbVFlip.checked = camprop.isVFlip
                         }
                     }
 
@@ -604,6 +815,10 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersD()
+                            sliderTime.value = camprop.exposureTime / 1000.0
+                            sliderGain.value = camprop.aeGain / 100.0
+                            cbHFlip.checked = camprop.isHFlip
+                            cbVFlip.checked = camprop.isVFlip
                         }
                     }
 
@@ -633,8 +848,8 @@ Rectangle {
                     font.italic: true
                     anchors.top: gridlayout.bottom
                     anchors.topMargin: 25
-                    anchors.right: preview.right
-                    anchors.left: preview.left
+                    anchors.right: gridlayout.right
+                    anchors.left: gridlayout.left
                     wrapMode: Text.WordWrap
                 }
 
@@ -1903,10 +2118,18 @@ Rectangle {
 
     Component.onCompleted: {
         var lastParams = appsettings.readInt("CameraLastParams", 0)
-        if (lastParams === 0) radioButton1.checked = true
+        if (lastParams === 0) {
+            radioButton1.checked = true
+            camprop.loadParametersA()
+            sliderTime.value = camprop.exposureTime / 1000.0
+            sliderGain.value = camprop.aeGain / 100.0
+            cbHFlip.checked = camprop.isHFlip
+            cbVFlip.checked = camprop.isVFlip
+        }
         else if (lastParams === 1) radioButton2.checked = true
         else if (lastParams === 2) radioButton3.checked = true
         else radioButton4.checked = true
+        aeMonitor.running = true
     }
 
     Binding { target: camprop; property: "hue"; value: sliderHue.value }
@@ -1915,13 +2138,22 @@ Rectangle {
     Binding { target: camprop; property: "contrast"; value: sliderContrast.value }
     Binding { target: camprop; property: "gamma"; value: sliderGamma.value }
     Binding { target: camprop; property: "aeTarget"; value: sliderTarget.value }
-    Binding { target: camprop; property: "exposureTime"; value: sliderTime.value }
-    Binding { target: camprop; property: "aeGain"; value: sliderGain.value }
-    Binding { target: camprop; property: "rGain"; value: sliderRed.value   }
-    Binding { target: camprop; property: "gGain"; value: sliderGreen.value }
-    Binding { target: camprop; property: "bGain"; value: sliderBlue.value }
+    Binding { target: camprop; property: "exposureTime"; value: sliderTime.value * 1000 }
+    Binding { target: camprop; property: "aeGain"; value: sliderGain.value * 100 }
     Binding { target: camprop; property: "whiteBalanceTemperature"; value: sliderTemperature.value }
     Binding { target: camprop; property: "whiteBalanceTint"; value: sliderTint.value }
     Binding { target: camprop; property: "frameRate"; value: sliderFrameRate.value }
+
+    Timer {
+        id: aeMonitor
+        interval: 500
+        repeat: true
+        onTriggered: {
+            if (checkboxAutoExposure.checked) {
+                sliderTime.value = camprop.exposureTime / 1000.0
+                sliderGain.value = camprop.aeGain / 100.0
+            }
+        }
+    }
 }
 

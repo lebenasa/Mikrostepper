@@ -93,7 +93,7 @@ Item {
 
     Dialog {
         id: dgSettings
-        width: 800
+        width: 900
         height: 600
         standardButtons: StandardButton.RestoreDefaults | StandardButton.Ok | StandardButton.Cancel
         SettingsPage {

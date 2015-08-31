@@ -74,7 +74,17 @@ ToupWrapper::ToupWrapper(QObject* parent)
 {
 	init();
 	start();
-	setResolution(2);
+	auto res = sizes();
+	size_t select;
+	for (size_t i = res.size() - 1; i >= 0; --i)
+	{
+		if (res.at(i).width() * res.at(i).height() > 1000000)
+		{
+			select = i;
+			break;
+		}
+	}
+	setResolution(select);
 }
 
 ToupWrapper::~ToupWrapper()

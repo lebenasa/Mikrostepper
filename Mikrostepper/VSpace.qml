@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 
 Item {
+    id: root
     property int length: h2.y - h1.y
     property real realLength
     property int _index: cbUnit.currentIndex
@@ -33,9 +34,6 @@ Item {
         onProfileIdChanged: updateProfile()
     }
     onVisibleChanged: updateProfile()
-
-    onLengthChanged: updateText()
-    on_IndexChanged: updateText()
 
     LineWidget {
         id: h1

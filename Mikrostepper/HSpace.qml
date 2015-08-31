@@ -35,9 +35,6 @@ Item {
     }
     onVisibleChanged: updateProfile()
 
-    onLengthChanged: updateText()
-    on_IndexChanged: updateText()
-
     LineWidget {
         id: h1
         orientation: 1

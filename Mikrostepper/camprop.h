@@ -117,6 +117,12 @@ public slots:
 	virtual void reloadParams();
 
 	virtual int getCurrentParameterTeam();
+
+private:
+	void saveParameter(int id);
+	void loadParameter(int id);
+
+	int lastParam;
 };
 
 class NullCamProp : public CamProp

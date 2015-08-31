@@ -70,5 +70,6 @@
         <file>Images/ArrowSmall.png</file>
         <file>Images/ArrowLSmall.png</file>
         <file>BookmarkMenu.qml</file>
+        <file>KeySlider.qml</file>
     </qresource>
 </RCC>
