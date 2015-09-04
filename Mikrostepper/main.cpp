@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     AppSettings settings;
 	settings.updateCNCSettings();
-    MockCamera camera;
+    ToupCamera camera;
 	//if (!camera.isAvailable()) {
 	//	return 0;
 	//}
@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
 
     //CameraControl camctr(&camera);
 	vector<unique_ptr<CamProp>> vprop;
-	//if (camera.isAvailable())
-	//	vprop.emplace_back(new ToupCameraProp(camera.wrapper()));
-	//else
+	if (camera.isAvailable())
+		vprop.emplace_back(new ToupCameraProp(camera.wrapper()));
+	else
 		vprop.emplace_back(new NullCamProp(&camera));
     StepperNavigator nav(&stepper);
     OptilabViewer ov(&camera);

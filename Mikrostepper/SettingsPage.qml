@@ -121,7 +121,7 @@ Rectangle {
     function updateCamera() {
         sliderHue.value = camprop.hue
         sliderContrast.value = camprop.contrast
-        sliderSaturation.value = campropt.saturation
+        sliderSaturation.value = camprop.saturation
         sliderGamma.value = camprop.gamma
         checkboxAutoExposure.checked = camprop.autoexposure
         sliderGain.value = camprop.aeGain / 100
@@ -787,10 +787,7 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersA()
-                            sliderTime.value = camprop.exposureTime / 1000.0
-                            sliderGain.value = camprop.aeGain / 100.0
-                            cbHFlip.checked = camprop.isHFlip
-                            cbVFlip.checked = camprop.isVFlip
+                            updateCamera()
                         }
                     }
 
@@ -801,10 +798,7 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersB()
-                            sliderTime.value = camprop.exposureTime / 1000.0
-                            sliderGain.value = camprop.aeGain / 100.0
-                            cbHFlip.checked = camprop.isHFlip
-                            cbVFlip.checked = camprop.isVFlip
+                            updateCamera()
                         }
                     }
 
@@ -815,10 +809,7 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersC()
-                            sliderTime.value = camprop.exposureTime / 1000.0
-                            sliderGain.value = camprop.aeGain / 100.0
-                            cbHFlip.checked = camprop.isHFlip
-                            cbVFlip.checked = camprop.isVFlip
+                            updateCamera()
                         }
                     }
 
@@ -829,10 +820,7 @@ Rectangle {
                         exclusiveGroup: group2
                         onCheckedChanged: {
                             if (checked) camprop.loadParametersD()
-                            sliderTime.value = camprop.exposureTime / 1000.0
-                            sliderGain.value = camprop.aeGain / 100.0
-                            cbHFlip.checked = camprop.isHFlip
-                            cbVFlip.checked = camprop.isVFlip
+                            updateCamera()
                         }
                     }
 
@@ -2111,15 +2099,10 @@ Rectangle {
         if (lastParams === 0) {
             radioButton1.checked = true
             camprop.loadParametersA()
-            sliderTime.value = camprop.exposureTime / 1000.0
-            sliderGain.value = camprop.aeGain / 100.0
-            cbHFlip.checked = camprop.isHFlip
-            cbVFlip.checked = camprop.isVFlip
         }
         else if (lastParams === 1) radioButton2.checked = true
         else if (lastParams === 2) radioButton3.checked = true
         else radioButton4.checked = true
-        aeMonitor.running = true
     }
 
     Connections {

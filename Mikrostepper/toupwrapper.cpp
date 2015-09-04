@@ -8,7 +8,8 @@ Image::Image(int w, int h, int c)
 
 Image::~Image()
 {
-	if (m_buffer) delete[] m_buffer;
+	if (width * height * channel > 0) 
+		delete[] m_buffer;
 }
 
 Image::Image(const Image& o)
@@ -75,8 +76,8 @@ ToupWrapper::ToupWrapper(QObject* parent)
 	init();
 	start();
 	auto res = sizes();
-	size_t select;
-	for (size_t i = res.size() - 1; i >= 0; --i)
+	size_t select = 0;
+	for (int i = res.size() - 1; i >= 0; --i)
 	{
 		if (res.at(i).width() * res.at(i).height() > 1000000)
 		{
@@ -120,6 +121,7 @@ void ToupWrapper::close()
 
 void ToupWrapper::updateSize()
 {
+	if (!isAvailable()) return;
 	int w, h;
 	Toupcam_get_Resolution(htoupcam, resolution(), &w, &h);
 	m_size = QSize{ w, h };
@@ -208,6 +210,7 @@ void ToupWrapper::cbCameraError()
 
 size_t ToupWrapper::resolution()
 {
+	if (!isAvailable()) return 0;
 	size_t res;
 	Toupcam_get_eSize(htoupcam, &res);
 	return res;
@@ -220,16 +223,20 @@ QSize ToupWrapper::size() const
 
 vector<QSize> ToupWrapper::sizes()
 {
-	vector<QSize> res;
-	auto model = arrinst[0].model;
-	size_t cnt = model->preview;
-	for (auto i = 0u; i < cnt; ++i)
-	{
-		int w, h;
-		Toupcam_get_Resolution(htoupcam, i, &w, &h);
-		res.emplace_back(QSize{ w, h });
+	if (isAvailable()) {
+		vector<QSize> res;
+		auto model = arrinst[0].model;
+		size_t cnt = model->preview;
+		for (auto i = 0u; i < cnt; ++i)
+		{
+			int w, h;
+			Toupcam_get_Resolution(htoupcam, i, &w, &h);
+			res.emplace_back(QSize{ w, h });
+		}
+		return move(res);
 	}
-	return move(res);
+	auto sizes = { QSize{ 0, 0 } };
+	return sizes;
 }
 
 size_t ToupWrapper::stillResolution() const
@@ -239,21 +246,28 @@ size_t ToupWrapper::stillResolution() const
 
 QSize ToupWrapper::stillSize()
 {
-	return stillSizes().at(m_still);
+	if (m_still < stillSizes().size())
+		return stillSizes().at(m_still);
+	return QSize{ 0, 0 };
 }
 
 vector<QSize> ToupWrapper::stillSizes()
 {
-	vector<QSize> res;
-	auto model = arrinst[0].model;
-	size_t cnt = model->still;
-	for (auto i = 0u; i < cnt; ++i)
+	if (isAvailable())
 	{
-		int w, h;
-		Toupcam_get_StillResolution(htoupcam, i, &w, &h);
-		res.emplace_back(QSize{ w, h });
+		vector<QSize> res;
+		auto model = arrinst[0].model;
+		size_t cnt = model->still;
+		for (auto i = 0u; i < cnt; ++i)
+		{
+			int w, h;
+			Toupcam_get_StillResolution(htoupcam, i, &w, &h);
+			res.emplace_back(QSize{ w, h });
+		}
+		return move(res);
 	}
-	return move(res);
+	auto sizes = { QSize{ 0, 0 } };
+	return sizes;
 }
 
 QRect ToupWrapper::roi() const

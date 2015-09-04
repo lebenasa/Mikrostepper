@@ -25,7 +25,7 @@ Item {
             mod = 1
             break
         }
-        var txt = parseInt(tLength.text)
+        var txt = parseInt(_tlength)
         return mod * txt
     }
 

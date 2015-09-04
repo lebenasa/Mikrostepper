@@ -8,6 +8,7 @@ import QtQuick.Window 2.2
 Item {
     id: root
     property alias keysModel: settingspage.keysModel
+    property bool isRibbonHidden: false
     signal fullscreen
 
     width: 1280
@@ -363,8 +364,8 @@ Item {
                 id: coordstatus
                 text: navigator.coordinateString
                 Layout.fillWidth: true
-                anchors.verticalCenter: parent.verticalCenter
                 font.pointSize: 9
+                visible: !isRibbonHidden
             }
             Rectangle {
                 width: 2
@@ -375,6 +376,7 @@ Item {
                 id: aestatus
                 property string aestat: (camprop.autoexposure) ? "ON" : "OFF"
                 text: "AE: %1".arg(aestat)
+                visible: !isRibbonHidden
             }
             Rectangle {
                 width: 2
@@ -386,7 +388,7 @@ Item {
             }
             TextRegular {
                 id: recordtime
-                visible: (optilab.recordingStatus != 0)
+                visible: (optilab.recordingStatus != 0 && !isRibbonHidden)
                 Connections {
                     target: optilab
                     onRecordingTime: recordtime.text = time
@@ -397,19 +399,6 @@ Item {
     }
 
     states: [
-        State {
-            name: "no_ribbon"
-
-            PropertyChanges {
-                target: ribbon
-                height: 0
-            }
-
-            PropertyChanges {
-                target: status
-                height: 0
-            }
-        },
         State {
             name: "grid_view"
 
@@ -531,10 +520,16 @@ Item {
     }
 
     function hideRibbon() {
-        if (root.state === "")
-            root.state = "no_ribbon"
-        else
-            root.state = ""
+        if (isRibbonHidden) {
+            ribbon.height = 150
+            status.height = 25
+            isRibbonHidden = false
+        }
+        else {
+            ribbon.height = 0
+            status.height = 0
+            isRibbonHidden = true
+        }
     }
 
     Connections {
@@ -783,36 +778,6 @@ Item {
         onTriggered: {
             if (!camprop.autoexposure) camprop.aeGain -= 1
         }
-    }
-    Action {
-        id: actionRedUp
-        shortcut: keysModel.get(getIndex("RedUp")).shortcut
-        onTriggered: camprop.rGain += 1
-    }
-    Action {
-        id: actionRedDown
-        shortcut: keysModel.get(getIndex("RedDown")).shortcut
-        onTriggered: camprop.rGain -= 1
-    }
-    Action {
-        id: actionGreenUp
-        shortcut: keysModel.get(getIndex("GreenUp")).shortcut
-        onTriggered: camprop.gGain += 1
-    }
-    Action {
-        id: actionGreenDown
-        shortcut: keysModel.get(getIndex("GreenDown")).shortcut
-        onTriggered: camprop.gGain -= 1
-    }
-    Action {
-        id: actionBlueUp
-        shortcut: keysModel.get(getIndex("BlueUp")).shortcut
-        onTriggered: camprop.bGain += 1
-    }
-    Action {
-        id: actionBlueDown
-        shortcut: keysModel.get(getIndex("BlueDown")).shortcut
-        onTriggered: camprop.bGain -= 1
     }
 
     Action {
