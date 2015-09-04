@@ -8,6 +8,7 @@ import QtQuick.Window 2.2
 Item {
     id: root
     property alias keysModel: settingspage.keysModel
+    signal fullscreen
 
     width: 1280
     height: 720
@@ -527,6 +528,13 @@ Item {
 
     function updateSettings() {
         navigator.initSettings()
+    }
+
+    function hideRibbon() {
+        if (root.state === "")
+            root.state = "no_ribbon"
+        else
+            root.state = ""
     }
 
     Connections {
@@ -1073,27 +1081,16 @@ Item {
         }
     }
 
-//    function printFocus() {
-//        console.log(camera.focusValue());
-//    }
-
-//    Action {
-//        id: actionPrintFocus
-//        shortcut: "F1"
-//        onTriggered: printFocus()
-//    }
-
-//    Action {
-//        id: actionGlobalSearch
-//        shortcut: "g"
-//        onTriggered: autofocus.globalSearch()
-//    }
-
-//    Action {
-//        id: actionScanSearch
-//        shortcut: "f"
-//        onTriggered: autofocus.scanSearch()
-//    }
+    Action {
+        id: actionHideRibbon
+        shortcut: keysModel.get(getIndex("View.HideRibbon")).shortcut
+        onTriggered: hideRibbon()
+    }
+    Action {
+        id: actionFullscreen
+        shortcut: keysModel.get(getIndex("View.Fullscreen")).shortcut
+        onTriggered: fullscreen()
+    }
 
     Component.onDestruction: {
         profilemenu.visible = false

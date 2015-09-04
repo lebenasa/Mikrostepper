@@ -68,6 +68,16 @@ LebenWindow {
                     color: "#2c3e50"
                 }
                 ToolButton {
+                    id: hideRibbonBtn
+                    iconSource: {
+                        if (mainForm.state == "")
+                            hovered ? "Images/HideRibbon-hover.png" : "Images/HideRibbon.png"
+                        else
+                            hovered ? "Images/ShowRibbon-hover.png" : "Images/ShowRibbon.png"
+                    }
+                    onClicked: mainForm.hideRibbon()
+                }
+                ToolButton {
                     id: minimizeBtn
                     iconSource: hovered ? "Images/MinimizeHover.png" : "Images/Minimize.png"
                     onClicked: win.minimize()
@@ -100,6 +110,12 @@ LebenWindow {
                 right: parent.right; left: parent.left
                 top: titleBar.bottom; bottom: parent.bottom
                 topMargin: 5
+            }
+            onFullscreen: {
+                if (win.visibility === Window.FullScreen)
+                    win.showNormal()
+                else
+                    win.showFullScreen()
             }
         }
     }
