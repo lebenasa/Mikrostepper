@@ -133,10 +133,8 @@ Rectangle {
             checkBoxColor.checked = true
         else
             checkBoxBW.checked = true
-        if (camprop.isHFlip)
-            checkBoxHFlip.checked = true
-        if (camprop.isVFlip)
-            checkBoxVFlip.checked = true
+        checkBoxHFlip.checked = camprop.isHFlip
+        checkBoxVFlip.checked = camprop.isVFlip
         if (camprop.isBin)
             checkBoxBin.checked = true
         else
@@ -840,7 +838,10 @@ Rectangle {
                         id: button2
                         text: qsTr("Default")
                         Layout.alignment: Qt.AlignCenter
-                        onClicked: camprop.loadDefaultParameters()
+                        onClicked: {
+                            camprop.loadDefaultParameters()
+                            updateCamera()
+                        }
                     }
                 }
 

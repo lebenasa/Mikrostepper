@@ -519,7 +519,7 @@ Item {
         navigator.initSettings()
     }
 
-    function hideRibbon() {
+    function toggleRibbon() {
         if (isRibbonHidden) {
             ribbon.height = 150
             status.height = 25
@@ -1049,7 +1049,7 @@ Item {
     Action {
         id: actionHideRibbon
         shortcut: keysModel.get(getIndex("View.HideRibbon")).shortcut
-        onTriggered: hideRibbon()
+        onTriggered: toggleRibbon()
     }
     Action {
         id: actionFullscreen

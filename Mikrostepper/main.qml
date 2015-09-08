@@ -70,12 +70,12 @@ LebenWindow {
                 ToolButton {
                     id: hideRibbonBtn
                     iconSource: {
-                        if (mainForm.state == "")
-                            hovered ? "Images/HideRibbon-hover.png" : "Images/HideRibbon.png"
-                        else
+                        if (mainForm.isRibbonHidden)
                             hovered ? "Images/ShowRibbon-hover.png" : "Images/ShowRibbon.png"
+                        else
+                            hovered ? "Images/HideRibbon-hover.png" : "Images/HideRibbon.png"
                     }
-                    onClicked: mainForm.hideRibbon()
+                    onClicked: mainForm.toggleRibbon()
                 }
                 ToolButton {
                     id: minimizeBtn
